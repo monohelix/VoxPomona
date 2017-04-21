@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^home', views.home, name='home'),
     url(r'^new_petition', views.new_petition_view, name='new_petition'),
     url(r'^view_petition', views.view_petition_view, name='view_petition'),
-    url(r'^petition/([0-9]{5})/$', views.display_petition),
+    url(r'^petition/([0-9]{1})([0-9]+)/$', views.display_petition),
 ]
