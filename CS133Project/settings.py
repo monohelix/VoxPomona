@@ -132,7 +132,7 @@ STATICFILES_DIRS = (
 
 # Login settings
 LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/home'
+LOGIN_REDIRECT_URL = 'home'
 
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
