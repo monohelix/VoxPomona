@@ -39,7 +39,7 @@ def register_view(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-            return redirect('/VoxPomona/profile')
+            return redirect('/profile')
         else:
             return render(request, 'signup.html', {'form': form})
     else:
@@ -59,8 +59,8 @@ def user_profile(request):
 
 @login_required
 def home(request):
-    my_petitions = get_user_petitions(request)
-    return render(request, 'home.html')
+    home_info = get_user_petitions(request)
+    return render(request, 'home.html', home_info)
 
 @login_required
 #Start a New Petition
@@ -89,7 +89,7 @@ def new_petition_view(request):
 
             petition.save()
             
-            return redirect('/VoxPomona/home')
+            return redirect('/home')
         else:
             return render(request, 'new_petition.html', {'form': form})
     else:
@@ -111,6 +111,6 @@ def get_user_petitions(request):
     petDict = {
         'user' : request.user, \
         'UserInfo' : user_info, \
-        'petition_list' : petitionL
+        'my_petitions' : petitionL
     }
     return petDict

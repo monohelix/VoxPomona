@@ -6,7 +6,7 @@
 
 <nav class="col-xs-3 menu">
   <ul>
-    <a href="/VoxPomona/profile"><li class="withripple"> <div class="list-group">
+    <a href="/profile"><li class="withripple"> <div class="list-group">
           <div class="list-group-item">
             <div class="row-action-primary">
               <i class="material-icons">person</i>
@@ -16,10 +16,10 @@
             </div>
           </div>
         </div> </li></a>
-    <li> <a href="/VoxPomona/new_petition" class="btn btn-raised btn-primary">Start a new petition</a> </li>
+    <li> <a href="/new_petition" class="btn btn-raised btn-primary">Start a new petition</a> </li>
     <li class="withripple">Search Petitions</li>
     <li></li>
-    <a href="/VoxPomona/logout/"><li class="withripple">Logout</li></a>
+    <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
 </nav>
 
@@ -29,16 +29,16 @@
     <p><em>Petitions that you started</em></p>
     <p>Petitions go here...</p>
     <div class="list-group">
-      <!-- use once we figure out appropriate django syntax
+      {% for pet in my_petitions %}
         <div class="list-group-item">
           <div class="row-action-primary">
             <i class="material-icons">icon based on type</i>
           </div>
           <div class="row-content">
-            <h4 class="list-group-item-heading "> title of petition </h4>
+            <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
             </div>
         </div>
-      -->
+      {% endfor %}
     </div>
   </div>
   <br />

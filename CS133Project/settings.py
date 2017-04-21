@@ -127,12 +127,12 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'VoxPomona/static'),
+    os.path.join(BASE_DIR, 'static'),
     )
 
 # Login settings
-LOGIN_URL = '/VoxPomona/login'
-LOGIN_REDIRECT_URL = '/VoxPomona/home'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/home'
 
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
