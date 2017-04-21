@@ -59,8 +59,8 @@ def user_profile(request):
 
 @login_required
 def home(request):
-    my_petitions = get_user_petitions(request)
-    return render(request, 'home.html')
+    home_info = get_user_petitions(request)
+    return render(request, 'home.html', home_info)
 
 @login_required
 #Start a New Petition
@@ -111,6 +111,6 @@ def get_user_petitions(request):
     petDict = {
         'user' : request.user, \
         'UserInfo' : user_info, \
-        'petition_list' : petitionL
+        'my_petitions' : petitionL
     }
     return petDict
