@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Material Design for Bootstrap</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Mobile support -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Material Design fonts -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Material Design -->
+  <link href="../dist/css/bootstrap-material-design.css" rel="stylesheet">
+  <link href="../dist/css/ripples.min.css" rel="stylesheet">
+
+  <!-- Page style -->
+  <link href="../dist/css/view_petition.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="header-panel shadow-z-2">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-3">
+        <h1>Vox Pomona</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid main">
+
+  <div class="row">
+    <div class="pages pages-center col-xs-9">
+      <div class="row">
+        <div class="col-xs-10">
+          
+          <div class="jumbotron" id="about">
+            <h1>New Petition</h1>
+            <h2>Title</h2>
+            <p><em>Please provide a descriptive title.</em></p>
+            <div class="form-group label-floating">
+              <label class="control-label" for="focusedInput1">Petition title</label>
+              <textarea class="form-control" ></textarea>
+            </div> <br />
+            <h2>Issue Area</h2>
+            <p><em>Please select the issue area your petition best falls under.</em></p>
+            <div class="form-group">
+              <div class="col-md-10">
+                <div class="radio radio-primary">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                    Academics
+                  </label>
+                </div>
+                <div class="radio radio-primary">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Administrative Action
+                  </label>
+                </div>
+                <div class="radio radio-primary">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Dining Halls
+                  </label>
+                </div>
+                <div class="radio radio-primary">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    School Policy
+                  </label>
+                </div>
+                <div class="radio radio-primary">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Residence Halls
+                  </label>
+                </div>
+              </div>
+            </div> <br /> <br />
+            <h2>Introduction</h2>
+            <p><em>Why do you think people should sign your petition?</em></p>
+            <div class="form-group label-floating">
+              <label class="control-label" for="focusedInput1">Introduce your petition</label>
+              <textarea class="form-control" ></textarea>
+            </div> <br />
+            <h2>Clauses</h2>
+            <p><em>What do you think needs to be done?</em></p>
+            <div class="form-group label-floating">
+              <label class="control-label" for="focusedInput1">New clause</label>
+              <textarea class="form-control" ></textarea>
+            </div> <br />
+            <a class="btn btn-success" data-target="#about">Save</li>
+            <a class="btn btn-danger" data-target="#clause1">Cancel</li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../dist/js/bootstrap.min.js"></script>
+
+<!-- Material Design for Bootstrap -->
+<script src="../dist/js/material.js"></script>
+<script src="../dist/js/ripples.min.js"></script>
+<script>
+  $.material.init();
+</script>
+
+
+<!-- Sliders -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/noUiSlider/6.2.0/jquery.nouislider.min.js"></script>
+<script>
+  $(function () {
+    $.material.init();
+    $(".shor").noUiSlider({
+      start: 40,
+      connect: "lower",
+      range: {
+        min: 0,
+        max: 100
+      }
+    });
+
+    $(".svert").noUiSlider({
+      orientation: "vertical",
+      start: 40,
+      connect: "lower",
+      range: {
+        min: 0,
+        max: 100
+      }
+    });
+  });
+</script>
+
+<!-- Dropdown.js -->
+<script src="https://cdn.rawgit.com/FezVrasta/dropdown.js/master/jquery.dropdown.js"></script>
+<script>
+  $("#dropdown-menu select").dropdown();
+</script>
+
+</body>
+</html>

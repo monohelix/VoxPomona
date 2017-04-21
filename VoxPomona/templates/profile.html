@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+{% csrf_token %}
+
+<nav class="col-xs-3 menu">
+  <ul>
+    <li class="active withripple"> <div class="list-group">
+          <div class="list-group-item">
+            <div class="row-action-primary">
+              <i class="material-icons">person</i>
+            </div>
+            <div class="row-content">
+              <h4 class="list-group-item-heading ">{{user.first_name}} {{user.last_name}}</h4>
+            </div>
+          </div>
+        </div> </li>
+    <a href="/VoxPomona/home"><li class="withripple" data-target="#about">Go back</li></a>
+    <li></li>
+    <a href="/VoxPomona/logout/"><li class="withripple">Logout</li></a>
+  </ul>
+</nav>
+
+<div class="pages col-xs-9">
+	<div class ="well">
+        <h1>Your Information</h1><div class='section_edit'><a href='/edit-information/'>Edit</a></div>
+        <ul>
+			<li> Name: {{user.UserInfo.name}}
+			</li>
+			<li> Email: {{user.email}}
+			</li>
+			<li> User type: {{user.UserInfo.get_user_type}}
+			</li>
+			<li> Member since {{user.date_joined}}
+			</li>
+		</ul>
+    </div>
+</div>
+
+{% endblock %}

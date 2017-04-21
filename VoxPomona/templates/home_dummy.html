@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Material Design for Bootstrap</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Mobile support -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Material Design fonts -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Material Design -->
+  <link href="../static/css/bootstrap-material-design.css" rel="stylesheet">
+  <link href="../static/css/ripples.min.css" rel="stylesheet">
+
+  <!-- Dropdown.js -->
+  <link href="//cdn.rawgit.com/FezVrasta/dropdown.js/master/jquery.dropdown.css" rel="stylesheet">
+
+  <!-- Page style -->
+  <link href="../static/css/base.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="header-panel shadow-z-2">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-3">
+        <h1>Vox Pomona</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid main">
+
+  <div class="row">
+    <nav class="col-xs-3 menu">
+      <ul>
+        <li> <div class="list-group">
+              <div class="list-group-item">
+                <div class="row-action-primary">
+                  <i class="material-icons">person</i>
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading ">John Doe</h4>
+                </div>
+              </div>
+            </div> </li>
+        <li> <a href="javascript:void(0)" class="btn btn-raised btn-primary">Start a new petition</a> </li>
+        <li></li>
+        <li class="active withripple" data-target="#about">My Petitions</li>
+        <li class="withripple" data-target="#clause1">Petitions I'm Following</li>
+        <li data-target="#getting-started">
+          <div class="form-group label-floating">
+            <label class="control-label" for="focusedInput1">Search petitions</label>
+            <textarea class="form-control" ></textarea>
+            <p class="help-block">Press enter to search</p>
+          </div></li>
+        <li></li>
+        <li class="withripple">Logout</li>
+      </ul>
+    </nav>
+    <div class="pages col-xs-9">
+      <div class="row">
+        <div class="col-xs-10">
+          
+          <div class="jumbotron" id="about">
+            <h1>My Open Petitions</h1>
+            <p><em>Petitions that you started</em></p>
+            <div class="list-group">
+              <div class="list-group-item">
+                <div class="row-action-primary">
+                  <i class="material-icons">school</i>
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading ">Increase Support for Computer Science Department</h4>
+                </div>
+              </div>
+              <div class="list-group-separator"></div>
+              <div class="list-group-item">
+                <div class="row-action-primary">
+                  <i class="material-icons">restaurant_menu</i>
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading">Better Vegetarian Options at Frary</h4>
+                </div>
+              </div>
+              <div class="list-group-separator"></div>
+              <div class="list-group-item">
+                <div class="row-action-primary">
+                  <i class="material-icons">gavel</i>
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading">Change the Points System</h4>
+                </div>
+              </div>
+              <div class="list-group-separator"></div>
+            </div>
+          </div>
+          <br />
+          <div class="jumbotron" id="clause1">
+            <h1>Petitions I'm Following</h1>
+            <p> <em>Petitions you've signed, commented on, or proposed changes to</em></p>
+            <div class="list-group">
+              <div class="list-group-item">
+                <div class="row-action-primary">
+                  <i class="material-icons">hotel</i>
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading ">Bigger Beds in Residence Halls</h4>
+                </div>
+              </div>
+              <div class="list-group-separator"></div>
+              <div class="list-group-item">
+                <div class="row-action-primary">
+                  <i class="material-icons">account_balance</i>
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading">Release Public Statement Supporting DACA Students</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="../dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- Material Design for Bootstrap -->
+<script src="../dist/js/material.js"></script>
+<script src="../dist/js/ripples.min.js"></script>
+<script>
+  $.material.init();
+</script>
+
+
+<!-- Sliders -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/noUiSlider/6.2.0/jquery.nouislider.min.js"></script>
+<script>
+  $(function () {
+    $.material.init();
+    $(".shor").noUiSlider({
+      start: 40,
+      connect: "lower",
+      range: {
+        min: 0,
+        max: 100
+      }
+    });
+
+    $(".svert").noUiSlider({
+      orientation: "vertical",
+      start: 40,
+      connect: "lower",
+      range: {
+        min: 0,
+        max: 100
+      }
+    });
+  });
+</script>
+
+<!-- Dropdown.js -->
+<script src="https://cdn.rawgit.com/FezVrasta/dropdown.js/master/jquery.dropdown.js"></script>
+<script>
+  $("#dropdown-menu select").dropdown();
+</script>
+
+</body>
+</html>
