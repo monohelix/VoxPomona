@@ -116,4 +116,4 @@ def get_user_petitions(request):
     return petDict
 
 def display_petition(request, petitionID):
-    continue
+    return HttpResponse("ASDF")
