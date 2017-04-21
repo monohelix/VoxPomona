@@ -60,7 +60,7 @@ def user_profile(request):
 @login_required
 def home(request):
     my_petitions = get_user_petitions(request)
-    return HttpResponse(my_petitions)
+    
     return render(request, 'home.html', my_petitions)
 
 @login_required
