@@ -114,3 +114,6 @@ def get_user_petitions(request):
         'my_petitions' : petitionL
     }
     return petDict
+
+def display_petition(request, petitionID):
+    continue
