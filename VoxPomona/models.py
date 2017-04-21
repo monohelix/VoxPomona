@@ -39,6 +39,7 @@ class Petition(models.Model):
     # category
     ACADEMICS = 'AC'
     ADMINISTRATIVE_ACTION = 'AA'
+    CAMPUS_FACILITIES = 'CF'
     COLLEGE_POLICY = 'CP'
     DINING_HALLS = 'DH'
     EXTRACURRICULAR_ACTIVITIES = 'EA'
@@ -47,6 +48,7 @@ class Petition(models.Model):
     PETITION_CATEGORY_CHOICES = (
         (ACADEMICS,'Academics'),
         (ADMINISTRATIVE_ACTION, 'Administrative Action'),
+        (CAMPUS_FACILITIES, 'CF'),
         (COLLEGE_POLICY, 'CP'),
         (DINING_HALLS, 'Dining Halls'),
         (EXTRACURRICULAR_ACTIVITIES, 'Extracurricular Activities'),
@@ -74,6 +76,25 @@ class Petition(models.Model):
     staff_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 3)
     faculty_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 3)
     finalized = models.BooleanField()
+
+    def get_icon(self):
+        cat = self.category
+        if cat == 'AC':
+            return 'school'
+        elif cat == 'AA':
+            return 'account_balance'
+        elif cat == 'CF':
+            return 'build'
+        elif cat == 'CP':
+            return 'gavel'
+        elif cat == 'DH':
+            return 'restaurant_menu'
+        elif cat == 'EA':
+            return 'directions_run'
+        elif cat == 'RH':
+            return 'hotel'
+        else:
+            return 'toc'
 
     def __unicode__(self):
         return ("petition"+str(self.petitionID))
