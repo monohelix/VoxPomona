@@ -108,9 +108,10 @@ def get_user_petitions(request):
     user_info = request.user.UserInfo
     petitionL = Petition.objects.filter(userID=user_info.email)
 
+    #Make a dict: key: petitionID; value: the whole petition (for the time being)
     petIDList = []
-    for x in range(0,len(petIDList)):
+    for x in range(0,len(petitionL)):
         petIDList[x] = petitionL[x]
 
     petDict = dict(zip(petIDList,petitionL))
-    return petitionL
+    return petDict
