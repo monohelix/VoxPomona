@@ -119,9 +119,9 @@ def get_user_petitions(request):
 
 def get_follow_petitions(request):
     user_info = request.user.UserInfo
-    signL = Sign.objects.filter(userID=user_info.email)
-    commentL = Comment.objects.filter(userID=user_info.email)
-    proposeL = Change.objects.filter(userID=user_info.email)
+    signL = list(Sign.objects.filter(userID=user_info.email))
+    commentL = list(Comment.objects.filter(userID=user_info.email))
+    proposeL = list(Change.objects.filter(userID=user_info.email))
     fullList = commentL.extend(signL)
     fullList = proposeL.extend(fullList)
     petSet = set([])
