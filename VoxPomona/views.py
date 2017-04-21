@@ -106,14 +106,36 @@ def view_petition_view(request):
 #Grab Petitions
 def get_user_petitions(request):
     user_info = request.user.UserInfo
-    petitionL = Petition.objects.filter(userID=user_info.email)
+    myPetL = Petition.objects.filter(userID=user_info.email)
+    fwPetL = get_follow_petitions(request)
 
     petDict = {
         'user' : request.user, \
         'UserInfo' : user_info, \
-        'my_petitions' : petitionL
+        'my_petitions' : myPetL, \
+        'followed_petitions' : fwPetL
     }
     return petDict
+
+def get_follow_petitions(request):
+    user_info = request.user.UserInfo
+    signL = Sign.objects.filter(userID=user_info.email)
+    commentL = Comment.objects.filter(userID=user_info.email)
+    proposeL = Change.objects.filter(userID=user_info.email)
+    fullList = commentL.extend(signL)
+    fullList = proposeL.extend(fullList)
+    petSet = set([])
+    for i in range(0,len(fullList)):
+        currObj = fullList[i]
+        currPet = currObj.petitionID
+
+        #Check that this isn't user's petition
+        if currPet.userID == user_info:
+            pass
+        else:
+            petSet.add(currPet)
+            
+    return petSet
 
 def display_petition(request, pid):
     petition = Petition.objects.filter(petitionID = pid)
