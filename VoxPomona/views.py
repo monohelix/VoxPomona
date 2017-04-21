@@ -107,7 +107,7 @@ def view_petition_view(request):
 def get_user_petitions(request):
     user_info = request.user.UserInfo
     myPetL = Petition.objects.filter(userID=user_info.email)
-    fwPetL = get_follow_petitions(request)
+    fwPetL = list(get_follow_petitions(request))
 
     petDict = {
         'user' : request.user, \
@@ -134,7 +134,7 @@ def get_follow_petitions(request):
             pass
         else:
             petSet.add(currPet)
-            
+
     return petSet
 
 def display_petition(request, pid):
