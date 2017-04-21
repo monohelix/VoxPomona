@@ -39,15 +39,19 @@ class Petition(models.Model):
     # category
     ACADEMICS = 'AC'
     ADMINISTRATIVE_ACTION = 'AA'
+    COLLEGE_POLICY = 'CP'
     DINING_HALLS = 'DH'
-    SCHOOL_RECIDENCY = 'SR'
-    OTHERS = 'OT'
+    EXTRACURRICULAR_ACTIVITIES = 'EA'
+    RESIDENCE_HALLS = 'RH'
+    OTHER = 'OT'
     PETITION_CATEGORY_CHOICES = (
         (ACADEMICS,'Academics'),
         (ADMINISTRATIVE_ACTION, 'Administrative Action'),
+        (COLLEGE_POLICY, 'CP'),
         (DINING_HALLS, 'Dining Halls'),
-        (SCHOOL_RECIDENCY, 'School Recidency'),
-        (OTHERS,'Others'),
+        (EXTRACURRICULAR_ACTIVITIES, 'Extracurricular Activities'),
+        (RESIDENCE_HALLS, 'Residence Halls'),
+        (OTHER,'Other'),
         )
     category = models.CharField(
         max_length = 2,
