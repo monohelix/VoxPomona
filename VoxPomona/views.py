@@ -17,6 +17,7 @@ def index(request):
 
 #User Registration
 def register_view(request):
+    return HttpResonse("fuck this")
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():

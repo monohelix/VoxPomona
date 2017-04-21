@@ -25,7 +25,7 @@ SECRET_KEY = '!n^4qqds1#6_z@bsrler065h-5534a%ino*6aens=rn*=fs-(s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["testvoxpomona.herokuapp.com",]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
