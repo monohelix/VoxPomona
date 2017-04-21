@@ -60,7 +60,6 @@ def user_profile(request):
 @login_required
 def home(request):
     my_petitions = get_user_petitions(request)
-    
     return render(request, 'home.html', my_petitions)
 
 @login_required
@@ -98,6 +97,12 @@ def new_petition_view(request):
         return render(request, 'new_petition.html', {'form': form})
 
 @login_required
+#View Petition
+def view_petition_view(request):
+    my_petitions = get_user_petitions(request)
+    return HttpResponse(my_petitions)
+
+@login_required
 #Grab Petitions
 def get_user_petitions(request):
     user_info = request.user.UserInfo
@@ -108,4 +113,4 @@ def get_user_petitions(request):
         petIDList[x] = petitionL[x]
 
     petDict = dict(zip(petIDList,petitionL))
-    return petDict
+    return petitionL
