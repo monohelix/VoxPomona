@@ -39,7 +39,7 @@ def register_view(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-            return redirect('/VoxPomona/profile')
+            return redirect('/profile')
         else:
             return render(request, 'signup.html', {'form': form})
     else:
@@ -89,7 +89,7 @@ def new_petition_view(request):
 
             petition.save()
             
-            return redirect('/VoxPomona/home')
+            return redirect('/home')
         else:
             return render(request, 'new_petition.html', {'form': form})
     else:
