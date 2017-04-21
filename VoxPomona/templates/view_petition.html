@@ -25,9 +25,13 @@
 
 <div class="pages col-xs-9">
 	<div class ="well">
-    <h1>My Petitions</h1>
-    <p><em>Petitions that you started</em></p>
-    <p>Petitions go here...</p>
+    <h1>{{ petition.title }}</h1>
+    <p><em>Started by {{ petition.userID.UserInfo.name }}</em></p>
+    
+    <h2> Introduction </h2>
+    <p>{{ petition.summary }}</p>
+
+    <p><em>We ask that the following actions be taken:</em></p>
     <div class="list-group">
       <!-- use once we figure out appropriate django syntax
         <div class="list-group-item">
