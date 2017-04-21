@@ -111,7 +111,7 @@ def get_user_petitions(request):
     #Make a dict: key: petitionID; value: the whole petition (for the time being)
     petIDList = []
     for x in range(0,len(petitionL)):
-        petIDList[x] = petitionL[x]
+        petIDList.append(petitionL[x])
 
     petDict = dict(zip(petIDList,petitionL))
     return petDict
