@@ -119,21 +119,39 @@ def get_user_petitions(request):
 
 def get_follow_petitions(request):
     user_info = request.user.UserInfo
-    signL = list(Sign.objects.filter(userID=user_info.email))
-    commentL = list(Comment.objects.filter(userID=user_info.email))
-    proposeL = list(Change.objects.filter(userID=user_info.email))
-    fullList = commentL.extend(signL)
-    fullList = proposeL.extend(fullList)
+    signL = Sign.objects.filter(userID=user_info.email)
+    commL = Comment.objects.filter(userID=user_info.email)
+    propL = Change.objects.filter(userID=user_info.email)
     petSet = set([])
-    for i in range(0,len(fullList)):
-        currObj = fullList[i]
-        currPet = currObj.petitionID
+    for i in range(0,len(signL)):
+        signObj = signL[i]
+        signPet = signObj.petitionID
 
         #Check that this isn't user's petition
-        if currPet.userID == user_info:
+        if signPet.userID == user_info:
             pass
         else:
-            petSet.add(currPet)
+            petSet.add(signPet)
+
+    for i in range(0,len(commL)):
+        commObj = commL[i]
+        commPet = commObj.petitionID
+
+        #Check that this isn't user's petition
+        if commPet.userID == user_info:
+            pass
+        else:
+            petSet.add(commPet)
+
+    for i in range(0,len(propL)):
+        propObj = propL[i]
+        propPet = propObj.petitionID
+
+        #Check that this isn't user's petition
+        if propPet.userID == user_info:
+            pass
+        else:
+            petSet.add(propPet)
 
     return petSet
 
