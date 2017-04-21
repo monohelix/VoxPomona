@@ -100,7 +100,7 @@ def new_petition_view(request):
 #View Petition
 def view_petition_view(request):
     my_petitions = get_user_petitions(request)
-    return HttpResponse(my_petitions)
+    return HttpResponse(my_petitions['petition_list'][0])
 
 @login_required
 #Grab Petitions
@@ -108,10 +108,9 @@ def get_user_petitions(request):
     user_info = request.user.UserInfo
     petitionL = Petition.objects.filter(userID=user_info.email)
 
-    #Make a dict: key: petitionID; value: the whole petition (for the time being)
-    petIDList = []
-    for x in range(0,len(petitionL)):
-        petIDList.append(petitionL[x])
-
-    petDict = dict(zip(petIDList,petitionL))
+    petDict = {
+        'user' : request.user, \
+        'UserInfo' : user_info, \
+        'petition_list' : petitionL
+    }
     return petDict
