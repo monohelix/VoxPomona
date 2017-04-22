@@ -16,8 +16,12 @@
             </div>
           </div>
         </div> </li></a>
-    {% if user_perm > 1 %}
+    {% if sign_status %}
+      <li> <a href="" class="btn btn-raised btn-primary">Revoke signature</a> </li>
+    {% elif user_perm > 1 %}
       <li> <a href="" class="btn btn-raised btn-primary">Sign this petition</a> </li>
+    {% else %}
+      
     {% endif %}
     <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>

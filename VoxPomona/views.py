@@ -108,10 +108,12 @@ def view_petition_view(request,pid):
         user_perm = this_petition.faculty_permission
     else:
         user_perm = this_petition.staff_permission
+    sign_status = Sign.objects.filter(userID=request.user.email).exists()
     petDict = {
        'petition' : this_petition, \
        'clauses' : pet_clauses, \
-       'user_perm' : int(user_perm)
+       'user_perm' : int(user_perm), \
+       'sign_status': sign_status
     }
     return render(request,'view_petition.html',petDict)
 
