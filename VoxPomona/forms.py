@@ -58,10 +58,12 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class' : 'form-control'})
         self.fields['title'].label = 'Petition Title'
         self.fields['title'].help_text = 'Give your petition a descriptive title.'
+        self.fields['title'].initial = ''
 
         self.fields['summary'].widget.attrs.update({'class' : 'form-control'})
         self.fields['summary'].label = 'Petition Summary'
         self.fields['summary'].help_text = 'Summarize your petition - why should people sign it?'
+        self.fields['summary'].initial = ''
 
         self.fields['category'].widget.attrs.update({'class' : 'form-control'})
         self.fields['category'].label = 'Petition Category'
