@@ -37,7 +37,9 @@
             <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
           </div>
         </div>
-        <div class="list-group-separator"></div>
+        {% if not forloop.last %}
+          <div class="list-group-separator"></div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
