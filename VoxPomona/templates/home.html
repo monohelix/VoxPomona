@@ -29,14 +29,16 @@
     <p><em>Petitions that you started</em></p>
     <div class="list-group">
       {% for pet in my_petitions %}
-        <a href="{{ pet.get_url }}"<div class="list-group-item">
-          <div class="row-action-primary">
-            <i class="material-icons">{{ pet.get_icon }}</i>
+        <a href="{{ pet.get_url }}">
+          <div class="list-group-item">
+            <div class="row-action-primary">
+              <i class="material-icons">{{ pet.get_icon }}</i>
+            </div>
+            <div class="row-content">
+              <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+            </div>
           </div>
-          <div class="row-content">
-            <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
-          </div>
-        </div> </a>
+        </a>
         {% if not forloop.last %}
           <div class="list-group-separator"></div>
         {% endif %}
@@ -49,14 +51,16 @@
     <p><em>Petitions you've signed, commented on, or proposed changes to</em></p>
     <div class="list-group">
       {% for pet in followed_petitions %}
-        <div class="list-group-item">
-          <div class="row-action-primary">
-            <i class="material-icons">{{ pet.get_icon }}</i>
+        <a href="{{ pet.get_url }}">
+          <div class="list-group-item">
+            <div class="row-action-primary">
+              <i class="material-icons">{{ pet.get_icon }}</i>
+            </div>
+            <div class="row-content">
+              <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+            </div>
           </div>
-          <div class="row-content">
-            <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
-          </div>
-        </div>
+        </a>
         {% if not forloop.last %}
           <div class="list-group-separator"></div>
         {% endif %}
