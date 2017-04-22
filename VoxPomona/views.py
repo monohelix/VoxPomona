@@ -98,9 +98,12 @@ def new_petition_view(request):
 
 @login_required
 #View Petition
-def view_petition_view(request):
-    my_petitions = get_user_petitions(request)
-    return HttpResponse(my_petitions['petition_list'][0])
+def view_petition_view(request,pid):
+    this_petition = Petition.objects.get(petitionID=pid)
+    petDict = {
+       'petition' : this_petition 
+    }
+    return render(request,'view_petition.html',petDict)
 
 @login_required
 #Grab Petitions
