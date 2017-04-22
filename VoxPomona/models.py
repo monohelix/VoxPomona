@@ -101,6 +101,9 @@ class Petition(models.Model):
         user = UserInfo.objects.get(email=creator)
         return user.name
 
+    def get_signatures(self):
+        return Sign.objects.filter(petitionID=self.petitionID)
+
     def __unicode__(self):
         return ("petition"+str(self.petitionID))
     def __str__(self):

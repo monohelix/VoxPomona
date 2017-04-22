@@ -37,7 +37,9 @@
   <!-- Clauses go here -->
   <div class ="well">
     <h1>Signatures</h1>
-    <!-- signatures go here -->
+    {% for sig in {petition.get_signatures} %}
+      Signature found
+    {% endfor %}
   </div>
 </div>
 
