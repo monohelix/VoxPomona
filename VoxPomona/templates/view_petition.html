@@ -38,7 +38,7 @@
   <div class ="well">
     <h1>Signatures</h1>
     {% for sig in petition.get_signatures %}
-      Signature found
+      <p>{{sig.get_name}}</p>
     {% endfor %}
   </div>
 </div>

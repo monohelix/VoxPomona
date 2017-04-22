@@ -156,6 +156,10 @@ class Sign(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
     petitionID = models.ForeignKey(Petition) #on-delete???
     time = models.DateTimeField()
+
+    def get_name(self):
+        return UserInfo.objects.get(email=self.userID).name
+
     class Meta:
         unique_together = ("userID","petitionID")
 
