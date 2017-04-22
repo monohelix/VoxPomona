@@ -115,7 +115,6 @@ class Petition(models.Model):
 class Clause(models.Model):
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
     index = models.IntegerField()
-    title = models.CharField(max_length = 64) # change 64 as needed
     content = models.TextField()
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
 

@@ -101,9 +101,17 @@ def new_petition_view(request):
 def view_petition_view(request,pid):
     this_petition = Petition.objects.get(petitionID=pid)
     pet_clauses = Clause.objects.filter(petitionID=this_petition.petitionID).order_by('index')
+    user_type = request.user.UserInfo.user_type
+    if user_type == 'STU':
+        user_perm = this_petition.stu_permission
+    elif user_type =='FAC':
+        user_perm = this_petition.faculty_permission
+    else:
+        user_perm = this_petition.staff_permission
     petDict = {
        'petition' : this_petition, \
-       'clauses' : pet_clauses
+       'clauses' : pet_clauses, \
+       'user_perm' : int(user_perm)
     }
     return render(request,'view_petition.html',petDict)
 

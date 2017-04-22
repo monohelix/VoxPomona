@@ -16,7 +16,9 @@
             </div>
           </div>
         </div> </li></a>
-    <li> <a href="/new_petition" class="btn btn-raised btn-primary">Sign this petition</a> </li>
+    {% if user_perm > 1 %}
+      <li> <a href="" class="btn btn-raised btn-primary">Sign this petition</a> </li>
+    {% endif %}
     <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
