@@ -34,6 +34,15 @@
     <p><em>We ask that the College do the following:</em></p>
   </div>
   <br />
+
+  {% for cl in clauses %}
+    <div class="well">
+      <h1>Clause {{ forloop.counter }}</h1>
+      <p>{{ cl.content }}</p>
+    </div>
+    <br />
+  {% endfor %}
+  
   <!-- Clauses go here -->
   <div class ="well">
     <h1>Signatures</h1>
