@@ -26,7 +26,7 @@
 <div class="pages col-xs-9">
 	<div class ="well">
     <h1>{{ petition.title }}</h1>
-    <p><em>Started by {{ petition.userID.UserInfo.name }}</em></p>
+    <p><em>Started by {{ petition.get_creator_name }}</em></p>
     
     <h2> Introduction </h2>
     <p>{{ petition.summary }}</p>

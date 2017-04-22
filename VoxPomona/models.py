@@ -96,6 +96,11 @@ class Petition(models.Model):
         else:
             return 'toc'
 
+    def get_creator_name(self):
+        creator = self.userID
+        user = UserInfo.objects.get(email=creator)
+        return user.name
+
     def __unicode__(self):
         return ("petition"+str(self.petitionID))
     def __str__(self):
