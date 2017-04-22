@@ -108,9 +108,9 @@ class Petition(models.Model):
         return Sign.objects.filter(petitionID=self.petitionID)
 
     def __unicode__(self):
-        return ("petition"+str(self.petitionID))
+        return ("petition"+str(self.petitionID)+str(self.title))
     def __str__(self):
-        return ("petition"+str(self.petitionID))
+        return ("petition"+str(self.petitionID)+str(self.title))
 
 class Clause(models.Model):
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
