@@ -101,6 +101,9 @@ class Petition(models.Model):
         user = UserInfo.objects.get(email=creator)
         return user.name
 
+    def get_url(self):
+        return '/view_petition/' + str(self.petitionID)
+
     def get_signatures(self):
         return Sign.objects.filter(petitionID=self.petitionID)
 
