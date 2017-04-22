@@ -100,8 +100,10 @@ def new_petition_view(request):
 #View Petition
 def view_petition_view(request,pid):
     this_petition = Petition.objects.get(petitionID=pid)
+    pet_clauses = Clause.objects.filter(petitionID=this_petition.petitionID)
     petDict = {
-       'petition' : this_petition 
+       'petition' : this_petition
+       'clauses' : pet_clauses
     }
     return render(request,'view_petition.html',petDict)
 
