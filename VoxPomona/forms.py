@@ -78,3 +78,9 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['faculty_permission'].widget.attrs.update({'class' : 'form-control'})
         self.fields['faculty_permission'].label = ''
         self.fields['faculty_permission'].help_text = 'Faculty users can...'
+
+class SignPetForm(forms.ModelForm):
+
+    class Meta:
+        model = Sign
+        fields = ('userID','petitionID','time')
