@@ -81,8 +81,8 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['faculty_permission'].label = ''
         self.fields['faculty_permission'].help_text = 'Faculty users can...'
 
-class SignPetForm(forms.ModelForm):
+class NewClauseForm(forms.Form):
+    content = forms.CharField( widget=forms.Textarea)
 
     class Meta:
-        model = Sign
-        fields = ('userID','petitionID','time')
+        model = Clause

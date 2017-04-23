@@ -143,6 +143,24 @@ def view_petition_view(request,pid):
        'sign_status': sign_status, \
        'is_owner' : is_owner
     }
+
+    if is_owner:
+        if request.method == 'POST':
+            form = NewClauseForm(request.POST)
+            if form.is_valid():
+                clause = Clause()
+                clause.petitionID = this_petition
+                clause.index = Clause.objects.filter(petitionID=this_petition).count()
+                clause.content = form.cleaned_data.get('content')
+                clause.time = datetime.datetime.now()
+                clause.save()
+                return redirect(this_petition.get_url())
+            else:
+                return render(request,'view_petition.html',petDict,{'form': form})
+        else: 
+            form = NewClauseForm()
+            return render(request,'view_petition.html',petDict,{'form': form})
+
     return render(request,'view_petition.html',petDict)
 
 @login_required
