@@ -82,7 +82,12 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['faculty_permission'].help_text = 'Faculty users can...'
 
 class NewClauseForm(forms.Form):
-    content = forms.CharField( widget=forms.Textarea)
-
     class Meta:
         model = Clause
+        fields = ('content',)
+
+    def __init__(self, *args, **kwargs):
+        super(NewClauseForm, self).__init__(*args, **kwargs)
+        self.fields['content'].widget.attrs.update({'class' : form-control})
+        self.fields['content'].label = 'Clause text'
+        self.fields['content'].initial = ''
