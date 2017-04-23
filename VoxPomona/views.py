@@ -119,7 +119,7 @@ def view_petition_view(request,pid):
     sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     is_owner = this_petition.userID == user_info
 
-    if (request.GET>get('delete_btn')):
+    if (request.GET.get('delete_btn')):
         this_petition.delete()
         return redirect('/home')
 
