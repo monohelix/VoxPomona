@@ -63,6 +63,31 @@
     </div>
     <br />
   {% endfor %}
+
+  {% if is_owner %}
+    <div class="well">
+      <h1>Add a new clause</h1>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          <br />
+          {% if field.help_text %}
+              <p>{{ field.help_text }}</p>
+          {% endif %}
+          <div class="form-group label-floating">
+            {% if field.label %}
+              <label class="control-label" for="focusedInput1">{{ field.label }}</label>
+            {% endif %}
+            {{ field }}
+          </div>
+            {% for error in field.errors %}
+              <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+        <button class="btn" type="submit">Save</button>
+      </form>
+    </div>
+  {% endif %}
   
   <!-- Clauses go here -->
   <div class ="well">
