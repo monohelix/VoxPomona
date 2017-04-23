@@ -115,7 +115,6 @@ def view_petition_view(request,pid):
         user_perm = this_petition.faculty_permission
     else:
         user_perm = this_petition.staff_permission
-    sign_status = Sign.objects.filter(userID=request.user.email).exists()
 
     if (request.GET.get('sign_btn')):
         signature = Sign()
@@ -123,10 +122,14 @@ def view_petition_view(request,pid):
         signature.petitionID = this_petition
         signature.time = datetime.datetime.now()
         signature.save()
+        return redirect(this_petition.get_url())
     elif (request.GET.get('revoke_btn')):
-        signature = Sign.objects.get(userID=user_info.email,petitionID=this_petition.petitionID).delete()
+        signature = Sign.objects.get(userID=user_info.email,petitionID=this_petition.petitionID)
+        if (signature != None):
+            signature.delete()
+        return redirect(this_petition.get_url())
 
-
+    sign_status = Sign.objects.filter(userID=request.user.email).exists()
     petDict = {
        'petition' : this_petition, \
        'clauses' : pet_clauses, \

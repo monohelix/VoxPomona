@@ -19,10 +19,9 @@
     {% if sign_status %}
       <li>
         <form action="#" method="get">
-          <!-- <a href="" class="btn btn-raised btn-primary" name="revoke_signature_btn">Revoke signature</a> -->
           <input type="submit" class="btn btn-raised btn-primary" value="Revoke Signature" name="revoke_btn">
         </form>
-        </li>
+      </li>
     {% elif user_perm > 1 %}
       <li>
         <form action="#" method="get">
