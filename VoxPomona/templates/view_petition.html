@@ -17,9 +17,18 @@
           </div>
         </div> </li></a>
     {% if sign_status %}
-      <li> <a href="" class="btn btn-raised btn-primary" name="revoke_signature_btn">Revoke signature</a> </li>
+      <li>
+        <form action="#" method="get">
+          <!-- <a href="" class="btn btn-raised btn-primary" name="revoke_signature_btn">Revoke signature</a> -->
+          <input type="submit" class="btn btn-raised btn-primary" value="Revoke Signature" name="revoke_btn">
+        </form>
+        </li>
     {% elif user_perm > 1 %}
-      <li> <a href="" class="btn btn-raised btn-primary" name="sign_btn">Sign this petition</a> </li>
+      <li>
+        <form action="#" method="get">
+          <input type="submit" class="btn btn-raised btn-primary" value="Sign This Petition" name="sign_btn">
+        </form>
+      </li>
     {% else %}
       <!-- do nothing -->
     {% endif %}

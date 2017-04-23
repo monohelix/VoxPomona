@@ -89,7 +89,7 @@ def new_petition_view(request):
 
             petition.save()
             
-            return redirect('/home')
+            return redirect(petition.get_url())
         else:
             return render(request, 'new_petition.html', {'form': form})
     else:
@@ -99,6 +99,7 @@ def new_petition_view(request):
 @login_required
 #View Petition
 def view_petition_view(request,pid):
+    user_info = request.user.UserInfo
     this_petition = Petition.objects.get(petitionID=pid)
     pet_clauses = Clause.objects.filter(petitionID=this_petition.petitionID).order_by('index')
     user_type = request.user.UserInfo.user_type
@@ -109,6 +110,17 @@ def view_petition_view(request,pid):
     else:
         user_perm = this_petition.staff_permission
     sign_status = Sign.objects.filter(userID=request.user.email).exists()
+
+    if (request.GET.get('sign_btn')):
+        signature = Sign()
+        signature.userID = user_info.email
+        signature.petitionID = this_petition.petitionID
+        signature.time = datetime.datetime.now()
+        signature.save()
+    elif (request.GET.get('revoke_btn')):
+        signature = Sign.objects.get(userID=user_info.email,petitionID=this_petition.petitionID).delete()
+
+
     petDict = {
        'petition' : this_petition, \
        'clauses' : pet_clauses, \
