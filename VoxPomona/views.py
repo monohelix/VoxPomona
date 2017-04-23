@@ -88,6 +88,12 @@ def new_petition_view(request):
             petition.threshold = 10
 
             petition.save()
+
+            signature = Sign()
+            signature.userID = user_info
+            signature.petitionID = this_petition
+            signature.time = datetime.datetime.now()
+            signature.save()
             
             return redirect(petition.get_url())
         else:
@@ -113,8 +119,8 @@ def view_petition_view(request,pid):
 
     if (request.GET.get('sign_btn')):
         signature = Sign()
-        signature.userID = user_info.email
-        signature.petitionID = this_petition.petitionID
+        signature.userID = user_info
+        signature.petitionID = this_petition
         signature.time = datetime.datetime.now()
         signature.save()
     elif (request.GET.get('revoke_btn')):
