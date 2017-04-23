@@ -116,6 +116,13 @@ def view_petition_view(request,pid):
     else:
         user_perm = this_petition.staff_permission
 
+    sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
+    isOwner = this_petition.userID == user_info
+
+    if (request.GET>get('delete_btn')):
+        this_petition.delete()
+        return redirect('/home')
+
     if (request.GET.get('sign_btn')):
         signature = Sign()
         signature.userID = user_info
@@ -129,12 +136,12 @@ def view_petition_view(request,pid):
             signature.delete()
         return redirect(this_petition.get_url())
 
-    sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     petDict = {
        'petition' : this_petition, \
        'clauses' : pet_clauses, \
        'user_perm' : int(user_perm), \
-       'sign_status': sign_status
+       'sign_status': sign_status, \
+       'is_owner' :
     }
     return render(request,'view_petition.html',petDict)
 
