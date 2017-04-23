@@ -31,6 +31,13 @@
     {% else %}
       <!-- do nothing -->
     {% endif %}
+    {% if is_owner %}
+      <li>
+        <form action="#" method="get">
+          <input type="submit" class="btn btn-raised btn-danger" value="Delete This Petition" name="delete_btn">
+        </form>
+      </li>
+    {% endif %}
     <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
