@@ -91,7 +91,7 @@ def new_petition_view(request):
 
             signature = Sign()
             signature.userID = user_info
-            signature.petitionID = this_petition
+            signature.petitionID = petition
             signature.time = datetime.datetime.now()
             signature.save()
             
