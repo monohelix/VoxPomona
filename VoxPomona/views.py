@@ -166,6 +166,26 @@ def view_petition_view(request,pid):
     return render(request,'view_petition.html',petDict)
 
 @login_required
+#Deletes a clause for a given petition, assuming ownership
+def delete_clause(request,pid,cIndex):
+    #Check that this user is the owner
+    user_info = request.user.UserInfo
+    if not(Petition.objects.get(petitionID=pid,userID=user_info).exists()):
+        return HttpResponse('Error: This user does not have permission to delete this clause, or this petition does not exist.')
+
+    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+
+    #Delete current clause, and reorder the remaining clauses
+    this_clause = Clause.objects.filter(petitionID=pid,index=cIndex)
+    if (this_clause.exists()):
+        this_clause.delete()
+
+    clause_list = Clause.objects.filter(petitionID=pid).order_by('index')
+    for i in range(0,len(clause_list)):
+        clause_list[i].index = i
+
+
+@login_required
 #Grab Petitions
 def get_user_petitions(request):
     user_info = request.user.UserInfo
