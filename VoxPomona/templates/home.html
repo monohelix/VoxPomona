@@ -5,19 +5,24 @@
 {% csrf_token %}
 
 <nav class="col-xs-3 menu">
-  <ul>
-    <a href="/profile"><li class="withripple"> <div class="list-group">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">person</i>
-            </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
-            </div>
+  <div class="user_menu">
+    <a href="/profile">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row-action-primary">
+            <i class="material-icons">person</i>
           </div>
-        </div> </li></a>
-    <li> <a href="/new_petition" class="btn btn-raised btn-primary">Start a new petition</a> </li>
-    <li class="withripple">Search Petitions</li>
+          <div class="row-content">
+            <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="/new_petition" class="btn btn-raised btn-primary">Start a new petition</a>
+    <br /> <br />
+  </div>
+  <ul>
+    <li class="withripple">Browse Petitions</li>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
@@ -28,21 +33,26 @@
     <h1>My Petitions</h1>
     <p><em>Petitions that you started</em></p>
     <div class="list-group">
-      {% for pet in my_petitions %}
-        <a href="{{ pet.get_url }}">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">{{ pet.get_icon }}</i>
+      {% if my_petitions %}
+        {% for pet in my_petitions %}
+          <a href="{{ pet.get_url }}">
+            <div class="list-group-item">
+              <div class="row-action-primary">
+                <i class="material-icons">{{ pet.get_icon }}</i>
+              </div>
+              <div class="row-content">
+                <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+              </div>
             </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
-            </div>
-          </div>
-        </a>
-        {% if not forloop.last %}
-          <div class="list-group-separator"></div>
-        {% endif %}
-      {% endfor %}
+          </a>
+          {% if not forloop.last %}
+            <div class="list-group-separator"></div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <br />
+        <p> You haven't started any petitions. Start one by clicking the button to the left. </p>
+      {% endif %}
     </div>
   </div>
   <br />
@@ -50,21 +60,26 @@
     <h1>Petitions I'm Following</h1>
     <p><em>Petitions you've signed, commented on, or proposed changes to</em></p>
     <div class="list-group">
-      {% for pet in followed_petitions %}
-        <a href="{{ pet.get_url }}">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">{{ pet.get_icon }}</i>
+      {% if followed_petitions %}
+        {% for pet in followed_petitions %}
+          <a href="{{ pet.get_url }}">
+            <div class="list-group-item">
+              <div class="row-action-primary">
+                <i class="material-icons">{{ pet.get_icon }}</i>
+              </div>
+              <div class="row-content">
+                <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+              </div>
             </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
-            </div>
-          </div>
-        </a>
-        {% if not forloop.last %}
-          <div class="list-group-separator"></div>
-        {% endif %}
-      {% endfor %}
+          </a>
+          {% if not forloop.last %}
+            <div class="list-group-separator"></div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <br />
+        <p> You aren't following any petitions. Discover new petitions to the left. </p>
+      {% endif %}
     </div>
   </div>
 </div>

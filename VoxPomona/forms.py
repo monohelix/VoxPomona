@@ -81,9 +81,9 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['faculty_permission'].label = ''
         self.fields['faculty_permission'].help_text = 'Faculty users can...'
 
-class SignPetForm(forms.ModelForm):
-
+class NewClauseForm(forms.ModelForm):
     class Meta:
+<<<<<<< HEAD
         model = Sign
         fields = ('userID','petitionID','time')
 
@@ -155,3 +155,13 @@ class SearchForm(forms.ModelForm):
         self.fields['category'].blank = True
         self.fields['category'].required = False
 
+=======
+        model = Clause
+        fields = ('content',)
+
+    def __init__(self, *args, **kwargs):
+        super(NewClauseForm, self).__init__(*args, **kwargs)
+        self.fields['content'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['content'].label = 'Clause text'
+        self.fields['content'].initial = ''
+>>>>>>> 2cc3074ac491e59f3f18bc731712590244a05205

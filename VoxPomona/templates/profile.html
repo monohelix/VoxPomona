@@ -5,18 +5,24 @@
 {% csrf_token %}
 
 <nav class="col-xs-3 menu">
-  <ul>
-    <li class="active withripple"> <div class="list-group">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">person</i>
-            </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
-            </div>
+  <div class="user_menu">
+    <a href="/profile">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row-action-primary">
+            <i class="material-icons">person</i>
           </div>
-        </div> </li>
-    <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
+          <div class="row-content">
+            <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="/new_petition" class="btn btn-raised btn-primary">Start a new petition</a>
+    <br /> <br />
+  </div>
+  <ul>
+    <a href="/home"><li class="withripple">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
