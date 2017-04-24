@@ -156,10 +156,12 @@ def view_petition_view(request,pid):
                 clause.save()
                 return redirect(this_petition.get_url())
             else:
-                return render(request,'view_petition.html',petDict,{'form': form})
+                petDict['form'] = form
+                return render(request,'view_petition.html',petDict)
         else: 
             form = NewClauseForm()
-            return render(request,'view_petition.html',petDict,{'form': form})
+            petDict['form'] = form
+            return render(request,'view_petition.html',petDict)
 
     return render(request,'view_petition.html',petDict)
 

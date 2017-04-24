@@ -2,7 +2,6 @@
 {% load staticfiles %}
 
 {% block content %}
-{% csrf_token %}
 
 <nav class="col-xs-3 menu">
   <ul>
@@ -68,9 +67,8 @@
     <div class="well">
       <h1>Add a new clause</h1>
       <form method="post">
-        
+        {% csrf_token %}
         {% for field in form %}
-          <br />
           <div class="form-group label-floating">
             {% if field.label %}
               <label class="control-label" for="focusedInput1">{{ field.label }}</label>

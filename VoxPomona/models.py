@@ -67,7 +67,7 @@ class Petition(models.Model):
     # threshold: say = 10 for now
     threshold = 10
     title = models.CharField(max_length = 50, default = "New Petition")
-    summary = models.CharField(max_length = 500, default = "A Petition")
+    summary = models.CharField(max_length = 1000, default = "A Petition")
     # permissions
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
         ('4','view, sign, comment, propose changes'),
@@ -115,7 +115,7 @@ class Petition(models.Model):
 class Clause(models.Model):
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
     index = models.IntegerField()
-    content = models.TextField()
+    content = models.CharField(max_length=500, default='New Clause')
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
 
     # might not work
@@ -133,7 +133,7 @@ class Change(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
     clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
     chid = models.AutoField(primary_key = True)
-    content = models.TextField()
+    content = models.CharField(max_length=500, default='New Change')
     decision = models.IntegerField() #limit this to 1, 2, 3
     def __unicode__(self):
         return ("change"+str(self.chid))
