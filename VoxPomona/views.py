@@ -246,3 +246,34 @@ def display_petition(request, pid):
         return HttpResponse(petition[0])
     else:
         return HttpResponse("Petition not finalized.")
+
+@login_required
+def search_petition(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data.get('user')
+            petitionID = form.cleaned_data.get('petitionID')
+            title = form.cleaned_data.get('title')
+            keyword = form.cleaned_data.get('keyword')
+            category = form.cleaned_data.get('category')
+
+            if user or petitionID or title or keyword or category:
+                #only search if the search form is not entirely empty
+                petition = Petition.objects
+                if user:
+                    petition = petition.filter(userID = user)
+                if petitionID:
+                    petition = petition.filter(petitionID = petitionID)
+                if title:
+                    petition = petition.filter(title__icontains = title)
+                if keyword:
+                    petition = petition.filter(summary__icontains = keyword)
+                if category:
+                    petition = petition.filter(category = category)
+            return HttpResponse(petition)
+        else:
+            return HttpResponse("form not valid.")
+    else:
+        form = SearchForm()
+        return render(request, 'search.html', {'form': form})

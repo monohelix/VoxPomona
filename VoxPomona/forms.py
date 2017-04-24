@@ -83,6 +83,79 @@ class NewPetitionForm(forms.ModelForm):
 
 class NewClauseForm(forms.ModelForm):
     class Meta:
+<<<<<<< HEAD
+        model = Sign
+        fields = ('userID','petitionID','time')
+
+
+class SearchResultsForm(forms.Form):
+    """
+    Form to display resume search results in a dropdown box
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(SearchResultsForm, self).__init__(*args, **kwargs)
+
+    # populates dropdown box with results
+    def set_petitions_to_display(self, resume_list):
+        self.fields['results_list'] = forms.ChoiceField(choices=resume_list)
+
+class SearchForm(forms.ModelForm):
+
+    user = forms.CharField(label =  'user', max_length = 200, required = False)
+    keyword = forms.CharField(label = 'keyword', max_length = 500, required = False)
+    petitionID = forms.IntegerField(label = 'petitionID', required = False)
+
+    def clean_user(self):
+        user = self.cleaned_data.get('user')
+        return user
+
+    def clean_keyword(self):
+        keyword = self.cleaned_data.get('keyword')
+        return keyword
+
+    def clean_pID(self):
+        petitionID = self.cleaned_data.get('petitionID')
+        return petitionID
+
+    # class Meta:
+    #     model = Petition
+    #     fields = ('petitionID','title','category')
+
+    # def __init__(self, *args, **kwargs):
+    #     super(SearchForm, self).__init__(*args, **kwargs)
+
+        # self.fields['petitionID'].widget.attrs.update({'class' : 'form-control'})
+        # self.fields['petitionID'].label = 'petitionID'
+        # self.fields['petitionID'].blank = True
+
+    #     self.fields['title'].widget.attrs.update({'class' : 'form-control'})
+    #     self.fields['title'].label = 'title'
+    #     self.fields['title'].blank = True
+
+    #     self.fields['category'].widget.attrs.update({'class' : 'form-control'})
+    #     self.fields['category'].label = 'category'
+    #     self.fields['category'].blank = True
+
+    class Meta:
+        model = Petition
+        fields = ('title','category')
+
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+
+        self.fields['title'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['title'].label = 'Petition Title'
+        self.fields['title'].required = False
+
+        self.fields['category'].empty_label = "----------------"
+        self.fields['category'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['category'].label = 'Petition Category'
+        self.fields['category'].widget.choices = self.fields['category'].choices
+        self.fields['category'].blank = True
+        self.fields['category'].required = False
+
+=======
         model = Clause
         fields = ('content',)
 
@@ -91,3 +164,4 @@ class NewClauseForm(forms.ModelForm):
         self.fields['content'].widget.attrs.update({'class' : 'form-control'})
         self.fields['content'].label = 'Clause text'
         self.fields['content'].initial = ''
+>>>>>>> 2cc3074ac491e59f3f18bc731712590244a05205
