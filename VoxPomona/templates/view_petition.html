@@ -56,6 +56,14 @@
   {% for cl in clauses %}
     <div class="well">
       <h1>Clause {{ forloop.counter }}</h1>
+      {% if is_owner %}
+        <form action="/delete_clause" method="POST" class="pull-right">
+          {% csrf_token %}
+          <input type="hidden" name="clause_index" value="{{ cl.index }}">
+          <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+          <input type="submit" class="btn" value="Delete This Clause">
+        </form>
+      {% endif %}
       <p>{{ cl.content }}</p>
     </div>
     <br />
@@ -66,7 +74,7 @@
       <h1>Add a new clause</h1>
       <form method="post">
         {% csrf_token %}
-        {% for field in form %}
+        {% for field in new_clause_form %}
           <div class="form-group label-floating">
             {% if field.label %}
               <label class="control-label" for="focusedInput1">{{ field.label }}</label>

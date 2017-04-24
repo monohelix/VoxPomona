@@ -121,6 +121,9 @@ class Clause(models.Model):
     # might not work
     key = (petitionID,index)
 
+    def get_delete_btn_id(self):
+        return str(self.index)
+
     def __unicode__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
     def __str__(self):
