@@ -106,7 +106,7 @@ def new_petition_view(request):
 #View Petition
 def view_petition_view(request,pid):
     user_info = request.user.UserInfo
-    this_petition = Petition.objects.get(petitionID=pid)
+    #this_petition = Petition.objects.get(petitionID=pid)
     pet_clauses = Clause.objects.filter(petitionID=this_petition.petitionID).order_by('index')
     user_type = request.user.UserInfo.user_type
     if user_type == 'STU':
