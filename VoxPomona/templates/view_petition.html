@@ -4,39 +4,37 @@
 {% block content %}
 
 <nav class="col-xs-3 menu">
-  <ul>
-    <a href="/profile"><li class="withripple"> <div class="list-group">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">person</i>
-            </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
-            </div>
-          </div>
-        </div> </li></a>
-    {% if sign_status %}
-      <li>
+  <div class="user_menu">
+    <a href="/profile"><div class="list-group withripple">
+      <div class="list-group-item">
+        <div class="row-action-primary">
+          <i class="material-icons">person</i>
+        </div>
+        <div class="row-content">
+          <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+        </div>
+      </div>
+    </div></a>
+    <div class="btn-group-vertical">
+      {% if sign_status %}
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-primary" value="Revoke Signature" name="revoke_btn">
         </form>
-      </li>
-    {% elif user_perm > 1 %}
-      <li>
+      {% elif user_perm > 1 %}
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-primary" value="Sign This Petition" name="sign_btn">
         </form>
-      </li>
-    {% else %}
-      <!-- do nothing -->
-    {% endif %}
-    {% if is_owner %}
-      <li>
+      {% else %}
+        <!-- do nothing -->
+      {% endif %}
+      {% if is_owner %}
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-danger" value="Delete This Petition" name="delete_btn">
         </form>
-      </li>
-    {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  <ul>
     <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>

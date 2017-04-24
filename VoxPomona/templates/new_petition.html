@@ -4,22 +4,27 @@
 {% block content %}
 
 <nav class="col-xs-3 menu">
-  <ul>
-    <a href="/profile"><li class="withripple"> <div class="list-group">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">person</i>
-            </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
-            </div>
+  <div class="user_menu">
+    <a href="/profile">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row-action-primary">
+            <i class="material-icons">person</i>
           </div>
-        </div> </li></a>
-    <a href="/home/"><li class="withripple">Go Back</li></a>
+          <div class="row-content">
+            <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <ul>
+    <a href="/home"><li class="withripple">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
 </nav>
+
 
 <div class="pages col-xs-9">
   <div class="well">
@@ -42,6 +47,7 @@
         {% endfor %}
     {% endfor %}
     <button class="btn" type="submit">Save</button>
+    <em> You can add clauses to your petition on the next screen. </em>
   </form>
   </div>
 </div>
