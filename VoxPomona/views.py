@@ -107,7 +107,7 @@ def new_petition_view(request):
 def view_petition_view(request,pid):
     user_info = request.user.UserInfo
     this_petition = Petition.objects.get(petitionID=pid)
-    pet_clauses = Clause.objects.filter(petitionID=this_petition.petitionID).order_by('index')
+    pet_clauses = Clause.objects.filter(petitionID=this_petition).order_by('index')
     user_type = request.user.UserInfo.user_type
     if user_type == 'STU':
         user_perm = this_petition.stu_permission
@@ -116,15 +116,22 @@ def view_petition_view(request,pid):
     else:
         user_perm = this_petition.staff_permission
 
-    comment_list = []
-    for clause in pet_clauses:
-        curr = list(Comment.objects.filter(clause=this_petition+clause))
-        comment_list.extend(curr)
-
     sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     is_owner = this_petition.userID == user_info
 
+    change_list = []
+    comment_list = []
+    for clause in pet_clauses:
+        currCo = list(Comment.objects.filter(clauseID=clause.clauseID).order_by('time'))
+        currCh = list(Change.objects.filter(clauseID=clause.clauseID))
+        comment_list.extend(currCo)
+        change_list.extend(currCh)
+
+    if len(change_list) > 0:
+        return HttpResponse(change_list[0].content)
+
     if (request.GET.get('delete_btn')):
+        Sign.objects.filter(petitionID=this_petition).delete()
         this_petition.delete()
         return redirect('/home')
 
@@ -147,50 +154,87 @@ def view_petition_view(request,pid):
        'user_perm' : int(user_perm), \
        'sign_status': sign_status, \
        'is_owner' : is_owner, \
-       'comments' : comment_list
-
+       'comments' : comment_list, \
+       'changes' : change_list
     }
 
     if is_owner:
         if request.method == 'POST':
-            form = NewClauseForm(request.POST)
-            if form.is_valid():
+            new_clause_form = NewClauseForm(request.POST)
+            if new_clause_form.is_valid():
                 clause = Clause()
                 clause.petitionID = this_petition
                 clause.index = Clause.objects.filter(petitionID=this_petition).count()
-                clause.content = form.cleaned_data.get('content')
+                clause.content = new_clause_form.cleaned_data.get('content')
                 clause.time = datetime.datetime.now()
                 clause.save()
                 return redirect(this_petition.get_url())
             else:
-                petDict['form'] = form
+                petDict['new_clause_form'] = new_clause_form
                 return render(request,'view_petition.html',petDict)
         else: 
-            form = NewClauseForm()
-            petDict['form'] = form
+            new_clause_form = NewClauseForm()
+            petDict['new_clause_form'] = new_clause_form
             return render(request,'view_petition.html',petDict)
 
     return render(request,'view_petition.html',petDict)
 
 @login_required
 #Deletes a clause for a given petition, assuming ownership
-def delete_clause(request,pid,cIndex):
+def delete_clause(request):
     #Check that this user is the owner
     user_info = request.user.UserInfo
-    if not(Petition.objects.get(petitionID=pid,userID=user_info).exists()):
+    pid = request.POST.get('petition_id')
+    cIndex = request.POST.get('clause_index')
+    if not(Petition.objects.get(petitionID=pid,userID=user_info)):
         return HttpResponse('Error: This user does not have permission to delete this clause, or this petition does not exist.')
 
     this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
 
     #Delete current clause, and reorder the remaining clauses
     this_clause = Clause.objects.filter(petitionID=pid,index=cIndex)
-    if (this_clause.exists()):
-        this_clause.delete()
+    this_clause.delete()
 
     clause_list = Clause.objects.filter(petitionID=pid).order_by('index')
-    for i in range(1,len(clause_list)+1):
+    for i in range(0,len(clause_list)):
         clause_list[i].index = i
+        clause_list[i].save()
 
+    return redirect(this_petition.get_url())
+
+@login_required
+#adds a comment to a given petition, assuming has permission
+def add_comment(request):
+    user_info = request.user.UserInfo
+    cid = request.POST.get('clause_id')
+    this_clause = Clause.objects.get(clauseID=cid)
+
+    comment = Comment()
+    comment.userID = user_info
+    comment.clauseID = this_clause
+    comment.content = request.POST.get('content')
+    comment.time = datetime.datetime.now()
+    comment.save()
+
+    pid = request.POST.get('petition_id')
+    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+
+    return redirect(this_petition.get_url())
+
+@login_required
+def delete_comment(request):
+    #Check that this user is the owner
+    user_info = request.user.UserInfo
+    pid = request.POST.get('petition_id')
+    commentID = request.POST.get('comment_id')
+
+    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+
+    #Delete current clause, and reorder the remaining clauses
+    this_comment = Comment.objects.get(commentID=commentID)
+    this_comment.delete()
+
+    return redirect(this_petition.get_url())
 
 @login_required
 #Grab Petitions
@@ -223,19 +267,19 @@ def get_follow_petitions(request):
         else:
             petSet.add(signPet)
 
-    for i in range(0,len(commL)):
-        commObj = commL[i]
-        commPet = commObj.petitionID
+    for comment in commL:
+        clause = comment.clauseID
+        commPet = clause.petitionID
 
         #Check that this isn't user's petition
         if commPet.userID == user_info:
             pass
         else:
             petSet.add(commPet)
-
-    for i in range(0,len(propL)):
-        propObj = propL[i]
-        propPet = propObj.petitionID
+    
+    for change in propL:
+        clause = change.clauseID
+        propPet = clause.petitionID
 
         #Check that this isn't user's petition
         if propPet.userID == user_info:
@@ -283,6 +327,10 @@ def search_results(request):
             return HttpResponse("form not valid.")
     else:
         form = SearchForm()
+<<<<<<< HEAD
         return render(request, 'search.html', {'form': form})
 
 
+=======
+        return render(request, 'search.html', {'form': form})
+>>>>>>> 4fb99bbe15412230b05b17185aa50f3d36267b0f

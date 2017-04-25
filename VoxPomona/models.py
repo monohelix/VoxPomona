@@ -113,42 +113,41 @@ class Petition(models.Model):
         return ("petition"+str(self.petitionID)+str(self.title))
 
 class Clause(models.Model):
+    clauseID = models.AutoField(primary_key=True)
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
     index = models.IntegerField()
     content = models.CharField(max_length=500, default='New Clause')
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
 
-    # might not work
-    key = (petitionID,index)
-
     def get_delete_btn_id(self):
         return str(self.index)
 
+    def has_comments(self):
+        if Comment.objects.filter(clauseID=self.clauseID):
+            return True
+        else:
+            return False
+
     def __unicode__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
     def __str__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
-
-    class Meta:
-        unique_together = ("petitionID","index")
 
 class Change(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
-    chid = models.AutoField(primary_key = True)
+    clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
+    changeID = models.AutoField(primary_key = True)
     content = models.CharField(max_length=500, default='New Change')
     decision = models.IntegerField() #limit this to 1, 2, 3
     def __unicode__(self):
-        return ("change"+str(self.chid))
+        return ("change"+str(self.changeID))
     def __str__(self):
-        return ("change"+str(self.chid))
-    class Meta:
-        unique_together = ("userID","clause")
+        return ("change"+str(self.changeID))
 
 class Comment(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
-    cid = models.AutoField(primary_key = True)
+    clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
+    commentID = models.AutoField(primary_key = True)
     content = models.TextField()
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
@@ -156,9 +155,9 @@ class Comment(models.Model):
         return UserInfo.objects.get(email=self.userID).name
 
     def __unicode__(self):
-        return ("comment"+str(self.cid))
+        return ("comment"+str(self.commentID))
     def __str__(self):
-        return ("comment"+str(self.cid))
+        return ("comment"+str(self.commentID))
 
 class Sign(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
@@ -173,18 +172,14 @@ class Sign(models.Model):
 
 class ChangeVote(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    chid = models.ForeignKey(Change, on_delete=models.CASCADE)
+    changeID = models.ForeignKey(Change, to_field = 'changeID', on_delete=models.CASCADE)
     vote = models.BooleanField()
     class Meta:
-        unique_together = ("userID","chid")
+        unique_together = ("userID","changeID")
 
 class CommentVote(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    cid = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    commentID = models.ForeignKey(Comment, to_field = 'commentID', on_delete=models.CASCADE)
     vote = models.BooleanField()
     class Meta:
-        unique_together = ("userID","cid")
-
-
-
-
+        unique_together = ("userID","commentID")
