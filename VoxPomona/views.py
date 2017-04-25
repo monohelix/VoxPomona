@@ -119,6 +119,11 @@ def view_petition_view(request,pid):
     sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     is_owner = this_petition.userID == user_info
 
+    comment_list = []
+    for clause in pet_clauses:
+        curr = list(Comment.objects.filter(clauseID=clause.clauseID))
+        comment_list.extend(curr)
+
     if (request.GET.get('delete_btn')):
         this_petition.delete()
         return redirect('/home')
@@ -141,7 +146,8 @@ def view_petition_view(request,pid):
        'clauses' : pet_clauses, \
        'user_perm' : int(user_perm), \
        'sign_status': sign_status, \
-       'is_owner' : is_owner
+       'is_owner' : is_owner, \
+       'comments' : comment_list
     }
 
     if is_owner:
@@ -220,16 +226,16 @@ def get_follow_petitions(request):
         else:
             petSet.add(signPet)
 
-    for i in range(0,len(commL)):
-        commObj = commL[i]
-        commPet = commObj.petitionID
+    for comment in commL:
+        clause = comment.clauseID
+        commPet = clause.petitionID
 
         #Check that this isn't user's petition
         if commPet.userID == user_info:
             pass
         else:
             petSet.add(commPet)
-
+    
     for i in range(0,len(propL)):
         propObj = propL[i]
         propPet = propObj.petitionID
