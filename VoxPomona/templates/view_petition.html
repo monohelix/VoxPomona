@@ -65,11 +65,13 @@
       {% endif %}
       <h1>Clause {{ forloop.counter }}</h1>
       <p>{{ cl.content }}</p>
-      {% if comments %}
+      {% if cl.has_comments %}
         <hr></hr>
         <h3>Comments</h3>
         {% for c in comments %}
-          <p><b>{{ c.get_name }}: </b>{{ c.content }}</p>
+          {% if c.clauseID.clauseID == cl.clauseID %}
+            <p><b>{{ c.get_name }}: </b>{{ c.content }}</p>
+          {% endif %}
         {% endfor %}
       {% endif %}
       {% if user_perm > 2 %}

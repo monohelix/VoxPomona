@@ -122,6 +122,12 @@ class Clause(models.Model):
     def get_delete_btn_id(self):
         return str(self.index)
 
+    def has_comments(self):
+        if Comment.objects.filter(clauseID=self.clauseID):
+            return True
+        else:
+            return False
+
     def __unicode__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
     def __str__(self):
