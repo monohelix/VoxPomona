@@ -66,16 +66,17 @@
       <h1>Clause {{ forloop.counter }}</h1>
       <p>{{ cl.content }}</p>
       {% if comments %}
-        <h2>Comments</h2>
+        <hr></hr>
+        <h3>Comments</h3>
         {% for c in comments %}
           <p><b>{{ c.get_name }}: </b>{{ c.content }}</p>
         {% endfor %}
       {% endif %}
       {% if user_perm > 2 %}
-        <br />
-        <form action="/add_coment" method="POST">
+        <form action="/add_comment" method="POST">
           {% csrf_token %}
           <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+          <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
           <div class="form-group label-floating">
             <label class="control-label" for="focusedInput1">Add a comment</label>
             <input class="form-control" name="content" required="required">

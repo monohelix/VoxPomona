@@ -121,7 +121,7 @@ def view_petition_view(request,pid):
 
     comment_list = []
     for clause in pet_clauses:
-        curr = list(Comment.objects.filter(clauseID=clause.clauseID).order_by(time))
+        curr = list(Comment.objects.filter(clauseID=clause.clauseID).order_by('time'))
         comment_list.extend(curr)
 
     if (request.GET.get('delete_btn')):
@@ -203,7 +203,15 @@ def add_comment(request):
 
     comment = Comment()
     comment.userID = user_info
-    comment.clauseID = cid
+    comment.clauseID = this_clause
+    comment.content = request.POST.get('content')
+    comment.time = datetime.datetime.now()
+    comment.save()
+
+    pid = request.POST.get('petition_id')
+    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+
+    return redirect(this_petition.get_url())
 
 @login_required
 #Grab Petitions
