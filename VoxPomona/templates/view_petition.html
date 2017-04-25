@@ -68,8 +68,20 @@
       {% if comments %}
         <h2>Comments</h2>
         {% for c in comments %}
-          <b>{{ c.get_name }}: </b>{{ c.content }}
+          <p><b>{{ c.get_name }}: </b>{{ c.content }}</p>
         {% endfor %}
+      {% endif %}
+      {% if user_perm > 2 %}
+        <br />
+        <form action="/add_coment" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+          <div class="form-group label-floating">
+            <label class="control-label" for="focusedInput1">Add a comment</label>
+            <input class="form-control" name="content" required="required">
+            <p class="help-block">Press Enter to save your comment</p>
+          </div>
+        </form>
       {% endif %}
     </div>
     <br />

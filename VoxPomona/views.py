@@ -194,6 +194,16 @@ def delete_clause(request):
 
     return redirect(this_petition.get_url())
 
+@login_required
+#adds a comment to a given petition, assuming has permission
+def add_comment(request):
+    user_info = request.user.UserInfo
+    cid = request.POST.get('clause_id')
+    this_clause = Clause.objects.get(clauseID=cid)
+
+    comment = Comment()
+    comment.userID = user_info
+    comment.clauseID = cid
 
 @login_required
 #Grab Petitions
