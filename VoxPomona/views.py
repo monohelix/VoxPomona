@@ -107,7 +107,7 @@ def new_petition_view(request):
 def view_petition_view(request,pid):
     user_info = request.user.UserInfo
     this_petition = Petition.objects.get(petitionID=pid)
-    pet_clauses = Clause.objects.filter(petitionID=this_petition.petitionID).order_by('index')
+    pet_clauses = Clause.objects.filter(petitionID=this_petition).order_by('index')
     user_type = request.user.UserInfo.user_type
     if user_type == 'STU':
         user_perm = this_petition.stu_permission
@@ -125,6 +125,7 @@ def view_petition_view(request,pid):
         comment_list.extend(curr)
 
     if (request.GET.get('delete_btn')):
+        Sign.objects.filter(petitionID=this_petition).delete()
         this_petition.delete()
         return redirect('/home')
 
