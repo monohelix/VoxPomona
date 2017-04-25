@@ -93,6 +93,7 @@ class NewClauseForm(forms.ModelForm):
         self.fields['content'].widget.attrs.update({'class' : 'form-control'})
         self.fields['content'].label = 'Clause text'
         self.fields['content'].initial = ''
+        self.fields['content'].help_text = 'Press Enter to save your new clause when you\'re done'
 
 class SearchResultsForm(forms.Form):
     """

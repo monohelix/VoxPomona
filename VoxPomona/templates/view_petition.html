@@ -86,12 +86,12 @@
               <label class="control-label" for="focusedInput1">{{ field.label }}</label>
             {% endif %}
             {{ field }}
+            <p class="help-block">{{ field.help_text }}</p>
           </div>
             {% for error in field.errors %}
               <p style="color: red">{{ error }}</p>
             {% endfor %}
         {% endfor %}
-        <button class="btn" type="submit">Save</button>
       </form>
     </div>
     <br />
