@@ -114,6 +114,7 @@ class Petition(models.Model):
 
 class Clause(models.Model):
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
+    clauseID = models.AutoField(primary_key=True)
     index = models.IntegerField()
     content = models.CharField(max_length=500, default='New Clause')
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
@@ -135,7 +136,7 @@ class Clause(models.Model):
 class Change(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
     clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
-    chid = models.AutoField(primary_key = True)
+    changeID = models.AutoField(primary_key = True)
     content = models.CharField(max_length=500, default='New Change')
     decision = models.IntegerField() #limit this to 1, 2, 3
     def __unicode__(self):
@@ -147,8 +148,8 @@ class Change(models.Model):
 
 class Comment(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
-    cid = models.AutoField(primary_key = True)
+    clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
+    commentID = models.AutoField(primary_key = True)
     content = models.TextField()
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
