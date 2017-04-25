@@ -113,8 +113,8 @@ class Petition(models.Model):
         return ("petition"+str(self.petitionID)+str(self.title))
 
 class Clause(models.Model):
-    petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
     clauseID = models.AutoField(primary_key=True)
+    petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
     index = models.IntegerField()
     content = models.CharField(max_length=500, default='New Clause')
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
@@ -129,9 +129,6 @@ class Clause(models.Model):
         return (str(self.petitionID)+" clause"+str(self.index))
     def __str__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
-
-    class Meta:
-        unique_together = ("petitionID","index")
 
 class Change(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
