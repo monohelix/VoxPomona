@@ -121,6 +121,9 @@ class Clause(models.Model):
     # might not work
     key = (petitionID,index)
 
+    def get_delete_btn_id(self):
+        return str(self.index)
+
     def __unicode__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
     def __str__(self):
@@ -147,12 +150,15 @@ class Comment(models.Model):
     clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
     cid = models.AutoField(primary_key = True)
     content = models.TextField()
+    time = models.DateTimeField()
+
+    def get_name(self):
+        return UserInfo.objects.get(email=self.userID).name
+
     def __unicode__(self):
         return ("comment"+str(self.cid))
     def __str__(self):
         return ("comment"+str(self.cid))
-    class Meta:
-        unique_together = ("userID","clause")
 
 class Sign(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)

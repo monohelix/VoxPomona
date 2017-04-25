@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+{% csrf_token %}
+
+<nav class="col-xs-3 menu">
+  <div class="user_menu">
+    <a href="/profile">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row-action-primary">
+            <i class="material-icons">person</i>
+          </div>
+          <div class="row-content">
+            <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </a>
+    <br /> <br />
+  </div>
+  <ul>
+    <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
+    <li></li>
+    <a href="/logout/"><li class="withripple">Logout</li></a>
+  </ul>
+</nav>
+
+<div class="pages col-xs-9">
+	<div class ="well">
+    <h1>Search Results</h1>
+  </div> <br />
+  {% if search_results %}
+    {% for pet in search_results %}
+      <div class="well">
+        <a href="{{ pet.get_url }}">
+            <div class="list-group-item">
+              <div class="row-action-primary">
+                <i class="material-icons">{{ pet.get_icon }}</i>
+              </div>
+              <div class="row-content">
+                <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+              </div>
+            </div>
+          </a>
+      </div>
+      <br />
+    {% endfor %}
+  {% endif %}
+</div>
+
+{% endblock %}
