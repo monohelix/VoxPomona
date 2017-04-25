@@ -113,13 +113,11 @@ class Petition(models.Model):
         return ("petition"+str(self.petitionID)+str(self.title))
 
 class Clause(models.Model):
+    clauseID = models.AutoField(primary_key=True)
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
     index = models.IntegerField()
     content = models.CharField(max_length=500, default='New Clause')
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
-
-    # might not work
-    key = (petitionID,index)
 
     def get_delete_btn_id(self):
         return str(self.index)
@@ -129,13 +127,10 @@ class Clause(models.Model):
     def __str__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
 
-    class Meta:
-        unique_together = ("petitionID","index")
-
 class Change(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
     clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
-    chid = models.AutoField(primary_key = True)
+    changeID = models.AutoField(primary_key = True)
     content = models.CharField(max_length=500, default='New Change')
     decision = models.IntegerField() #limit this to 1, 2, 3
     def __unicode__(self):
@@ -147,8 +142,8 @@ class Change(models.Model):
 
 class Comment(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
-    cid = models.AutoField(primary_key = True)
+    clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
+    commentID = models.AutoField(primary_key = True)
     content = models.TextField()
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
@@ -184,7 +179,3 @@ class CommentVote(models.Model):
     vote = models.BooleanField()
     class Meta:
         unique_together = ("userID","cid")
-
-
-
-
