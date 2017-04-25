@@ -150,7 +150,7 @@ class Comment(models.Model):
     clause = models.ForeignKey(Clause, on_delete=models.CASCADE)
     cid = models.AutoField(primary_key = True)
     content = models.TextField()
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def get_name(self):
         return UserInfo.objects.get(email=self.userID).name
