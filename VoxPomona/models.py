@@ -180,6 +180,6 @@ class CommentVote(models.Model):
     class Meta:
         unique_together = ("userID","cid")
 
-
-
+class FUCK_MIGRATIONS(models.Model):
+    field = models.AutoField(primary_key=True)
 
