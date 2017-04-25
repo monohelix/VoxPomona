@@ -327,10 +327,5 @@ def search_results(request):
             return HttpResponse("form not valid.")
     else:
         form = SearchForm()
-<<<<<<< HEAD
         return render(request, 'search.html', {'form': form})
 
-
-=======
-        return render(request, 'search.html', {'form': form})
->>>>>>> 4fb99bbe15412230b05b17185aa50f3d36267b0f

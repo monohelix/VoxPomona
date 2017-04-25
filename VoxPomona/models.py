@@ -58,7 +58,8 @@ class Petition(models.Model):
     category = models.CharField(
         max_length = 2,
         choices = PETITION_CATEGORY_CHOICES,
-        default = ACADEMICS,
+        # default = ACADEMICS,
+        # blank = True
         )
     # open time
     open_time = models.DateField()
