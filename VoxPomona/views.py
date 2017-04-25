@@ -119,10 +119,16 @@ def view_petition_view(request,pid):
     sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     is_owner = this_petition.userID == user_info
 
+    change_list = []
     comment_list = []
     for clause in pet_clauses:
-        curr = list(Comment.objects.filter(clauseID=clause.clauseID).order_by('time'))
-        comment_list.extend(curr)
+        currCo = list(Comment.objects.filter(clauseID=clause.clauseID).order_by('time'))
+        currCh = list(Change.objects.filter(clauseID=clause.clauseID))
+        comment_list.extend(currCo)
+        change_list.extend(currCh)
+
+    if len(change_list) > 0:
+        return HttpResponse(change_list[0].content)
 
     if (request.GET.get('delete_btn')):
         Sign.objects.filter(petitionID=this_petition).delete()
@@ -148,7 +154,8 @@ def view_petition_view(request,pid):
        'user_perm' : int(user_perm), \
        'sign_status': sign_status, \
        'is_owner' : is_owner, \
-       'comments' : comment_list
+       'comments' : comment_list, \
+       'changes' : change_list
     }
 
     if is_owner:
@@ -215,6 +222,21 @@ def add_comment(request):
     return redirect(this_petition.get_url())
 
 @login_required
+def delete_comment(request):
+    #Check that this user is the owner
+    user_info = request.user.UserInfo
+    pid = request.POST.get('petition_id')
+    commentID = request.POST.get('comment_id')
+
+    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+
+    #Delete current clause, and reorder the remaining clauses
+    this_comment = Comment.objects.get(commentID=commentID)
+    this_comment.delete()
+
+    return redirect(this_petition.get_url())
+
+@login_required
 #Grab Petitions
 def get_user_petitions(request):
     user_info = request.user.UserInfo
@@ -255,9 +277,9 @@ def get_follow_petitions(request):
         else:
             petSet.add(commPet)
     
-    for i in range(0,len(propL)):
-        propObj = propL[i]
-        propPet = propObj.petitionID
+    for change in propL:
+        clause = change.clauseID
+        propPet = clause.petitionID
 
         #Check that this isn't user's petition
         if propPet.userID == user_info:

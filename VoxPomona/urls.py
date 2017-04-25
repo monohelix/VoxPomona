@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^search', views.search_petition),
     url(r'^delete_clause', views.delete_clause),
     url(r'^add_comment', views.add_comment),
+    url(r'^delete_comment', views.delete_comment),
 ]
