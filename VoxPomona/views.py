@@ -116,11 +116,6 @@ def view_petition_view(request,pid):
     else:
         user_perm = this_petition.staff_permission
 
-    comment_list = []
-    for clause in pet_clauses:
-        curr = list(Comment.objects.filter(clause=this_petition+clause))
-        comment_list.extend(curr)
-
     sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     is_owner = this_petition.userID == user_info
 
@@ -146,50 +141,52 @@ def view_petition_view(request,pid):
        'clauses' : pet_clauses, \
        'user_perm' : int(user_perm), \
        'sign_status': sign_status, \
-       'is_owner' : is_owner, \
-       'comments' : comment_list
-
+       'is_owner' : is_owner
     }
 
     if is_owner:
         if request.method == 'POST':
-            form = NewClauseForm(request.POST)
-            if form.is_valid():
+            new_clause_form = NewClauseForm(request.POST)
+            if new_clause_form.is_valid():
                 clause = Clause()
                 clause.petitionID = this_petition
                 clause.index = Clause.objects.filter(petitionID=this_petition).count()
-                clause.content = form.cleaned_data.get('content')
+                clause.content = new_clause_form.cleaned_data.get('content')
                 clause.time = datetime.datetime.now()
                 clause.save()
                 return redirect(this_petition.get_url())
             else:
-                petDict['form'] = form
+                petDict['new_clause_form'] = new_clause_form
                 return render(request,'view_petition.html',petDict)
         else: 
-            form = NewClauseForm()
-            petDict['form'] = form
+            new_clause_form = NewClauseForm()
+            petDict['new_clause_form'] = new_clause_form
             return render(request,'view_petition.html',petDict)
 
     return render(request,'view_petition.html',petDict)
 
 @login_required
 #Deletes a clause for a given petition, assuming ownership
-def delete_clause(request,pid,cIndex):
+def delete_clause(request):
     #Check that this user is the owner
     user_info = request.user.UserInfo
-    if not(Petition.objects.get(petitionID=pid,userID=user_info).exists()):
+    pid = request.POST.get('petition_id')
+    cIndex = request.POST.get('clause_index')
+    if not(Petition.objects.get(petitionID=pid,userID=user_info)):
         return HttpResponse('Error: This user does not have permission to delete this clause, or this petition does not exist.')
 
     this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
 
     #Delete current clause, and reorder the remaining clauses
     this_clause = Clause.objects.filter(petitionID=pid,index=cIndex)
-    if (this_clause.exists()):
-        this_clause.delete()
+    this_clause.delete()
 
     clause_list = Clause.objects.filter(petitionID=pid).order_by('index')
-    for i in range(1,len(clause_list)+1):
+    for i in range(0,len(clause_list)):
         clause_list[i].index = i
+        clause_list[i].save()
+
+    return redirect(this_petition.get_url())
 
 
 @login_required
