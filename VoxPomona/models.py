@@ -152,7 +152,7 @@ class Comment(models.Model):
     content = models.TextField()
     time = models.DateTimeField()
 
-    def get_name:
+    def get_name(self):
         return UserInfo.objects.get(email=self.userID).name
 
     def __unicode__(self):
