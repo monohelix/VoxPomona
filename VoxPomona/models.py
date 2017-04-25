@@ -119,9 +119,6 @@ class Clause(models.Model):
     content = models.CharField(max_length=500, default='New Clause')
     time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
 
-    # might not work
-    key = (petitionID,index)
-
     def get_delete_btn_id(self):
         return str(self.index)
 
