@@ -121,7 +121,7 @@ def view_petition_view(request,pid):
 
     comment_list = []
     for clause in pet_clauses:
-        curr = list(Comment.objects.filter(clauseID=clause.clauseID))
+        curr = list(Comment.objects.filter(clauseID=clause.clauseID).order_by(time))
         comment_list.extend(curr)
 
     if (request.GET.get('delete_btn')):
