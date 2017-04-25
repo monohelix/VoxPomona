@@ -252,7 +252,7 @@ def display_petition(request, pid):
         return HttpResponse("Petition not finalized.")
 
 @login_required
-def search_petition(request):
+def search_results(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -275,9 +275,11 @@ def search_petition(request):
                     petition = petition.filter(summary__icontains = keyword)
                 if category:
                     petition = petition.filter(category = category)
-            return HttpResponse(petition)
+            return render(request,'search_results.html',{'search_results': petition})
         else:
             return HttpResponse("form not valid.")
     else:
         form = SearchForm()
         return render(request, 'search.html', {'form': form})
+
+
