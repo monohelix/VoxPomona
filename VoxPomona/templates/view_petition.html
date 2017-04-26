@@ -110,7 +110,7 @@
       {% if cl.has_changes %}
         {% for c in changes %}
           {% if c.clauseID.clauseID == cl.clauseID %}
-            <p><b>{{ c.get_name }}: </b>
+            <p>{{ c.get_votes }}<b>{{ c.get_name }}: </b>
             {% if c.content|length > 0 %}
               {{ c.content }}
             {% else %}
