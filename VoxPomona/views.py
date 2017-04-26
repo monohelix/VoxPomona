@@ -123,6 +123,7 @@ def view_petition_view(request,pid):
 
     if this_petition.finalized:
         return redirect(this_petition.get_url())
+
     if user_type == 'STU':
         user_perm = this_petition.stu_permission
     elif user_type =='FAC':
@@ -198,6 +199,8 @@ def delete_clause(request):
     cid = request.POST.get('clause_id')
 
     this_petition = Petition.objects.get(petitionID=pid)
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
 
     #Delete current clause, and reorder the remaining clauses
     this_clause = Clause.objects.get(clauseID=cid)
@@ -215,7 +218,12 @@ def delete_clause(request):
 def add_comment(request):
     user_info = request.user.UserInfo
     cid = request.POST.get('clause_id')
+    pid = request.POST.get('petition_id')
     this_clause = Clause.objects.get(clauseID=cid)
+    this_petition = Petition.objects.get(petitionID=pid)
+
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
 
     comment = Comment()
     comment.userID = user_info
@@ -224,18 +232,18 @@ def add_comment(request):
     comment.time = datetime.datetime.now()
     comment.save()
 
-    pid = request.POST.get('petition_id')
-    this_petition = Petition.objects.get(petitionID=pid)
-
     return redirect(this_petition.get_url())
 
 @login_required
 def delete_comment(request):
     user_info = request.user.UserInfo
     pid = request.POST.get('petition_id')
-    commentID = request.POST.get('comment_id')
 
+    commentID = request.POST.get('comment_id')
     this_petition = Petition.objects.get(petitionID=pid)
+
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
 
     #Delete current comment
     this_comment = Comment.objects.get(commentID=commentID)
@@ -250,14 +258,16 @@ def add_change(request):
     cid = request.POST.get('clause_id')
     this_clause = Clause.objects.get(clauseID=cid)
 
+    pid = request.POST.get('petition_id')
+    this_petition = Petition.objects.get(petitionID=pid)
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
+
     change = Change()
     change.userID = user_info
     change.clauseID = this_clause
     change.content = request.POST.get('content')
     change.save()
-
-    pid = request.POST.get('petition_id')
-    this_petition = Petition.objects.get(petitionID=pid)
 
     return redirect(this_petition.get_url())
 
@@ -271,6 +281,9 @@ def accept_change(request):
     this_clause = Clause.objects.get(clauseID=cid)
     this_change = Change.objects.get(changeID=chid)
     this_petition = Petition.objects.get(petitionID=pid)
+
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
 
     if (this_change.content == ''):
         this_change.delete()
@@ -290,6 +303,9 @@ def reject_change(request):
 
     this_change = Change.objects.get(changeID=chid)
     this_petition = Petition.objects.get(petitionID=pid)
+
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
 
     this_change.delete()
     return redirect(this_petition.get_url())
