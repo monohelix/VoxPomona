@@ -231,7 +231,7 @@ def delete_comment(request):
 
 @login_required
 #Add a proposed change to a clause, assuming permission
-def add_change_edit(request):
+def add_change(request):
     user_info = request.user.UserInfo
     cid = request.POST.get('clause_id')
     this_clause = Clause.objects.get(clauseID=cid)
@@ -245,21 +245,6 @@ def add_change_edit(request):
 
     pid = request.POST.get('petition_id')
     this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
-
-    return redirect(this_petition.get_url())
-
-@login_required
-#Delete a proposed change assuming permission
-def add_change_remove(request):
-    user_info = request.user.UserInfo
-    pid = request.POST.get('petition_id')
-    changeID = request.POST.get('change_id')
-
-    this_petition = Petition.objects.get(petitionID=pid)
-
-    #Delete current proposed change
-    this_change = Change.objects.get(changeID=changeID)
-    this_change.delete()
 
     return redirect(this_petition.get_url())
 

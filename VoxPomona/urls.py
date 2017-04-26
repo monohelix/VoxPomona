@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^delete_clause', views.delete_clause),
     url(r'^add_comment', views.add_comment),
     url(r'^delete_comment', views.delete_comment),
+    url(r'^add_change', views.add_change),
 ]
