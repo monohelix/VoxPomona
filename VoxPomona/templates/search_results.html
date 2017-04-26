@@ -35,6 +35,7 @@
     {% for pet in search_results %}
       <div class="well">
         <a href="{{ pet.get_url }}">
+          <div class="list-group">
             <div class="list-group-item">
               <div class="row-action-primary">
                 <i class="material-icons">{{ pet.get_icon }}</i>
@@ -43,7 +44,8 @@
                 <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
               </div>
             </div>
-          </a>
+          </div>
+        </a>
       </div>
       <br />
     {% endfor %}
