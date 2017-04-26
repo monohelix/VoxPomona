@@ -132,6 +132,17 @@
                 <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
               </form>
               <br />
+            {% elif not is_owner %}
+              {% if c.userID.email == user.UserInfo.email %}
+                <form action="/reject_change" method="POST" class="pull-right">
+                  {% csrf_token %}
+                  <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                  <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                  <input type="submit" class="btn btn-danger btn-sm" value="Delete This Change">
+                </form>
+                <br />
+              {% endif %}
             {% endif %}
             </p>
           {% endif %}
