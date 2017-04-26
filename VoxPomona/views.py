@@ -15,7 +15,7 @@ from VoxPomona.models import *
 def index(request):
     return HttpResponse("Hello, world. I'm hungry")
 
-#User Registration
+# User Registration
 def register_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -25,7 +25,7 @@ def register_view(request):
                 form.cleaned_data.get('email'), form.cleaned_data.get('password'))
             user.save()
 
-            #Create UserInfo to retain other info
+            # Create UserInfo to retain other info
             user_info = UserInfo()
             user_info.email = form.cleaned_data.get('email')
             user_info.name = form.cleaned_data.get('name')
@@ -46,7 +46,7 @@ def register_view(request):
         form = SignUpForm()
         return render(request, 'signup.html', {'form': form})
 
-#Logout Out: Simply logs out user and redirects to login
+# Logout Out: Simply logs out user and redirects to login
 @login_required
 def logout_view(request):
     logout(request)

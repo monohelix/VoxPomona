@@ -5,15 +5,17 @@ from django import forms
 from django.contrib.auth.models import User
 from django.conf import settings
 
-# Create your models here.
+# implementation of the relational schema
 
-# plan to use Django user
-# plan to use Django permission
 class UserInfo(models.Model):
+    # email of the user, used as primary key
     email = models.EmailField(max_length = 100, unique = True)
+    # name that the user registered with
     name = models.CharField(max_length = 100)
+    # user type, student, staff or faculty
     USER_TYPE = (('STU','Student'), ('STA','Staff'),('FAC','Faculty'))
     user_type = models.CharField(max_length = 3, choices = USER_TYPE, default = 'STU')
+    # Django user 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name = "UserInfo", on_delete = models.CASCADE)
 
     def get_user_type(self):
@@ -101,7 +103,11 @@ class Petition(models.Model):
         user = UserInfo.objects.get(email=creator)
         return user.name
 
+    # if petition is finalized, return url to display the petition
+    # otherwise give the url
     def get_url(self):
+        if finalized:
+            return '/petition/' + str(self.petitionID)
         return '/view_petition/' + str(self.petitionID)
 
     def get_signatures(self):
