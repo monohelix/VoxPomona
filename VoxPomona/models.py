@@ -48,8 +48,8 @@ class Petition(models.Model):
     PETITION_CATEGORY_CHOICES = (
         (ACADEMICS,'Academics'),
         (ADMINISTRATIVE_ACTION, 'Administrative Action'),
-        (CAMPUS_FACILITIES, 'CF'),
-        (COLLEGE_POLICY, 'CP'),
+        (CAMPUS_FACILITIES, 'Campus Facilities'),
+        (COLLEGE_POLICY, 'Campus Policy'),
         (DINING_HALLS, 'Dining Halls'),
         (EXTRACURRICULAR_ACTIVITIES, 'Extracurricular Activities'),
         (RESIDENCE_HALLS, 'Residence Halls'),
@@ -59,6 +59,7 @@ class Petition(models.Model):
         max_length = 2,
         choices = PETITION_CATEGORY_CHOICES,
         # default = ACADEMICS,
+        blank = True
         )
     # open time
     open_time = models.DateField()
