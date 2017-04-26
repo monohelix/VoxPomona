@@ -66,7 +66,7 @@
       <h1>Clause {{ forloop.counter }}</h1>
       <span class="pet_content">{{ cl.content }}</span>
       {% if cl.has_comments %}
-        <hr></hr>
+        <br /> <br />
         <h3>Comments</h3>
         {% for c in comments %}
           {% if c.clauseID.clauseID == cl.clauseID %}
@@ -80,6 +80,25 @@
               </form>
               <br />
             {% endif %}
+            </p>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      {% if cl.has_changes %}
+        <br /> <br />
+        <h3>Proposed Changes</h3>
+        {% for c in changes %}
+          {% if c.clauseID.clauseID == cl.clauseID %}
+            <p><b>{{ c.get_name }}: </b>{{ c.content }}
+            <!--{% if c.userID.email == user.UserInfo.email %}
+              <form action="/delete_comment" method="POST" class="pull-right">
+                {% csrf_token %}
+                <input type="hidden" name="comment_id" value="{{ c.commentID }}">
+                <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                <input type="submit" class="btn btn-danger btn-sm" value="Delete Your Comment">
+              </form>
+              <br />
+            {% endif %}-->
             </p>
           {% endif %}
         {% endfor %}

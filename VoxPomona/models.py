@@ -129,6 +129,12 @@ class Clause(models.Model):
         else:
             return False
 
+    def has_changes(self):
+        if Change.objects.filter(clauseID=self.clauseID):
+            return True
+        else:
+            return False
+
     def __unicode__(self):
         return (str(self.petitionID)+" clause"+str(self.index))
     def __str__(self):
@@ -140,6 +146,10 @@ class Change(models.Model):
     changeID = models.AutoField(primary_key = True)
     content = models.CharField(max_length=500, default='New Change')
     decision = models.IntegerField() #limit this to 1, 2, 3
+
+    def get_name(self):
+        return UserInfo.objects.get(email=self.userID).name
+
     def __unicode__(self):
         return ("change"+str(self.changeID))
     def __str__(self):
