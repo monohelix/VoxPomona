@@ -349,7 +349,7 @@ def display_petition(request, pid):
     if len(petition) == 0:
         return HttpResponse("This petition doesn't exist.")
     elif petition[0].finalized:
-        return HttpResponse(petition[0])
+        return render(request, 'petition.html', {'petition' : petition})
     else:
         return HttpResponse("Petition not finalized.")
 
