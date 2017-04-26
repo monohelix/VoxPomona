@@ -309,11 +309,13 @@ def search_results(request):
             keyword = form.cleaned_data.get('keyword')
             category = form.cleaned_data.get('category')
 
+            petition = Petition.objects.all()
             if user or petitionID or title or keyword or category:
                 #only search if the search form is not entirely empty
-                petition = Petition.objects
                 if user:
-                    petition = petition.filter(userID = user)
+                    users = UserInfo.objects.filter(name__icontains = user).values('email')
+                    # return HttpResponse
+                    petition = petition.filter(userID__in = user)
                 if petitionID:
                     petition = petition.filter(petitionID = petitionID)
                 if title:
