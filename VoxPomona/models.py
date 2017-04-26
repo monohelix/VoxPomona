@@ -59,7 +59,6 @@ class Petition(models.Model):
         max_length = 2,
         choices = PETITION_CATEGORY_CHOICES,
         # default = ACADEMICS,
-        # blank = True
         )
     # open time
     open_time = models.DateField()
@@ -67,8 +66,8 @@ class Petition(models.Model):
     close_time = models.DateField()
     # threshold: say = 10 for now
     threshold = 10
-    title = models.CharField(max_length = 50, default = "New Petition")
-    summary = models.CharField(max_length = 1000, default = "A Petition")
+    title = models.CharField(max_length = 50)
+    summary = models.CharField(max_length = 1000)
     # permissions
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
         ('4','view, sign, comment, propose changes'),
