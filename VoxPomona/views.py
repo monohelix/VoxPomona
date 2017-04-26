@@ -89,11 +89,22 @@ def new_petition_view(request):
 
             petition.save()
 
-            signature = Sign()
-            signature.userID = user_info
-            signature.petitionID = petition
-            signature.time = datetime.datetime.now()
-            signature.save()
+            #Sign this petition if the user has sign permission
+            user_type = user_info.user_type
+            sign_perm = False
+            if (user_type == "Student"):
+                sign_perm = petition.stu_permission >= 2
+            elif (user_type == "Faculty"):
+                sign_perm = petition.staff_permission >= 2
+            else:
+                sign_perm = petition.faculty_permission >= 2
+
+            if (sign_perm):
+                signature = Sign()
+                signature.userID = user_info
+                signature.petitionID = petition
+                signature.time = datetime.datetime.now()
+                signature.save()
             
             return redirect(petition.get_url())
         else:
