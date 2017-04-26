@@ -340,9 +340,8 @@ def search_results(request):
             if user or petitionID or title or keyword or category:
                 #only search if the search form is not entirely empty
                 if user:
-                    users = UserInfo.objects.filter(name__icontains = user).values('email')
-                    # return HttpResponse
-                    petition = petition.filter(userID__in = user)
+                    users = UserInfo.objects.filter(name__icontains = user).values_list('email', flat = True)
+                    petition = petition.filter(userID__in = users)
                 if petitionID:
                     petition = petition.filter(petitionID = petitionID)
                 if title:
