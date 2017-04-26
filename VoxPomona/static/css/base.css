@@ -130,6 +130,10 @@
     z-index: 100;
 }
 
+.pet_content {
+    font-size: 24px;
+}
+
 #source-modal h4 {
     color: black;
 }
