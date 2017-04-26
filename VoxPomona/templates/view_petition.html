@@ -18,6 +18,7 @@
     <div class="btn-group-vertical">
       {% if is_owner %}
         <form action="/finalize_petition" method="POST">
+          {% csrf_token %}
           <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
           <input type="submit" class="btn btn-raised btn-info" value="Finalize This Petition">
         </form>

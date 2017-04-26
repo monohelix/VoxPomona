@@ -346,10 +346,15 @@ def get_follow_petitions(request):
 
 def display_petition(request, pid):
     petition = Petition.objects.filter(petitionID = pid)
+    pet_clauses = Clause.objects.filter(petitionID=pid).order_by('index')
+    petDict = {
+        'petition' : petition[0], \
+        'clauses' : pet_clauses
+    }
     if len(petition) == 0:
         return HttpResponse("This petition doesn't exist.")
     elif petition[0].finalized:
-        return render(request, 'petition.html', {'petition' : petition})
+        return render(request, 'petition.html', petDict)
     else:
         return HttpResponse("Petition not finalized.")
 
@@ -391,7 +396,7 @@ def finalize_petition(request):
     #Grab the petition, and finalize it
     petitionID = request.POST.get('petition_id')
     this_petition = Petition.objects.get(petitionID=petitionID)
-    this_petition.finalized = False
+    this_petition.finalized = True
     this_petition.save()
 
     #Remove all comments and changes, since we won't display them anymore
