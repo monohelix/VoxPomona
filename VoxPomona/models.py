@@ -71,8 +71,7 @@ class Petition(models.Model):
     summary = models.CharField(max_length = 1000)
     # permissions
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
-        ('4','view, sign, comment, propose changes'),
-        ('5','view, sign, comment, propose changes, modify'))
+        ('4','view, sign, comment, propose changes'))
     stu_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
     staff_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
     faculty_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
