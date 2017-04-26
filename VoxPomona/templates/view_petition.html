@@ -70,16 +70,16 @@
       {% if cl.has_comments %}
         {% for c in comments %}
           {% if c.clauseID.clauseID == cl.clauseID %}
-            <p><b>{{ c.get_name }}: </b>{{ c.content }}
             {% if c.userID.email == user.UserInfo.email %}
-              <form action="/delete_comment" method="POST" class="pull-right">
-                {% csrf_token %}
-                <input type="hidden" name="comment_id" value="{{ c.commentID }}">
-                <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                <input type="submit" class="btn btn-danger btn-sm" value="Delete Your Comment">
-              </form>
-              <br />
-            {% endif %}
+                <form action="/delete_comment" method="POST" class="pull-right">
+                  {% csrf_token %}
+                  <input type="hidden" name="comment_id" value="{{ c.commentID }}">
+                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                  <input type="submit" class="btn btn-danger btn-sm" value="Delete Your Comment">
+                </form>
+              {% endif %}
+            <p>
+            <b>{{ c.get_name }}: </b>{{ c.content }}
             </p>
           {% endif %}
         {% endfor %}
@@ -98,7 +98,7 @@
           </div>
         </form>
       {% endif %}
-      <br /> <br />
+      <br />
       <h3>Proposed Changes</h3>
       {% if cl.has_changes %}
         {% for c in changes %}
@@ -109,15 +109,23 @@
             {% else %}
               <em><span class="text-danger">Delete this clause</span></em>
             {% endif %}
-            <!--{% if c.userID.email == user.UserInfo.email %}
-              <form action="/delete_comment" method="POST" class="pull-right">
+            {% if is_owner %}
+              <form action="/accept_change" method="POST" class="pull-right">
                 {% csrf_token %}
-                <input type="hidden" name="comment_id" value="{{ c.commentID }}">
+                <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
                 <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                <input type="submit" class="btn btn-danger btn-sm" value="Delete Your Comment">
+                <input type="submit" class="btn btn-danger btn-sm" value="Accept Change">
+              </form>
+              <form action="/reject_change" method="POST" class="pull-right">
+                {% csrf_token %}
+                <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+                <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
               </form>
               <br />
-            {% endif %}-->
+            {% endif %}
             </p>
           {% endif %}
         {% endfor %}

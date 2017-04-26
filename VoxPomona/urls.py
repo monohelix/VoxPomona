@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^add_comment', views.add_comment),
     url(r'^delete_comment', views.delete_comment),
     url(r'^add_change', views.add_change),
+    url(r'^accept_change', views.accept_change),
+    url(r'^reject_change', views.reject_change),
 ]
