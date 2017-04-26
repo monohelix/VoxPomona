@@ -127,9 +127,6 @@ def view_petition_view(request,pid):
         comment_list.extend(currCo)
         change_list.extend(currCh)
 
-    if len(change_list) > 0:
-        return HttpResponse(change_list[0].content)
-
     if (request.GET.get('delete_btn')):
         Sign.objects.filter(petitionID=this_petition).delete()
         this_petition.delete()
@@ -182,14 +179,11 @@ def view_petition_view(request,pid):
 @login_required
 #Deletes a clause for a given petition, assuming ownership
 def delete_clause(request):
-    #Check that this user is the owner
     user_info = request.user.UserInfo
     pid = request.POST.get('petition_id')
     cIndex = request.POST.get('clause_index')
-    if not(Petition.objects.get(petitionID=pid,userID=user_info)):
-        return HttpResponse('Error: This user does not have permission to delete this clause, or this petition does not exist.')
 
-    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+    this_petition = Petition.objects.get(petitionID=pid)
 
     #Delete current clause, and reorder the remaining clauses
     this_clause = Clause.objects.filter(petitionID=pid,index=cIndex)
@@ -217,22 +211,55 @@ def add_comment(request):
     comment.save()
 
     pid = request.POST.get('petition_id')
-    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+    this_petition = Petition.objects.get(petitionID=pid)
 
     return redirect(this_petition.get_url())
 
 @login_required
 def delete_comment(request):
-    #Check that this user is the owner
     user_info = request.user.UserInfo
     pid = request.POST.get('petition_id')
     commentID = request.POST.get('comment_id')
 
-    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+    this_petition = Petition.objects.get(petitionID=pid)
 
-    #Delete current clause, and reorder the remaining clauses
+    #Delete current comment
     this_comment = Comment.objects.get(commentID=commentID)
     this_comment.delete()
+
+    return redirect(this_petition.get_url())
+
+@login_required
+#Add a proposed change to a clause, assuming permission
+def add_change_edit(request):
+    user_info = request.user.UserInfo
+    cid = request.POST.get('clause_id')
+    this_clause = Clause.objects.get(clauseID=cid)
+
+    change = Change()
+    change.userID = user_info
+    change.clauseID = this_clause
+    change.content = request.POST.get('content')
+    change.decision = 1
+    change.save()
+
+    pid = request.POST.get('petition_id')
+    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+
+    return redirect(this_petition.get_url())
+
+@login_required
+#Delete a proposed change assuming permission
+def add_change_remove(request):
+    user_info = request.user.UserInfo
+    pid = request.POST.get('petition_id')
+    changeID = request.POST.get('change_id')
+
+    this_petition = Petition.objects.get(petitionID=pid)
+
+    #Delete current proposed change
+    this_change = Change.objects.get(changeID=changeID)
+    this_change.delete()
 
     return redirect(this_petition.get_url())
 
