@@ -65,9 +65,9 @@
       {% endif %}
       <h1>Clause {{ forloop.counter }}</h1>
       <span class="pet_content">{{ cl.content }}</span>
+      <br /> <br />
+      <h3>Comments</h3>
       {% if cl.has_comments %}
-        <br /> <br />
-        <h3>Comments</h3>
         {% for c in comments %}
           {% if c.clauseID.clauseID == cl.clauseID %}
             <p><b>{{ c.get_name }}: </b>{{ c.content }}
@@ -83,13 +83,32 @@
             </p>
           {% endif %}
         {% endfor %}
+      {% else %}
+        <p>No one has commented on this clause.</p>
       {% endif %}
+      {% if user_perm > 2 %}
+        <form action="/add_comment" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+          <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+          <div class="form-group label-floating">
+            <label class="control-label" for="focusedInput1">Add a comment</label>
+            <input class="form-control" name="content" required="required">
+            <p class="help-block">Press Enter to save your comment</p>
+          </div>
+        </form>
+      {% endif %}
+      <br /> <br />
+      <h3>Proposed Changes</h3>
       {% if cl.has_changes %}
-        <br /> <br />
-        <h3>Proposed Changes</h3>
         {% for c in changes %}
           {% if c.clauseID.clauseID == cl.clauseID %}
-            <p><b>{{ c.get_name }}: </b>{{ c.content }}
+            <p><b>{{ c.get_name }}: </b>
+            {% if c.content|length > 0 %}
+              {{ c.content }}
+            {% else %}
+              <em><span class="text-danger">Delete this clause</span></em>
+            {% endif %}
             <!--{% if c.userID.email == user.UserInfo.email %}
               <form action="/delete_comment" method="POST" class="pull-right">
                 {% csrf_token %}
@@ -102,16 +121,18 @@
             </p>
           {% endif %}
         {% endfor %}
+      {% else %}
+        <p>No one has proposed any changes to this clause.</p>
       {% endif %}
-      {% if user_perm > 2 %}
-        <form action="/add_comment" method="POST">
+      {% if user_perm > 3 %}
+        <form action="/add_change" method="POST">
           {% csrf_token %}
           <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
           <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
           <div class="form-group label-floating">
-            <label class="control-label" for="focusedInput1">Add a comment</label>
-            <input class="form-control" name="content" required="required">
-            <p class="help-block">Press Enter to save your comment</p>
+            <label class="control-label" for="focusedInput1">Propose a change to this clause</label>
+            <input class="form-control" name="content">
+            <p class="help-block">Type exactly what you want this clause to say. Leave this blank if you want to delete the clause. Press Enter to save your proposed change.</p>
           </div>
         </form>
       {% endif %}
