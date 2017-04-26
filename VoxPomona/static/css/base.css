@@ -107,6 +107,16 @@
     /*letter-spacing: 1.20000004768372px;*/
 }
 
+.vote_count {
+    width: 24px;
+    text-align: center;
+    display: inline-block;
+}
+
+.inline {
+    display: inline;
+}
+
 .page {
     transform: translateY(1080px);
     transition: transform 0 linear;

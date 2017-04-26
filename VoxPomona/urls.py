@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^add_change', views.add_change),
     url(r'^accept_change', views.accept_change),
     url(r'^reject_change', views.reject_change),
+    url(r'^upvote_change', views.upvote_change),
+    url(r'^downvote_change', views.downvote_change),
 
     # comment-related urls
     url(r'^add_comment', views.add_comment),

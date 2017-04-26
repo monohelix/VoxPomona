@@ -539,7 +539,7 @@ def upvote_change(request):
     chid = request.POST.get('change_id')
 
     this_petition = Petition.objects.get(petitionID=pid)
-    this_clause = Clause.objects.get(clauseID=chid)
+    this_change = Change.objects.get(changeID=chid)
 
     # a finalized petition cannot have changes made to it -- redirect
     if this_petition.finalized:
@@ -548,7 +548,7 @@ def upvote_change(request):
     # check if user has already voted, and update the vote
     this_vote = ChangeVote.objects.get(userID=user_info,changeID=this_change)
     if this_vote.exists():
-        this_vote.vote() = True
+        this_vote.vote = True
         this_vote.save()
     # otherwise, create a new vote
     else:
@@ -572,7 +572,7 @@ def downvote_change(request):
     chid = request.POST.get('change_id')
 
     this_petition = Petition.objects.get(petitionID=pid)
-    this_clause = Clause.objects.get(clauseID=chid)
+    this_change = Change.objects.get(changeID=chid)
 
     # a finalized petition cannot have changes made to it -- redirect
     if this_petition.finalized:
@@ -581,7 +581,7 @@ def downvote_change(request):
     # check if user has already voted, and update the vote
     this_vote = ChangeVote.objects.get(userID=user_info,changeID=this_change)
     if this_vote.exists():
-        this_vote.vote() = False
+        this_vote.vote = False
         this_vote.save()
     # otherwise, create a new vote
     else:

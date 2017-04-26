@@ -90,6 +90,7 @@
             </p>
           {% endif %}
         {% endfor %}
+        <br />
       {% else %}
         <p>No one has commented on this clause.</p>
       {% endif %}
@@ -110,43 +111,57 @@
       {% if cl.has_changes %}
         {% for c in changes %}
           {% if c.clauseID.clauseID == cl.clauseID %}
-            <p>{{ c.get_votes }}<b>{{ c.get_name }}: </b>
-            {% if c.content|length > 0 %}
-              {{ c.content }}
-            {% else %}
-              <em><span class="text-danger">Delete this clause</span></em>
-            {% endif %}
-            {% if is_owner %}
-              <form action="/accept_change" method="POST" class="pull-right">
-                {% csrf_token %}
-                <input type="hidden" name="change_id" value="{{ c.changeID }}">
-                <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
-                <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                <input type="submit" class="btn btn-success btn-sm" value="Accept Change">
-              </form>
-              <form action="/reject_change" method="POST" class="pull-right">
-                {% csrf_token %}
-                <input type="hidden" name="change_id" value="{{ c.changeID }}">
-                <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
-                <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
-              </form>
-              <br />
-            {% elif not is_owner %}
-              {% if c.userID.email == user.UserInfo.email %}
+            <form action="/upvote_change" method="POST" class="inline">
+              {% csrf_token %}
+              <input type="hidden" name="change_id" value="{{ c.changeID }}">
+              <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+              <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_less</i></button>
+            </form>
+            <span class="vote_count">{{ c.get_votes }}</span>
+            <form action="/downvote_change" method="POST" class="inline">
+              {% csrf_token %}
+              <input type="hidden" name="change_id" value="{{ c.changeID }}">
+              <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+              <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_more</i></button>
+            </form>
+            <p class="inline"><b>{{ c.get_name }}: </b>
+              {% if c.content|length > 0 %}
+                {{ c.content }}
+              {% else %}
+                <em><span class="text-danger">Delete this clause</span></em>
+              {% endif %}
+              {% if is_owner %}
+                <form action="/accept_change" method="POST" class="pull-right">
+                  {% csrf_token %}
+                  <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                  <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                  <input type="submit" class="btn btn-success btn-sm" value="Accept Change">
+                </form>
                 <form action="/reject_change" method="POST" class="pull-right">
                   {% csrf_token %}
                   <input type="hidden" name="change_id" value="{{ c.changeID }}">
                   <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
                   <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                  <input type="submit" class="btn btn-danger btn-sm" value="Delete This Change">
+                  <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
                 </form>
                 <br />
+              {% elif not is_owner %}
+                {% if c.userID.email == user.UserInfo.email %}
+                  <form action="/reject_change" method="POST" class="pull-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                    <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+                    <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete This Change">
+                  </form>
+                  <br />
+                {% endif %}
               {% endif %}
-            {% endif %}
             </p>
           {% endif %}
         {% endfor %}
+        <br />
       {% else %}
         <p>No one has proposed any changes to this clause.</p>
       {% endif %}
