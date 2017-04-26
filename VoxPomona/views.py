@@ -120,6 +120,9 @@ def view_petition_view(request,pid):
     this_petition = Petition.objects.get(petitionID=pid)
     pet_clauses = Clause.objects.filter(petitionID=this_petition).order_by('index')
     user_type = request.user.UserInfo.user_type
+
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
     if user_type == 'STU':
         user_perm = this_petition.stu_permission
     elif user_type =='FAC':
