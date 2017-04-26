@@ -159,6 +159,16 @@ class Change(models.Model):
     def get_name(self):
         return UserInfo.objects.get(email=self.userID).name
 
+    def get_votes(self):
+        netVotes = 0
+        votes = ChangeVote.objects.filter(changeID=self.changeID)
+        for v in votes:
+            if v.vote:
+                netVotes += 1
+            else:
+                netVotes -= 1
+        return netVotes
+
     def __unicode__(self):
         return ("change"+str(self.changeID))
     def __str__(self):
