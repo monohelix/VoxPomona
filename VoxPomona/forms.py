@@ -133,7 +133,7 @@ class SearchForm(forms.ModelForm):
         self.fields['title'].initial = ''
         self.fields['title'].required = False
 
-        self.fields['category'].empty_label = ""
+        self.fields['category'].empty_label = None
         self.fields['category'].widget.attrs.update({'class' : 'form-control'})
         self.fields['category'].label = 'Search by category'
         self.fields['category'].widget.choices = self.fields['category'].choices
