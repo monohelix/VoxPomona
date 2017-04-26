@@ -134,13 +134,14 @@ def view_petition_view(request,pid):
     sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
     is_owner = this_petition.userID == user_info
 
-    change_list = []
-    comment_list = []
-    for clause in pet_clauses:
-        currCo = list(Comment.objects.filter(clauseID=clause.clauseID).order_by('time'))
-        currCh = list(Change.objects.filter(clauseID=clause.clauseID))
-        comment_list.extend(currCo)
-        change_list.extend(currCh)
+    change_list = Change.objects.filter(clauseID__in=pet_clauses)
+    comment_list = Comment.objects.filter(clauseID__in=pet_clauses).order_by('time')
+    change_votes = {}
+    for change in change_list:
+        currVo =ChangeVote.objects.filter(changeID=change.changeID)
+        change_votes[change.changeID] = currVo
+
+
 
     if (request.GET.get('delete_btn')):
         Sign.objects.filter(petitionID=this_petition).delete()
@@ -167,7 +168,8 @@ def view_petition_view(request,pid):
        'sign_status': sign_status, \
        'is_owner' : is_owner, \
        'comments' : comment_list, \
-       'changes' : change_list
+       'changes' : change_list, \
+       'change_votes' : change_votes
     }
 
     if is_owner:
