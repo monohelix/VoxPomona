@@ -129,7 +129,7 @@ class Clause(models.Model):
     # time that the clause was created
     time = models.DateTimeField(auto_now_add=True)
 
-    # retrieves id 
+    # retrieves id for button
     def get_delete_btn_id(self):
         return str(self.index)
 
