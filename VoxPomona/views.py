@@ -261,8 +261,6 @@ def add_change(request):
 @login_required
 #Accept a proposed change to a clause (delete if change is empty)
 def accept_change(request):
-    print "call"
-    user_info = request.user.UserInfo
     cid = request.POST.get('clause_id')
     chid = request.POST.get('change_id')
     pid = request.POST.get('petition_id')
@@ -387,3 +385,13 @@ def search_results(request):
         form = SearchForm()
         return render(request, 'search.html', {'form': form})
 
+@login_required
+#Finalize a petition
+def finalized_petition(request):
+    petitionID = request.POST.get('petition_id')
+
+    this_petition = Petition.objects.get(petitionID=petitionID)
+    this_petition.finalized = False
+    this_petition.save()
+
+    return redirect(this_petition.get_url())
