@@ -15,7 +15,8 @@ urlpatterns = [
     url(r'^new_petition', views.new_petition_view, name='new_petition'),
     url(r'^view_petition/([0-9]+)/$', views.view_petition_view, name='view_petition'),
     url(r'^petition/([0-9]+)/$', views.display_petition),
-    url(r'^search', views.search_petition),
+    url(r'^search', views.search_results),
     url(r'^delete_clause', views.delete_clause),
     url(r'^add_comment', views.add_comment),
+    url(r'^delete_comment', views.delete_comment),
 ]
