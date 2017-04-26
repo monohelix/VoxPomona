@@ -255,8 +255,44 @@ def add_change(request):
     change.save()
 
     pid = request.POST.get('petition_id')
-    this_petition = Petition.objects.get(petitionID=pid,userID=user_info)
+    this_petition = Petition.objects.get(petitionID=pid)
 
+    return redirect(this_petition.get_url())
+
+@login_required
+#Accept a proposed change to a clause (delete if change is empty)
+def accept_change(request):
+    user_info = request.user.UserInfo
+    cid = request.POST.get('clause_id')
+    chid = request.POST.get('change_id')
+    pid = request.POST.get('petition_id')
+
+    this_clause = Clause.objects.get(clauseID=cid)
+    this_change = Change.objects.get(changeID=chid)
+    this_petition = Petition.objects.get(petitionID=pid)
+
+    this_change.decision = 3
+
+    content = request.POST.get('content')
+
+    if (content == ''):
+        delete_clause(request)
+    else:
+        this_clause.content = content
+        this_clause.time = datetime.datetime.now()
+
+    return redirect(this_petition.get_url())
+
+@login_required
+#Reject a proposed change to a clause; ie delete the change
+def reject_change(request):
+    chid = request.POST.get('change_id')
+    pid = request.POST.get('petition_id')
+
+    this_change = Change.objects.get(changeID=chid)
+    this_petition = Petition.objects.get(petitionID=pid)
+
+    this_change.delete()
     return redirect(this_petition.get_url())
 
 @login_required
