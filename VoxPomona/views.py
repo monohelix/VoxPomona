@@ -387,11 +387,18 @@ def search_results(request):
 
 @login_required
 #Finalize a petition
-def finalized_petition(request):
+def finalize_petition(request):
+    #Grab the petition, and finalize it
     petitionID = request.POST.get('petition_id')
-
     this_petition = Petition.objects.get(petitionID=petitionID)
     this_petition.finalized = False
     this_petition.save()
+
+    #Remove all comments and changes, since we won't display them anymore
+    #Votes are automatically deleted, thanks to model design
+    clauses = Clause.objects.filter(petitionID=petitionID)
+    for clause in clauses:
+        Comment.objects.filter(clauseID=clause.clauseID).delete()
+        Change.objects.filter(clauseID=clause.clauseID).delete()
 
     return redirect(this_petition.get_url())
