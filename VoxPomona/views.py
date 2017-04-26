@@ -273,9 +273,7 @@ def accept_change(request):
 
     this_change.decision = 3
 
-    content = request.POST.get('content')
-
-    if (content == ''):
+    if (this_change.content == ''):
         delete_clause(request)
     else:
         this_clause.content = content
