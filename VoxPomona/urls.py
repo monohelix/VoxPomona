@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^add_change', views.add_change),
     url(r'^accept_change', views.accept_change),
     url(r'^reject_change', views.reject_change),
+    url(r'^finalize_petition', views.finalize_petition),
 ]

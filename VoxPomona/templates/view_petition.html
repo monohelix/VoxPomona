@@ -16,6 +16,12 @@
       </div>
     </div></a>
     <div class="btn-group-vertical">
+      {% if is_owner %}
+        <form action="/finalize_petition" method="POST">
+          <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+          <input type="submit" class="btn btn-raised btn-info" value="Finalize This Petition">
+        </form>
+      {% endif %}
       {% if sign_status %}
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-primary" value="Revoke Signature" name="revoke_btn">
