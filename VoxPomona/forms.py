@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from VoxPomona.models import *
 
-
+# form for signing up
 class SignUpForm(forms.ModelForm):
     email = forms.CharField(label='email', max_length=500)
     password = forms.CharField(label='password', max_length=128, widget=forms.PasswordInput)
@@ -47,6 +47,7 @@ class SignUpForm(forms.ModelForm):
         self.fields['password'].widget.attrs.update({'placeholder' : 'Password'})
         self.fields['password'].label = ''
 
+# form for creating a new petition
 class NewPetitionForm(forms.ModelForm):
 
     class Meta:
@@ -82,6 +83,7 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['faculty_permission'].label = ''
         self.fields['faculty_permission'].help_text = 'Faculty users can...'
 
+# form for creating new clause
 class NewClauseForm(forms.ModelForm):
     class Meta:
         model = Sign
@@ -96,18 +98,7 @@ class NewClauseForm(forms.ModelForm):
         self.fields['content'].initial = ''
         self.fields['content'].help_text = 'Press Enter to save your new clause'
 
-class SearchResultsForm(forms.Form):
-    """
-    Form to display resume search results in a dropdown box
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(SearchResultsForm, self).__init__(*args, **kwargs)
-
-    # populates dropdown box with results
-    def set_petitions_to_display(self, resume_list):
-        self.fields['results_list'] = forms.ChoiceField(choices=resume_list)
-
+# form for the search function
 class SearchForm(forms.ModelForm):
 
     user = forms.CharField(label =  'user', max_length = 200, required = False)
