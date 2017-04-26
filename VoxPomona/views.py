@@ -546,10 +546,10 @@ def upvote_change(request):
         return redirect(this_petition.get_url())
 
     # check if user has already voted, and update the vote
-    this_vote = ChangeVote.objects.get(userID=user_info,changeID=this_change)
-    if this_vote.exists():
-        this_vote.vote = True
-        this_vote.save()
+    this_vote = ChangeVote.objects.filter(userID=user_info,changeID=this_change)
+    if this_vote:
+        this_vote[0].vote = True
+        this_vote[0].save()
     # otherwise, create a new vote
     else:
         new_vote = ChangeVote()
@@ -580,10 +580,10 @@ def downvote_change(request):
         return redirect(this_petition.get_url())
 
     # check if user has already voted, and update the vote
-    this_vote = ChangeVote.objects.get(userID=user_info,changeID=this_change)
-    if this_vote.exists():
-        this_vote.vote = False
-        this_vote.save()
+    this_vote = ChangeVote.objects.filter(userID=user_info,changeID=this_change)
+    if this_vote:
+        this_vote[0].vote = False
+        this_vote[0].save()
     # otherwise, create a new vote
     else:
         new_vote = ChangeVote()

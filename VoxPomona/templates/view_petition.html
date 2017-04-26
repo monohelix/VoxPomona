@@ -117,7 +117,7 @@
               <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
               <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_less</i></button>
             </form>
-            <span class="vote_count">{{ c.get_votes }}</span>
+            <p class="inline"><span class="vote_count">{{ c.get_votes }}</span></p>
             <form action="/downvote_change" method="POST" class="inline">
               {% csrf_token %}
               <input type="hidden" name="change_id" value="{{ c.changeID }}">
