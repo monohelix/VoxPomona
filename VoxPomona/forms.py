@@ -68,6 +68,7 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['category'].widget.attrs.update({'class' : 'form-control'})
         self.fields['category'].label = 'Petition Category'
         self.fields['category'].help_text = 'Select which category your petition best fits under'
+        self.fields['category'].initial = 'AC'
 
         self.fields['stu_permission'].widget.attrs.update({'class' : 'form-control'})
         self.fields['stu_permission'].label = ''
@@ -111,7 +112,6 @@ class SearchForm(forms.ModelForm):
 
     user = forms.CharField(label =  'user', max_length = 200, required = False)
     keyword = forms.CharField(label = 'keyword', max_length = 500, required = False)
-    petitionID = forms.IntegerField(label = 'petitionID', required = False)
 
     def clean_user(self):
         user = self.cleaned_data.get('user')
@@ -121,29 +121,6 @@ class SearchForm(forms.ModelForm):
         keyword = self.cleaned_data.get('keyword')
         return keyword
 
-    def clean_pID(self):
-        petitionID = self.cleaned_data.get('petitionID')
-        return petitionID
-
-    # class Meta:
-    #     model = Petition
-    #     fields = ('petitionID','title','category')
-
-    # def __init__(self, *args, **kwargs):
-    #     super(SearchForm, self).__init__(*args, **kwargs)
-
-        # self.fields['petitionID'].widget.attrs.update({'class' : 'form-control'})
-        # self.fields['petitionID'].label = 'petitionID'
-        # self.fields['petitionID'].blank = True
-
-    #     self.fields['title'].widget.attrs.update({'class' : 'form-control'})
-    #     self.fields['title'].label = 'title'
-    #     self.fields['title'].blank = True
-
-    #     self.fields['category'].widget.attrs.update({'class' : 'form-control'})
-    #     self.fields['category'].label = 'category'
-    #     self.fields['category'].blank = True
-
     class Meta:
         model = Petition
         fields = ('title','category')
@@ -152,12 +129,23 @@ class SearchForm(forms.ModelForm):
         super(SearchForm, self).__init__(*args, **kwargs)
 
         self.fields['title'].widget.attrs.update({'class' : 'form-control'})
-        self.fields['title'].label = 'Petition Title'
+        self.fields['title'].label = 'Search by petition title'
+        self.fields['title'].initial = ''
         self.fields['title'].required = False
 
-        self.fields['category'].empty_label = "----------------"
+        self.fields['category'].empty_label = ""
         self.fields['category'].widget.attrs.update({'class' : 'form-control'})
-        self.fields['category'].label = 'Petition Category'
+        self.fields['category'].label = 'Search by category'
         self.fields['category'].widget.choices = self.fields['category'].choices
         self.fields['category'].blank = True
         self.fields['category'].required = False
+
+        self.fields['user'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['user'].label = 'Search by creator name'
+        self.fields['user'].initial = ''
+        self.fields['user'].required = False
+
+        self.fields['keyword'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['keyword'].label = 'Search by keyword'
+        self.fields['keyword'].initial = ''
+        self.fields['keyword'].required = False
