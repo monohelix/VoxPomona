@@ -93,11 +93,11 @@ def new_petition_view(request):
             user_type = user_info.user_type
             sign_perm = False
             if (user_type == "Student"):
-                sign_perm = petition.stu_permission >= 2
+                sign_perm = int(petition.stu_permission) >= 2
             elif (user_type == "Faculty"):
-                sign_perm = petition.staff_permission >= 2
+                sign_perm = int(petition.staff_permission) >= 2
             else:
-                sign_perm = petition.faculty_permission >= 2
+                sign_perm = int(petition.faculty_permission) >= 2
 
             if (sign_perm):
                 signature = Sign()
