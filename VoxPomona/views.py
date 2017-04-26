@@ -156,30 +156,25 @@ def view_petition_view(request,pid):
     }
 
     if is_owner:
-        add_clause(request,this_petition,petDict)
-
-    return render(request,'view_petition.html',petDict)
-
-@login_required
-#Add a clause, assuming ownership
-def add_clause(request,this_petition,petDict):
-    if request.method == 'POST':
-        new_clause_form = NewClauseForm(request.POST)
-        if new_clause_form.is_valid():
-            clause = Clause()
-            clause.petitionID = this_petition
-            clause.index = Clause.objects.filter(petitionID=this_petition).count()
-            clause.content = new_clause_form.cleaned_data.get('content')
-            clause.time = datetime.datetime.now()
-            clause.save()
-            return redirect(this_petition.get_url())
-        else:
+        if request.method == 'POST':
+            new_clause_form = NewClauseForm(request.POST)
+            if new_clause_form.is_valid():
+                clause = Clause()
+                clause.petitionID = this_petition
+                clause.index = Clause.objects.filter(petitionID=this_petition).count()
+                clause.content = new_clause_form.cleaned_data.get('content')
+                clause.time = datetime.datetime.now()
+                clause.save()
+                return redirect(this_petition.get_url())
+            else:
+                petDict['new_clause_form'] = new_clause_form
+                return render(request,'view_petition.html',petDict)
+        else: 
+            new_clause_form = NewClauseForm()
             petDict['new_clause_form'] = new_clause_form
             return render(request,'view_petition.html',petDict)
-    else: 
-        new_clause_form = NewClauseForm()
-        petDict['new_clause_form'] = new_clause_form
-        return render(request,'view_petition.html',petDict)
+
+    return render(request,'view_petition.html',petDict)
 
 @login_required
 #Deletes a clause for a given petition, assuming ownership
@@ -341,11 +336,13 @@ def search_results(request):
             keyword = form.cleaned_data.get('keyword')
             category = form.cleaned_data.get('category')
 
+            petition = Petition.objects.all()
             if user or petitionID or title or keyword or category:
                 #only search if the search form is not entirely empty
-                petition = Petition.objects
                 if user:
-                    petition = petition.filter(userID = user)
+                    users = UserInfo.objects.filter(name__icontains = user).values('email')
+                    # return HttpResponse
+                    petition = petition.filter(userID__in = user)
                 if petitionID:
                     petition = petition.filter(petitionID = petitionID)
                 if title:
