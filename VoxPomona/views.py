@@ -276,7 +276,7 @@ def accept_change(request):
     if (this_change.content == ''):
         delete_clause(request)
     else:
-        this_clause.content = content
+        this_clause.content = this_change.content
         this_clause.time = datetime.datetime.now()
 
     return redirect(this_petition.get_url())
