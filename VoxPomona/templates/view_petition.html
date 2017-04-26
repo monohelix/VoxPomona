@@ -58,7 +58,7 @@
       {% if is_owner %}
         <form action="/delete_clause" method="POST" class="pull-right">
           {% csrf_token %}
-          <input type="hidden" name="clause_index" value="{{ cl.index }}">
+          <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
           <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
           <input type="submit" class="btn btn-danger" value="Delete This Clause">
         </form>
