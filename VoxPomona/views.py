@@ -272,8 +272,6 @@ def accept_change(request):
     this_change = Change.objects.get(changeID=chid)
     this_petition = Petition.objects.get(petitionID=pid)
 
-    this_change.decision = 3
-
     if (this_change.content == ''):
         delete_clause(request)
     else:
@@ -281,6 +279,7 @@ def accept_change(request):
         this_clause.time = datetime.datetime.now()
         this_clause.save()
 
+    this_change.delete()
     return redirect(this_petition.get_url())
 
 @login_required
