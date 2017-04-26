@@ -18,6 +18,7 @@ class UserInfo(models.Model):
     # Django user 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name = "UserInfo", on_delete = models.CASCADE)
 
+    # return the user type
     def get_user_type(self):
         ty = self.user_type
         if ty == "STU":
@@ -27,6 +28,7 @@ class UserInfo(models.Model):
         else:
             return "Faculty"
 
+    # for admin site display
     def __unicode__(self):
         return (self.email)
     def __str__(self):
@@ -35,10 +37,10 @@ class UserInfo(models.Model):
 class Petition(models.Model):
 
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete = models.CASCADE)
-    # petitionID
+    # auto filled petitionID
     petitionID = models.AutoField(primary_key = True)
 
-    # category
+    # category options
     ACADEMICS = 'AC'
     ADMINISTRATIVE_ACTION = 'AA'
     CAMPUS_FACILITIES = 'CF'
@@ -65,13 +67,13 @@ class Petition(models.Model):
         )
     # open time
     open_time = models.DateField()
-    # close time: no later than open_time
+    # close time: no earlier than open_time
     close_time = models.DateField()
-    # threshold: say = 10 for now
+    # threshold: fixed to 10
     threshold = 10
     title = models.CharField(max_length = 50)
     summary = models.CharField(max_length = 1000)
-    # permissions
+    # permissions, has four different levels
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
         ('4','view, sign, comment, propose changes'))
     stu_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
@@ -106,7 +108,7 @@ class Petition(models.Model):
     # if petition is finalized, return url to display the petition
     # otherwise give the url
     def get_url(self):
-        if finalized:
+        if self.finalized:
             return '/petition/' + str(self.petitionID)
         return '/view_petition/' + str(self.petitionID)
 
@@ -121,10 +123,13 @@ class Petition(models.Model):
 class Clause(models.Model):
     clauseID = models.AutoField(primary_key=True)
     petitionID = models.ForeignKey(Petition, on_delete=models.CASCADE)
+    # index of the clause in the petition
     index = models.IntegerField()
     content = models.CharField(max_length=500, default='New Clause')
-    time = models.DateTimeField(auto_now_add=True) #what does the bool do?!
+    # time that the clause was created
+    time = models.DateTimeField(auto_now_add=True)
 
+    # retrieves id 
     def get_delete_btn_id(self):
         return str(self.index)
 
