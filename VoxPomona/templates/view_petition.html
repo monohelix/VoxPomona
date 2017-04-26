@@ -115,7 +115,7 @@
                 <input type="hidden" name="change_id" value="{{ c.changeID }}">
                 <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
                 <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                <input type="submit" class="btn btn-danger btn-sm" value="Accept Change">
+                <input type="submit" class="btn btn-success btn-sm" value="Accept Change">
               </form>
               <form action="/reject_change" method="POST" class="pull-right">
                 {% csrf_token %}
