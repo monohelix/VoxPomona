@@ -192,12 +192,12 @@ def view_petition_view(request,pid):
 def delete_clause(request):
     user_info = request.user.UserInfo
     pid = request.POST.get('petition_id')
-    cIndex = request.POST.get('clause_index')
+    cid = request.POST.get('clause_id')
 
     this_petition = Petition.objects.get(petitionID=pid)
 
     #Delete current clause, and reorder the remaining clauses
-    this_clause = Clause.objects.filter(petitionID=pid,index=cIndex)
+    this_clause = Clause.objects.get(clauseID=cid)
     this_clause.delete()
 
     clause_list = Clause.objects.filter(petitionID=pid).order_by('index')
@@ -251,7 +251,6 @@ def add_change(request):
     change.userID = user_info
     change.clauseID = this_clause
     change.content = request.POST.get('content')
-    change.decision = 1
     change.save()
 
     pid = request.POST.get('petition_id')
@@ -262,7 +261,6 @@ def add_change(request):
 @login_required
 #Accept a proposed change to a clause (delete if change is empty)
 def accept_change(request):
-    user_info = request.user.UserInfo
     cid = request.POST.get('clause_id')
     chid = request.POST.get('change_id')
     pid = request.POST.get('petition_id')
@@ -271,16 +269,14 @@ def accept_change(request):
     this_change = Change.objects.get(changeID=chid)
     this_petition = Petition.objects.get(petitionID=pid)
 
-    this_change.decision = 3
-
-    content = request.POST.get('content')
-
-    if (content == ''):
+    if (this_change.content == ''):
+        this_change.delete()
         delete_clause(request)
     else:
-        this_clause.content = content
+        this_clause.content = this_change.content
         this_clause.time = datetime.datetime.now()
-
+        this_clause.save()
+        this_change.delete()
     return redirect(this_petition.get_url())
 
 @login_required
@@ -389,3 +385,13 @@ def search_results(request):
         form = SearchForm()
         return render(request, 'search.html', {'form': form})
 
+@login_required
+#Finalize a petition
+def finalized_petition(request):
+    petitionID = request.POST.get('petition_id')
+
+    this_petition = Petition.objects.get(petitionID=petitionID)
+    this_petition.finalized = False
+    this_petition.save()
+
+    return redirect(this_petition.get_url())

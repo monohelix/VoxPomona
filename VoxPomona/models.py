@@ -150,7 +150,6 @@ class Change(models.Model):
     clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
     changeID = models.AutoField(primary_key = True)
     content = models.CharField(max_length=500, default='New Change')
-    decision = models.IntegerField() #limit this to 1, 2, 3
 
     def get_name(self):
         return UserInfo.objects.get(email=self.userID).name
