@@ -251,7 +251,6 @@ def add_change(request):
     change.userID = user_info
     change.clauseID = this_clause
     change.content = request.POST.get('content')
-    change.decision = 1
     change.save()
 
     pid = request.POST.get('petition_id')
@@ -273,13 +272,13 @@ def accept_change(request):
     this_petition = Petition.objects.get(petitionID=pid)
 
     if (this_change.content == ''):
+        this_change.delete()
         delete_clause(request)
     else:
         this_clause.content = this_change.content
         this_clause.time = datetime.datetime.now()
         this_clause.save()
-
-    this_change.delete()
+        this_change.delete()
     return redirect(this_petition.get_url())
 
 @login_required
