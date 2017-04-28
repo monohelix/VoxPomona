@@ -67,8 +67,6 @@ class Petition(models.Model):
         )
     # open time
     open_time = models.DateField()
-    # close time: no earlier than open_time
-    close_time = models.DateField()
     # threshold: fixed to 10
     threshold = 10
     title = models.CharField(max_length = 50)

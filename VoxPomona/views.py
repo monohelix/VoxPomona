@@ -88,7 +88,6 @@ def new_petition_view(request):
 
             # need to Change these Default Values
             petition.open_time = datetime.datetime.now()
-            petition.close_time = datetime.datetime.now()
             petition.threshold = 10
 
             petition.save()
@@ -146,7 +145,10 @@ def view_petition_view(request,pid):
 
     # check owner status and whether user has a signature on the petition
     is_owner = this_petition.userID == user_info
-    sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
+    if Sign.objects.filter(userID=user_info, petitionID=this_petition):
+        sign_status = True
+    else:
+        sign_status = False
 
     # grab the clauses, proposed changes, comments, and votes for this petition
     pet_clauses = Clause.objects.filter(petitionID=this_petition).order_by('index')
@@ -460,7 +462,7 @@ def display_petition(request, pid):
     }
 
     # check if petition exists
-    if not(petition.exists()):
+    if not petition:
         return HttpResponse("This petition doesn't exist.")
     elif petition.finalized:
         return render(request, 'petition.html', petDict)
@@ -525,4 +527,72 @@ def finalize_petition(request):
 
     # refresh the page, which should now redirect to page where petition
     # cant be modified
+    return redirect(this_petition.get_url())
+
+@login_required
+def upvote_change(request):
+    '''
+    Upvote a proposed changed
+    '''
+
+    # standard info grab
+    user_info = request.user.UserInfo
+    pid = request.POST.get('petition_id')
+    chid = request.POST.get('change_id')
+
+    this_petition = Petition.objects.get(petitionID=pid)
+    this_change = Change.objects.get(changeID=chid)
+
+    # a finalized petition cannot have changes made to it -- redirect
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
+
+    # check if user has already voted, and update the vote
+    this_vote = ChangeVote.objects.filter(userID=user_info,changeID=this_change)
+    if this_vote:
+        this_vote[0].vote = True
+        this_vote[0].save()
+    # otherwise, create a new vote
+    else:
+        new_vote = ChangeVote()
+        new_vote.userID = user_info
+        new_vote.changeID = this_change
+        new_vote.vote = True
+        new_vote.save()
+
+    # redirect to page after vote has been processed
+    return redirect(this_petition.get_url())
+
+@login_required
+def downvote_change(request):
+    '''
+    Downvote a proposed changed
+    '''
+
+    # standard info grab
+    user_info = request.user.UserInfo
+    pid = request.POST.get('petition_id')
+    chid = request.POST.get('change_id')
+
+    this_petition = Petition.objects.get(petitionID=pid)
+    this_change = Change.objects.get(changeID=chid)
+
+    # a finalized petition cannot have changes made to it -- redirect
+    if this_petition.finalized:
+        return redirect(this_petition.get_url())
+
+    # check if user has already voted, and update the vote
+    this_vote = ChangeVote.objects.filter(userID=user_info,changeID=this_change)
+    if this_vote:
+        this_vote[0].vote = False
+        this_vote[0].save()
+    # otherwise, create a new vote
+    else:
+        new_vote = ChangeVote()
+        new_vote.userID = user_info
+        new_vote.changeID = this_change
+        new_vote.vote = False
+        new_vote.save()
+
+    # redirect to page after vote has been processed
     return redirect(this_petition.get_url())
