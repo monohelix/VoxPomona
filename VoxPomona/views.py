@@ -88,7 +88,6 @@ def new_petition_view(request):
 
             # need to Change these Default Values
             petition.open_time = datetime.datetime.now()
-            petition.close_time = datetime.datetime.now()
             petition.threshold = 10
 
             petition.save()
@@ -460,7 +459,7 @@ def display_petition(request, pid):
     }
 
     # check if petition exists
-    if not(petition.exists()):
+    if not petition:
         return HttpResponse("This petition doesn't exist.")
     elif petition.finalized:
         return render(request, 'petition.html', petDict)

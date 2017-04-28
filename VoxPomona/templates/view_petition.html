@@ -145,7 +145,6 @@
                   <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
                   <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
                 </form>
-                <br />
               {% elif not is_owner %}
                 {% if c.userID.email == user.UserInfo.email %}
                   <form action="/reject_change" method="POST" class="pull-right">
@@ -155,7 +154,6 @@
                     <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
                     <input type="submit" class="btn btn-danger btn-sm" value="Delete This Change">
                   </form>
-                  <br />
                 {% endif %}
               {% endif %}
             </p>
