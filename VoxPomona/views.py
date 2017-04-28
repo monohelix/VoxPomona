@@ -145,7 +145,10 @@ def view_petition_view(request,pid):
 
     # check owner status and whether user has a signature on the petition
     is_owner = this_petition.userID == user_info
-    sign_status = Sign.objects.filter(userID=user_info, petitionID=this_petition).exists()
+    if Sign.objects.filter(userID=user_info, petitionID=this_petition):
+        sign_status = True
+    else:
+        sign_status = False
 
     # grab the clauses, proposed changes, comments, and votes for this petition
     pet_clauses = Clause.objects.filter(petitionID=this_petition).order_by('index')
