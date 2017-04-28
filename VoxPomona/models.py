@@ -133,7 +133,6 @@ class Petition(models.Model):
             return 0
         else:
             diff = self.last_updated - time
-            print str(int(diff.seconds / 60 / 60))
             return int(diff.seconds / 60 / 60)
 
     def is_finalizable(self):
