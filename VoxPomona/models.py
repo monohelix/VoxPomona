@@ -69,7 +69,8 @@ class Petition(models.Model):
         blank = True
         )
     # open time
-    open_time = models.DateField()
+    open_time = models.DateTimeField()
+    last_updated = models.DateTimeField()
     # threshold: fixed to 10
     threshold = 10
     title = models.CharField(max_length = 50)
@@ -119,17 +120,32 @@ class Petition(models.Model):
     def get_clauses(self):
         return Clause.objects.filter(petitionID=self.petitionID).order_by('-time')
 
-    def is_finalizable(self):
+    def get_num_signatures_needed(self):
         sigs = self.get_signatures()
-        if len(sigs) < self.threshold:
+        if len(sigs) >= 10:
+            return 0
+        else:
+            return 10 - len(sigs)
+
+    def get_time_remaining(self):
+        time = timezone.now() - timedelta(days=1)
+        if self.last_updated <= time:
+            return 0
+        else:
+            diff = self.last_updated - time
+            print str(int(diff.seconds / 60 / 60))
+            return int(diff.seconds / 60 / 60)
+
+    def is_finalizable(self):
+        clauses = self.get_clauses()
+        if len(clauses) == 0:
             return False
 
-        clauses = self.get_clauses()
-        if len(get_clauses) == 0:
+        if self.get_num_signatures_needed > 0:
             return False
 
         time = timezone.now() - timedelta(days=1)
-        if clauses[0].time > time:
+        if self.last_updated > time:
             return False
         return True
 
