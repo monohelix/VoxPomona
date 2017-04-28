@@ -5,8 +5,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-import datetime
-
 from VoxPomona.forms import *
 from VoxPomona.models import *
 
@@ -87,7 +85,7 @@ def new_petition_view(request):
             petition.finalized = False #By default, the petition is not final
 
             # need to Change these Default Values
-            petition.open_time = datetime.datetime.now()
+            petition.open_time = datetime.now()
             petition.threshold = 10
 
             petition.save()
@@ -107,7 +105,7 @@ def new_petition_view(request):
                 signature = Sign()
                 signature.userID = user_info
                 signature.petitionID = petition
-                signature.time = datetime.datetime.now()
+                signature.time = datetime.now()
                 signature.save()
             
             #redirect to the petition page
@@ -171,7 +169,7 @@ def view_petition_view(request,pid):
         signature = Sign()
         signature.userID = user_info
         signature.petitionID = this_petition
-        signature.time = datetime.datetime.now()
+        signature.time = datetime.now()
         signature.save()
         return redirect(this_petition.get_url())
     elif (request.GET.get('revoke_btn')):
@@ -200,7 +198,7 @@ def view_petition_view(request,pid):
                 clause.petitionID = this_petition
                 clause.index = Clause.objects.filter(petitionID=this_petition).count()
                 clause.content = new_clause_form.cleaned_data.get('content')
-                clause.time = datetime.datetime.now()
+                clause.time = datetime.now()
                 clause.save()
 
                 #redirect to this same page
@@ -270,7 +268,7 @@ def add_comment(request):
     comment.userID = user_info
     comment.clauseID = this_clause
     comment.content = request.POST.get('content')
-    comment.time = datetime.datetime.now()
+    comment.time = datetime.now()
     comment.save()
 
     #refresh page
@@ -355,7 +353,7 @@ def accept_change(request):
     # otherwise adopt the change via overwriting
     else:
         this_clause.content = this_change.content
-        this_clause.time = datetime.datetime.now()
+        this_clause.time = datetime.now()
         this_clause.save()
         this_change.delete()
 
