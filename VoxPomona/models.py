@@ -4,6 +4,9 @@ from django.db import models
 from django import forms
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
+
+from datetime import datetime, timedelta
 
 # implementation of the relational schema
 
@@ -112,6 +115,23 @@ class Petition(models.Model):
 
     def get_signatures(self):
         return Sign.objects.filter(petitionID=self.petitionID)
+
+    def get_clauses(self):
+        return Clause.objects.filter(petitionID=self.petitionID).order_by('-time')
+
+    def is_finalizable(self):
+        sigs = self.get_signatures()
+        if len(sigs) < self.threshold:
+            return False
+
+        clauses = self.get_clauses()
+        if len(get_clauses) == 0:
+            return False
+
+        time = timezone.now() - timedelta(days=1)
+        if clauses[0].time > time:
+            return False
+        return True
 
     def __unicode__(self):
         return ("petition"+str(self.petitionID)+str(self.title))

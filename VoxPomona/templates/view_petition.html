@@ -17,11 +17,23 @@
     </div></a>
     <div class="btn-group-vertical">
       {% if is_owner %}
-        <form action="/finalize_petition" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-          <input type="submit" class="btn btn-raised btn-info" value="Finalize This Petition">
-        </form>
+        {% if petition.is_finalizable %}
+          <form action="/finalize_petition" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+            <input type="submit" class="btn btn-raised btn-info" value="Finalize This Petition">
+          </form>
+        {% endif %}
+        {% if not petition.is_finalizable %}
+          <form>
+            <fieldset disabled="">
+              <button type="submit" data-toggle="tooltip" class="btn btn-raised btn-info"> Finalize This Petition </button>
+            </fieldset>
+          </form> 
+          <h4><em>Need 9 more signatures</em></h4>
+          <h4><em>Need to wait 10 hours</em></h4>
+          <br />
+        {% endif %}
       {% endif %}
       {% if sign_status %}
         <form action="#" method="get">
