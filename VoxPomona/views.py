@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.core.mail import send_mail
+
+from datetime import datetime
 
 from VoxPomona.forms import *
 from VoxPomona.models import *
@@ -84,8 +87,8 @@ def new_petition_view(request):
             petition.faculty_permission = form.cleaned_data.get('faculty_permission')
             petition.finalized = False #By default, the petition is not final
 
-            # need to Change these Default Values
             petition.open_time = datetime.now()
+            petition.last_updated = datetime.now()
             petition.threshold = 10
 
             petition.save()
@@ -171,9 +174,12 @@ def view_petition_view(request,pid):
         signature.petitionID = this_petition
         signature.time = datetime.now()
         signature.save()
+
+        email_notification(this_petition,'S')
         return redirect(this_petition.get_url())
     elif (request.GET.get('revoke_btn')):
         signature = Sign.objects.get(userID=user_info,petitionID=this_petition).delete()
+        email_notification(this_petition,'R')
         return redirect(this_petition.get_url())
 
     # create a dictionary that stores all the info the HTML file needs to render everything
@@ -201,7 +207,12 @@ def view_petition_view(request,pid):
                 clause.time = datetime.now()
                 clause.save()
 
-                #redirect to this same page
+                # a new clause means to update the petition time 
+                this_petition.last_updated = datetime.now()
+                this_petition.save()
+
+                # notify via email to all signators of change and redirect
+                email_notification(this_petition,'L')
                 return redirect(this_petition.get_url())
             else:
                 petDict['new_clause_form'] = new_clause_form
@@ -242,7 +253,10 @@ def delete_clause(request):
         clause_list[i].index = i
         clause_list[i].save()
 
-    #refresh the page after deleting
+    # update the petition, notify signators, and refresh
+    this_petition.last_updated = datetime.now()
+    this_petition.save()
+    email_notification(this_petition,'D')
     return redirect(this_petition.get_url())
 
 @login_required
@@ -271,7 +285,8 @@ def add_comment(request):
     comment.time = datetime.now()
     comment.save()
 
-    #refresh page
+    #notify owner of petition, refresh
+    email_notification(this_petition,'C')
     return redirect(this_petition.get_url())
 
 @login_required
@@ -322,7 +337,10 @@ def add_change(request):
     change.content = request.POST.get('content')
     change.save()
 
-    # refresh page
+    # update petition, notify owner redirect to page
+    this_petition.last_updated = datetime.now()
+    this_petition.save()
+    email_notification(this_petition,'P')
     return redirect(this_petition.get_url())
 
 @login_required
@@ -357,7 +375,8 @@ def accept_change(request):
         this_clause.save()
         this_change.delete()
 
-    # refresh page
+    # notify signators and refresh
+    email_notification(this_petition,'A')
     return redirect(this_petition.get_url())
 
 @login_required
@@ -507,12 +526,19 @@ def search_results(request):
 @login_required
 def finalize_petition(request):
     '''
-    Assuming ownership, finalize a petition via button press
+    Assuming ownership, finalize a petition via button press if allowable;
+    (ie past 24 hours since last update and threshold reached)
     '''
 
-    # grab the petition, and finalize it
+    # grab petition info
     petitionID = request.POST.get('petition_id')
     this_petition = Petition.objects.get(petitionID=petitionID)
+
+    # if finalizable conditions not met, reject and return to view
+    if not(this_petition.finalizable()):
+        redirect(this_petition.get_url())
+
+    # finalize it
     this_petition.finalized = True
     this_petition.save()
 
@@ -594,3 +620,130 @@ def downvote_change(request):
 
     # redirect to page after vote has been processed
     return redirect(this_petition.get_url())
+
+def email_notification(this_petition,messageType):
+    '''
+    Code for sending email notifications to owners or signators.
+    Owners get notifications of new signators, revoked signators,
+    comments, proposed changes, finalizable. Signators get
+    notified of changes.
+
+    MessageTypes: S: new sign               [Owner-specific]
+                  R: revoked sign
+                  C: comment
+                  P: proposed change
+
+                  N: new change proposed    [Signator-specific]
+                  A: accepted change
+                  L: new clause
+                  D: deleted clause
+    '''
+
+    # grab some petition info needed for forming the email message
+    owner = this_petition.userID
+    title = this_petition.title
+    url = this_petition.get_url()
+
+    signs = Sign.objects.filter(petitionID=this_petition).order_by('-time')
+    signators = signs.values_list('userID',flat=True)
+
+    # owner specific email messages
+
+    # 'S' = a new person has signed
+    if messageType == 'S':
+        latest_sign = signs[0]
+        sign_count = signs.count()
+        signator = latest_sign.userID
+
+        message = ("Your petition: \"{title}\" has received a new signature by {person}!"
+                   "This petition now has {count} signatures!"
+                   "View your petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,person=signator,count=sign_count,url=url)
+        send_mail('New Signature on Your Petition',message,'voxpomona@gmail.com',[owner.email])
+
+    # 'R' = a signature has been revoked
+    elif messageType == 'R':
+        signs = Sign.objects.filter(petitionID=this_petition).order_by('-time')
+        sign_count = signs.count()
+
+        message = ("Your petition: \"{title}\" has lost a signature!"
+                   "This petition now has {ccount} signatures."
+                   "View your petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,count=sign_count,url=url)
+        send_mail('Signature Revoked on Your Petition',message,'voxpomona@gmail.com',[owner.email])
+
+    # 'C' = someone has commented on a clause
+    elif messageType == 'C':
+        clauses = Clause.objects.filter(petitionID=this_petition)
+        comment = Comment.objects.filter(clauseID__in=clauses).order_by('-time')[0]
+        commentor = comment.userID
+
+        message = ("Your petition: \"{title}\" has received a comment by {person}."
+                   "View your petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,person=commentor,url=url)
+        send_mail('New Comment on Your Petition',message,'voxpomona@gmail.com',[owner.email])
+
+    # 'P' = someone has proposed a change to a clause
+    elif messageType == 'P':
+        message = ("Your petition: \"{title}\" has received a proposed change"
+                   "to one of its clauses."
+                   "View your petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,url=url)
+        send_mail('New Proposed Change on Your Petition',message,'voxpomona@gmail.com',[owner.email])
+
+    # signator-specific messages
+
+    # 'N' = a new change as been proposed to the signed petition
+    elif messageType == 'N':
+        proposer = change.userID
+
+        message = ("The petition you signed: \"{title}\" has received a proposed change"
+                   "to one of its clauses. View this petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,url=url)
+        send_mail('New Proposed Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+    # 'A' = a new change has been accepted by the owner of the petition
+    elif messageType == 'A':
+        proposer = change.userID
+
+        message = ("The owner of the petition: \"{title}\", which you signed, has accepted a new change"
+                   "to one of its clauses. View this petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,url=url)
+        send_mail('New Accepted Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+
+    # 'L' = the owner has added a new clause
+    elif messageType == 'L':
+        message = ("The owner of the petition: \"{title}\", which you signed, has added a new clause. "
+                   "View this petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,url=url)
+        send_mail('New Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+
+    # 'D' = the owner has deleted a clause
+    elif messageType == 'D':
+        message = ("The owner of the petition: \"{title}\", which you signed, has deleted a clause. "
+                   "View this petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message.format(title=title,url=url)
+        send_mail('Deleted Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
