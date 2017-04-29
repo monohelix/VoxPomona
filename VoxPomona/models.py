@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -149,9 +150,9 @@ class Petition(models.Model):
         return True
 
     def __unicode__(self):
-        return ("petition"+str(self.petitionID)+self.title.encode('utf-8'))
+        return ("petition"+str(self.petitionID)+self.title.encode('utf8'))
     def __str__(self):
-        return ("petition"+str(self.petitionID)+self.title.encode('utf-8'))
+        return ("petition"+str(self.petitionID)+self.title.encode('utf8'))
 
 class Clause(models.Model):
     clauseID = models.AutoField(primary_key=True)

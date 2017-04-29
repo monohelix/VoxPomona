@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
