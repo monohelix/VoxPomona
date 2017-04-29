@@ -6,6 +6,9 @@
     width: 100%;
 }
 
+.normal-text {
+    color: black;
+}
 
 .header-panel {
     background-color: #009587;
