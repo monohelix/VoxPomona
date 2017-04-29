@@ -12,8 +12,6 @@ urlpatterns = [
     url(r'^logout', views.logout_view, name='logout'),
     url(r'^profile', views.user_profile, name='user_profile'),
 
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
-
     # general purpose urls
     url(r'^home', views.home, name='home'),
     url(r'^petition/([0-9]+)/$', views.display_petition),
