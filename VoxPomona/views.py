@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
-import operator
 
 from datetime import datetime
 
@@ -527,28 +526,23 @@ def search_results(request):
                     petition = petition.filter(open_time__gt = open_time)
                 if last_updated:
                     petition = petition.filter(last_updated__gt = last_updated)
-            fpetition = petition.filter(finalized = True)
+            fpetition = petition.filter(finalized = True).order_by('-last_updated')
             npetition = petition.filter(finalized = False)
-            fpetition = sorted(fpetition, key = operator.attrgetter('last_updated'))
             if user_type == 'STU':
-                p1 = npetition.filter(stu_permission = 1)
-                p2 = npetition.filter(stu_permission = 2)
-                p3 = npetition.filter(stu_permission = 3)
-                p4 = npetition.filter(stu_permission = 4)
+                p1 = npetition.filter(stu_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(stu_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(stu_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(stu_permission = 4).order_by('-last_updated')
             elif user_type == 'FAC':
-                p1 = npetition.filter(faculty_permission = 1)
-                p2 = npetition.filter(faculty_permission = 2)
-                p3 = npetition.filter(faculty_permission = 3)
-                p4 = npetition.filter(faculty_permission = 4)
+                p1 = npetition.filter(faculty_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(faculty_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(faculty_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(faculty_permission = 4).order_by('-last_updated')
             else:
-                p1 = npetition.filter(staff_permission = 1)
-                p2 = npetition.filter(staff_permission = 2)
-                p3 = npetition.filter(staff_permission = 3)
-                p4 = npetition.filter(staff_permission = 4)
-            p1 = sorted(p1, key = operator.attrgetter('last_updated'))
-            p2 = sorted(p2, key = operator.attrgetter('last_updated'))
-            p3 = sorted(p3, key = operator.attrgetter('last_updated'))
-            p4 = sorted(p4, key = operator.attrgetter('last_updated'))
+                p1 = npetition.filter(staff_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(staff_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(staff_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(staff_permission = 4).order_by('-last_updated')
             result = {'finalized_results' : fpetition, 'p1' : p1, 'p2' : p2, 'p3' : p3, 'p4': p4}
             return render(request,'search_results.html',result)
         else:
