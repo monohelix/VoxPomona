@@ -136,7 +136,8 @@ Template for displaying a petition prior to being finalized.
               {% if c.userID.email == user.UserInfo.email %}
                 <div class="col-md-9">
                   <br />
-                  <p> <b>{{ c.get_name }}: </b>{{ c.content }}
+                  <p> <b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}): {{ c.content }} </p>
+                  <p><em> {{ c.time }} </em></p>
                 </div>
                 <div class="col-md-3">
                   <form action="/delete_comment" method="POST" class="pull-right">
@@ -149,7 +150,8 @@ Template for displaying a petition prior to being finalized.
               {% else %}
                 <div class="col-md-12">
                   <br />
-                  <p> <b>{{ c.get_name }}: </b>{{ c.content }}
+                  <p> <b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}): {{ c.content }} </p>
+                  <p><em> {{ c.time }} </em></p>
                 </div>
               {% endif %}
             </div>
@@ -209,13 +211,14 @@ Template for displaying a petition prior to being finalized.
               {% if is_owner %}
                 <div class="col-md-6">
                   <br />
-                  <p><b>{{ c.get_name }}: </b>
+                  <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                     {% if c.content|length > 0 %}
                       {{ c.content }}
                     {% else %}
                       <em><span class="text-danger">Delete this clause</span></em>
                     {% endif %}
                   </p>
+                  <p><em> {{ c.time }} </em></p>
                 </div>
                 <div class="col-md-4">
                   <form action="/accept_change" method="POST" class="pull-right">
@@ -237,13 +240,14 @@ Template for displaying a petition prior to being finalized.
                 {% if c.userID.email == user.UserInfo.email %}
                   <div class="col-md-8">
                     <br />
-                    <p><b>{{ c.get_name }}: </b>
+                    <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                       {% if c.content|length > 0 %}
                         {{ c.content }}
                       {% else %}
                         <em><span class="text-danger">Delete this clause</span></em>
                       {% endif %}
                     </p>
+                    <p><em> {{ c.time }} </em></p>
                   </div>
                   <div class="col-md-2">
                     <form action="/reject_change" method="POST" class="pull-right">

@@ -344,6 +344,7 @@ def add_change(request):
     change.userID = user_info
     change.clauseID = this_clause
     change.content = content
+    change.time = datetime.now()
     change.save()
 
     email_notification(this_petition,'P')
