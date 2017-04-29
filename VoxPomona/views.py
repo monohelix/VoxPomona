@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
+import operator
 
 from datetime import datetime
 
@@ -501,9 +502,11 @@ def search_results(request):
             title = form.cleaned_data.get('title')
             keyword = form.cleaned_data.get('keyword')
             category = form.cleaned_data.get('category')
+            open_time = form.cleaned_data.get('open_time')
+            last_updated = form.cleaned_data.get('last_updated')
 
             petition = Petition.objects.all()
-            if user or petitionID or title or keyword or category:
+            if user or petitionID or title or keyword or category or open_time or last_updated:
                 #only search if the search form is not entirely empty
                 if user:
                     users = UserInfo.objects.filter(name__icontains = user).values_list('email', flat = True)
@@ -516,6 +519,11 @@ def search_results(request):
                     petition = petition.filter(summary__icontains = keyword)
                 if category:
                     petition = petition.filter(category = category)
+                if open_time:
+                    petition = petition.filter(open_time__gt = open_time)
+                if last_updated:
+                    petition = petition.filter(last_updated__gt = last_updated)
+            byTime = sorted(petition, key = operator.attrgetter('last_updated'))
             return render(request,'search_results.html',{'search_results': petition})
         else:
             return HttpResponse("form not valid.")

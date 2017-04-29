@@ -114,7 +114,7 @@ class SearchForm(forms.ModelForm):
 
     class Meta:
         model = Petition
-        fields = ('title','category')
+        fields = ('title','category','open_time','last_updated')
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
@@ -140,3 +140,11 @@ class SearchForm(forms.ModelForm):
         self.fields['keyword'].label = 'Search by keyword'
         self.fields['keyword'].initial = ''
         self.fields['keyword'].required = False
+
+        self.fields['open_time'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['open_time'].label = 'Search for petition opened after'
+        self.fields['open_time'].required = False
+
+        self.fields['last_updated'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['last_updated'].label = 'Search for petition updated after'
+        self.fields['last_updated'].required = False
