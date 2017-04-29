@@ -4,18 +4,23 @@
 {% block content %}
 
 <nav class="col-xs-3 menu">
-  <ul>
-    <a href="/profile"><li class="withripple"> <div class="list-group">
-          <div class="list-group-item">
-            <div class="row-action-primary">
-              <i class="material-icons">person</i>
-            </div>
-            <div class="row-content">
-              <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
-            </div>
+  <div class="user_menu">
+    <a href="/profile">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row-action-primary">
+            <i class="material-icons">person</i>
           </div>
-        </div> </li></a>
-    <a href="/home/"><li class="withripple">Go Back</li></a>
+          <div class="row-content">
+            <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </a>
+    <br /> <br />
+  </div>
+  <ul>
+    <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
@@ -24,7 +29,7 @@
 <div class="pages col-xs-9">
   <div class="well">
   <h1>Search For Petitions</h1>
-  <p>Leave all fields blank to get all the petitions</p>
+  <h4>Leave all fields blank to get all the petitions.</h4>
   <form method="post">
     <fieldset>
       {% csrf_token %}

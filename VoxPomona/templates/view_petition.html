@@ -28,7 +28,7 @@
         {% if not petition.is_finalizable %}
           <form>
             <fieldset disabled="">
-              <button type="submit" data-toggle="tooltip" class="btn btn-raised btn-info"> Finalize This Petition </button>
+              <input type="submit" data-toggle="tooltip" class="btn btn-raised btn-info" value="Finalize This Petition">
             </fieldset>
           </form>
           <h4><em>Before finalizing, you must:</em></h4>
@@ -53,7 +53,13 @@
           <input type="submit" class="btn btn-raised btn-primary" value="Sign This Petition" name="sign_btn">
         </form>
       {% else %}
-        <!-- do nothing -->
+        <form action="#" method="get">
+          <fieldset disabled="">
+            <input type="submit" class="btn btn-raised btn-primary" value="Sign This Petition" name="sign_btn">
+          </fieldset>
+        </form>
+        <h4><em>You do not have permission to sign this petition.</em></h4>
+        <br />
       {% endif %}
       {% if is_owner %}
         <form action="#" method="get">
@@ -140,6 +146,17 @@
             <input class="form-control" name="content" required="required">
             <p class="help-block">Press Enter to save your comment</p>
           </div>
+        </form>
+      {% else %}
+        <form>
+          <fieldset disabled="">
+            <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+            <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+            <div class="form-group label-floating">
+              <label class="control-label" for="focusedInput1">You do not have permission to comment on this petition</label>
+              <input class="form-control" name="content">
+            </div>
+          </fieldset>
         </form>
       {% endif %}
       <br />
@@ -241,6 +258,17 @@
             <input class="form-control" name="content">
             <p class="help-block">Type exactly what you want this clause to say. Leave this blank if you want to delete the clause. Press Enter to save your proposed change.</p>
           </div>
+        </form>
+      {% else %}
+        <form>
+          <fieldset disabled="">
+            <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+            <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+            <div class="form-group label-floating">
+              <label class="control-label" for="focusedInput1">You do not have permission to propose changes to this petition</label>
+              <input class="form-control" name="content">
+            </div>
+          </fieldset>
         </form>
       {% endif %}
     </div>
