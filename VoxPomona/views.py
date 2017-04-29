@@ -680,7 +680,7 @@ def email_notification(this_petition,messageType):
         sign_count = signs.count()
 
         message = ("Your petition: \"{title}\" has lost a signature!"
-                   "This petition now has {ccount} signatures."
+                   "This petition now has {count} signatures."
                    "View your petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
