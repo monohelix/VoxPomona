@@ -49,6 +49,7 @@
               </div>
               <div class="row-content">
                 <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+                <p class="list-group-item-heading "> (Last updated: {{ pet.last_updated }})</p>
               </div>
             </div>
           </a>
@@ -78,6 +79,7 @@
               </div>
               <div class="row-content">
                 <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
+                <p class="list-group-item-heading "> Started by: {{ pet.get_creator_name }} (Last updated: {{ pet.last_updated }})</p>
               </div>
             </div>
           </a>
