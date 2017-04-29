@@ -29,15 +29,16 @@
             <fieldset disabled="">
               <button type="submit" data-toggle="tooltip" class="btn btn-raised btn-info"> Finalize This Petition </button>
             </fieldset>
-          </form> 
+          </form>
+          <h4><em>Before finalizing, you must:</em></h4>
           {% if not clauses %}
-            <h4><em>Need at least 1 clause</em></h4>
+            <h4><em>Have at least 1 clause</em></h4>
           {% endif %}
           {% if petition.get_num_signatures_needed > 0 %}
-            <h4><em>Need {{ petition.get_num_signatures_needed }} more signatures</em></h4>
+            <h4><em>Get {{ petition.get_num_signatures_needed }} more signatures</em></h4>
           {% endif %}
           {% if petition.get_time_remaining > 0 %}
-            <h4><em>Need to wait {{petition.get_time_remaining}} more hours</em></h4>
+            <h4><em>Wait {{petition.get_time_remaining}} hours</em></h4>
           {% endif %}
           <br />
         {% endif %}

@@ -337,9 +337,6 @@ def add_change(request):
     change.content = request.POST.get('content')
     change.save()
 
-    # update petition, notify owner redirect to page
-    this_petition.last_updated = datetime.now()
-    this_petition.save()
     email_notification(this_petition,'P')
     return redirect(this_petition.get_url())
 
@@ -375,7 +372,11 @@ def accept_change(request):
         this_clause.save()
         this_change.delete()
 
-    # notify signators and refresh
+
+
+    # update petition, notify owner redirect to page
+    this_petition.last_updated = datetime.now()
+    this_petition.save()
     email_notification(this_petition,'A')
     return redirect(this_petition.get_url())
 
