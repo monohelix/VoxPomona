@@ -21,21 +21,24 @@ def register_view(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
 
+            # get the email, and check if it is a pomona email, non-pomona emails rejected
+            email = form.cleaned_data.get('email')
+
             # create django built-in user object
-            user = User.objects.create_user(form.cleaned_data.get('email'),
-                form.cleaned_data.get('email'), form.cleaned_data.get('password'))
+            user = User.objects.create_user(email,
+                email, form.cleaned_data.get('password'))
             user.save()
 
             # create UserInfo, which stores the info we will care about/use
             user_info = UserInfo()
-            user_info.email = form.cleaned_data.get('email')
+            user_info.email = email
             user_info.name = form.cleaned_data.get('name')
             user_info.user_type = form.cleaned_data.get('user_type')
             user_info.user = user
             user_info.save()
 
             # redirect to the profile page:
-            user = authenticate(username=request.POST.get('email'), password=request.POST.get('password'))
+            user = authenticate(username=email, password=request.POST.get('password'))
             if user is not None:
                 if user.is_active:
                     login(request, user)
