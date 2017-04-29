@@ -1,0 +1,1 @@
+Activate your voxpomona account - you have {{ expiration_days }} days!

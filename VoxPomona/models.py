@@ -149,9 +149,9 @@ class Petition(models.Model):
         return True
 
     def __unicode__(self):
-        return ("petition"+str(self.petitionID)+str(self.title))
+        return ("petition"+str(self.petitionID)+self.title.encode('utf-8'))
     def __str__(self):
-        return ("petition"+str(self.petitionID)+str(self.title))
+        return ("petition"+str(self.petitionID)+self.title.encode('utf-8'))
 
 class Clause(models.Model):
     clauseID = models.AutoField(primary_key=True)
