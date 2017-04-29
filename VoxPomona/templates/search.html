@@ -39,7 +39,11 @@
             <label class="col-md-2 control-label" for="focusedInput1">{{ field.label }}</label>
           {% endif %}
           <div class="col-md-10">
+            {% if field.prefix == "time" %}
+              <p>HELLO</p>
+            {% endif %}
             {{ field }}
+            
           </div>
           <p class="help-block">{{ field.help_text }}</p>
         </div>

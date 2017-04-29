@@ -163,11 +163,11 @@ class SearchForm(forms.ModelForm):
         self.fields['keyword'].required = False
 
         self.fields['open_time'].widget.attrs.update({'class' : 'form-control'})
-        self.fields['open_time'].label = 'Search for petition opened after'
-        self.fields['open_time'].initial = 'YYYY-MM-DD'
+        self.fields['open_time'].label = 'Search for petition opened after (YYYY-MM-DD)'
+        self.fields['open_time'].initial = ''
         self.fields['open_time'].required = False
 
         self.fields['last_updated'].widget.attrs.update({'class' : 'form-control'})
-        self.fields['last_updated'].label = 'Search for petition updated after'
-        self.fields['last_updated'].initial = 'YYYY-MM-DD'
+        self.fields['last_updated'].label = 'Search for petition updated after (YYYY-MM-DD)'
+        self.fields['last_updated'].initial = ''
         self.fields['last_updated'].required = False
