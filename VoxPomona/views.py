@@ -278,7 +278,6 @@ def add_comment(request):
     content = content.strip()
 
     if len(content) == 0:
-        print "nice try"
         return redirect(this_petition.get_url())
 
     # a finalized petition cannot be modified -- redirect
