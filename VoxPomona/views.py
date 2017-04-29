@@ -576,6 +576,7 @@ def finalize_petition(request):
 
     # finalize it
     this_petition.finalized = True
+    this_petition.last_updated = datetime.now()
     this_petition.save()
 
     # remove all comments and changes, since we won't display them anymore
