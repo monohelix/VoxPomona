@@ -30,7 +30,7 @@
 <div class="pages col-xs-9">
 	<div class ="well">
     <h1>Search Results</h1>
-    {% if finalized_results or open_results %}
+    {% if finalized_results or p1 or p2 or p3 or p4 %}
       <h4>Click to view each petition</h4>
     {% else %}
       <br />
@@ -38,11 +38,83 @@
     {% endif %}
   </div>
   <br />
-  {% if open_results %}
+  {% if p1 %}
     <div class="well">
-      <h1>Currently Open Petitions</h1>
+      <h1>Currently Open Petitions that You Can View Only </h1>
       <div class="list-group">
-        {% for pet in open_results %}
+        {% for pet in p1 %}
+          <a href="{{ pet.get_url }}">
+            <div class="list-group-item">
+              <div class="row-action-primary">
+                <i class="material-icons">{{ pet.get_icon }}</i>
+              </div>
+              <div class="row-content">
+                <b><h4 class="list-group-item-heading"> {{ pet.title }} </h4></b>
+                <p class="list-group-item-heading "> Started by: {{ pet.get_creator_name }} (Last updated: {{ pet.last_updated }})</p>
+              </div>
+            </div>
+          </a>
+          {% if not forloop.last %}
+            <div class="list-group-separator"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <br />
+  {% endif %}
+  {% if p2 %}
+    <div class="well">
+      <h1>Currently Open Petitions that You Can View and Sign </h1>
+      <div class="list-group">
+        {% for pet in p2 %}
+          <a href="{{ pet.get_url }}">
+            <div class="list-group-item">
+              <div class="row-action-primary">
+                <i class="material-icons">{{ pet.get_icon }}</i>
+              </div>
+              <div class="row-content">
+                <b><h4 class="list-group-item-heading"> {{ pet.title }} </h4></b>
+                <p class="list-group-item-heading "> Started by: {{ pet.get_creator_name }} (Last updated: {{ pet.last_updated }})</p>
+              </div>
+            </div>
+          </a>
+          {% if not forloop.last %}
+            <div class="list-group-separator"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <br />
+  {% endif %}
+  {% if p3 %}
+    <div class="well">
+      <h1>Currently Open Petitions that You Can View, Sign, and Comment </h1>
+      <div class="list-group">
+        {% for pet in p3 %}
+          <a href="{{ pet.get_url }}">
+            <div class="list-group-item">
+              <div class="row-action-primary">
+                <i class="material-icons">{{ pet.get_icon }}</i>
+              </div>
+              <div class="row-content">
+                <b><h4 class="list-group-item-heading"> {{ pet.title }} </h4></b>
+                <p class="list-group-item-heading "> Started by: {{ pet.get_creator_name }} (Last updated: {{ pet.last_updated }})</p>
+              </div>
+            </div>
+          </a>
+          {% if not forloop.last %}
+            <div class="list-group-separator"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <br />
+  {% endif %}
+  {% if p4 %}
+    <div class="well">
+      <h1>Currently Open Petitions that You Can View, Sign, Comment, and Propose Changes To </h1>
+      <div class="list-group">
+        {% for pet in p4 %}
           <a href="{{ pet.get_url }}">
             <div class="list-group-item">
               <div class="row-action-primary">
