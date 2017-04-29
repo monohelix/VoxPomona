@@ -1,19 +1,27 @@
+<!-- template for login -->
+
 {% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
+
+<!-- main page content -->
 <div class="pages col-xs-9">
     <div class ="well">
         <form id="login-form" method="post" action="{% url 'login' %}" class="form-horizontal">
             <fieldset>
             <h1>Login</h1>
             {% csrf_token %}
+
+            <!-- email -->
             <div class="form-group">
                 <label for="id_username" class="col-md-2 control-label">Email</label>
                 <div class="col-md-10">
                     <input type="email" class="form-control" id="id_username" placeholder="Email" name="username">
                 </div>
             </div>
+
+            <!-- password -->
             <div class="form-group">
                 <label for="id_password" class="col-md-2 control-label">Password</label>
 

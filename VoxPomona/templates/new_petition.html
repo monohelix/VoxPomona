@@ -1,8 +1,11 @@
+<!-- template for creating new petitions -->
+
 {% extends 'base.html' %}
 {% block title %}Start A New Petition{% endblock %}
 
 {% block content %}
 
+<!-- side navbar -->
 <nav class="col-xs-3 menu">
   <div class="user_menu">
     <a href="/profile">
@@ -25,10 +28,11 @@
   </ul>
 </nav>
 
-
+<!-- main page content -->
 <div class="pages col-xs-9">
   <div class="well">
   <h1>Start A New Petition</h1>
+  <!-- form fields -->
   <form method="post">
     {% csrf_token %}
     {% for field in form %}

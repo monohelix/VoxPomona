@@ -1,9 +1,15 @@
+<!--
+  Template with search fields for search functionality
+-->
+
 {% extends 'base.html' %}
 {% block title %}Start A New Petition{% endblock %}
 
 {% block content %}
 
+<!-- side navbar -->
 <nav class="col-xs-3 menu">
+  <!-- user profile, link to profile -->
   <div class="user_menu">
     <a href="/profile">
       <div class="list-group">
@@ -19,6 +25,8 @@
     </a>
     <br /> <br />
   </div>
+
+  <!-- navigation -->
   <ul>
     <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
@@ -26,34 +34,36 @@
   </ul>
 </nav>
 
+<!-- page content -->
 <div class="pages col-xs-9">
   <div class="well">
-  <h1>Search For Petitions</h1>
-  <h4>Leave all fields blank to get all the petitions.</h4>
-  <form method="post">
-    <fieldset>
-      {% csrf_token %}
-      {% for field in form %}
-        <div class="form-group">
-          {% if field.label %}
-            <label class="col-md-2 control-label" for="focusedInput1">{{ field.label }}</label>
-          {% endif %}
-          <div class="col-md-10">
-            {{ field }}
-            <span class="help-block">{{ field.help_text }}</span>
+    <!-- search fields -->
+    <h1>Search For Petitions</h1>
+    <h4>Leave all fields blank to get all the petitions.</h4>
+    <form method="post">
+      <fieldset>
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-group">
+            {% if field.label %}
+              <label class="col-md-2 control-label" for="focusedInput1">{{ field.label }}</label>
+            {% endif %}
+            <div class="col-md-10">
+              {{ field }}
+              <span class="help-block">{{ field.help_text }}</span>
+            </div>
+            
           </div>
-          
-        </div>
-        {% if not forloop.last %}
-          <br />
-        {% endif %}
-          {% for error in field.errors %}
-            <p style="color: red">{{ error }}</p>
-          {% endfor %}
-      {% endfor %}
-    </fieldset>
-    <button class="btn" type="submit">Search</button>
-  </form>
+          {% if not forloop.last %}
+            <br />
+          {% endif %}
+            {% for error in field.errors %}
+              <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+      </fieldset>
+      <button class="btn" type="submit">Search</button>
+    </form>
   </div>
 </div>
 {% endblock %}

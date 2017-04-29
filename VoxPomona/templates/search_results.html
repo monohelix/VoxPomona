@@ -1,9 +1,14 @@
+<!--
+  Template for display search results
+-->
+
 {% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block content %}
 {% csrf_token %}
 
+<!-- side navbar -->
 <nav class="col-xs-3 menu">
   <div class="user_menu">
     <a href="/profile">
@@ -27,17 +32,21 @@
   </ul>
 </nav>
 
+<!-- main content of pagae -->
 <div class="pages col-xs-9">
+  <!-- top level results -->
 	<div class ="well">
     <h1>Search Results</h1>
     {% if finalized_results or p1 or p2 or p3 or p4 %}
-      <h4>Click to view each petition</h4>
+      <h4>Click on each petition to view it</h4>
     {% else %}
       <br />
       <h3> No search results found. Please <a href="/search">try again</a> with different criteria.</h3>
     {% endif %}
   </div>
   <br />
+
+  <!-- view only petitions -->
   {% if p1 %}
     <div class="well">
       <h1>Currently Open Petitions that You Can View Only </h1>
@@ -62,6 +71,8 @@
     </div>
     <br />
   {% endif %}
+
+  <!-- petitions that you can view and sign -->
   {% if p2 %}
     <div class="well">
       <h1>Currently Open Petitions that You Can View and Sign </h1>
@@ -86,6 +97,8 @@
     </div>
     <br />
   {% endif %}
+
+  <!-- petitions you can view, sign, comment -->
   {% if p3 %}
     <div class="well">
       <h1>Currently Open Petitions that You Can View, Sign, and Comment </h1>
@@ -110,6 +123,8 @@
     </div>
     <br />
   {% endif %}
+
+  <!-- petitions you can view, sign, comment, and propose changes -->
   {% if p4 %}
     <div class="well">
       <h1>Currently Open Petitions that You Can View, Sign, Comment, and Propose Changes To </h1>
@@ -134,6 +149,8 @@
     </div>
     <br />
   {% endif %}
+
+  <!-- finalized petitions -->
   {% if finalized_results %}
     <div class="well">
       <h1>Finalized Petitions</h1>

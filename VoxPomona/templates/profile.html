@@ -1,9 +1,12 @@
+<!-- template for viewing user profiles -->
+
 {% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block content %}
 {% csrf_token %}
 
+<!-- side navbar -->
 <nav class="col-xs-3 menu">
   <div class="user_menu">
     <a href="/profile">
@@ -28,6 +31,7 @@
   </ul>
 </nav>
 
+<!-- main page content -->
 <div class="pages col-xs-9">
 	<div class ="well">
         <h1>Your Information</h1>
