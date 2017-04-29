@@ -274,6 +274,12 @@ def add_comment(request):
     pid = request.POST.get('petition_id')
     this_clause = Clause.objects.get(clauseID=cid)
     this_petition = Petition.objects.get(petitionID=pid)
+    content = request.POST.get('content')
+    content = content.strip()
+
+    if len(content) == 0:
+        print "nice try"
+        return redirect(this_petition.get_url())
 
     # a finalized petition cannot be modified -- redirect
     if this_petition.finalized:
@@ -283,7 +289,8 @@ def add_comment(request):
     comment = Comment()
     comment.userID = user_info
     comment.clauseID = this_clause
-    comment.content = request.POST.get('content')
+    comment.content = content
+
     comment.time = datetime.now()
     comment.save()
 
@@ -326,6 +333,8 @@ def add_change(request):
     cid = request.POST.get('clause_id')
     this_petition = Petition.objects.get(petitionID=pid)
     this_clause = Clause.objects.get(clauseID=cid)
+    content = request.POST.get('content')
+    content = content.strip()
 
     # finalized petitions cannot be modified 
     if this_petition.finalized:
@@ -335,7 +344,7 @@ def add_change(request):
     change = Change()
     change.userID = user_info
     change.clauseID = this_clause
-    change.content = request.POST.get('content')
+    change.content = content
     change.save()
 
     email_notification(this_petition,'P')
