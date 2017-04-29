@@ -677,8 +677,8 @@ def email_notification(this_petition,messageType):
 
     # owner specific email messages
 
-    # 'S' = a new person has signed
-    if messageType == 'S':
+    # 'S' = a new person has signed, make sure it's not owner
+    if messageType == 'S' && len(signs) > 0:
         latest_sign = signs[0]
         sign_count = signs.count()
         signator = latest_sign.userID
