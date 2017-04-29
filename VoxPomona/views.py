@@ -98,7 +98,7 @@ def new_petition_view(request):
             petition.save()
 
             # check if the user has sign permission
-            user_type = user_info.user_type
+            user_type = user_info.get_user_type()
             sign_perm = False
             if (user_type == "Student"):
                 sign_perm = int(petition.stu_permission) >= 2
