@@ -107,6 +107,9 @@ class Petition(models.Model):
         user = UserInfo.objects.get(email=creator)
         return user.name
 
+    def get_creator_user_type(self):
+        return self.userID.get_user_type()
+
     # if petition is finalized, return url to display the petition
     # otherwise give the url
     def get_url(self):
