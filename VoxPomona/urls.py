@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from . import views
@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^register', views.register_view, name='register'),
     url(r'^logout', views.logout_view, name='logout'),
     url(r'^profile', views.user_profile, name='user_profile'),
+
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
 
     # general purpose urls
     url(r'^home', views.home, name='home'),

@@ -147,3 +147,5 @@ EMAIL_HOST_USER = 'voxpomona@gmail.com'
 EMAIL_HOST_PASSWORD = '2017VoxPomona!'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+ACCOUNT_ACTIVATION_DAYS = 7 #Make it one week for now to be lazy
