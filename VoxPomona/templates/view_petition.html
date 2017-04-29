@@ -1,10 +1,18 @@
+<!--
+
+Template for displaying a petition prior to being finalized.
+
+-->
+
 {% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block content %}
 
+<!-- Side navbar -->
 <nav class="col-xs-3 menu">
   <div class="user_menu">
+    <!-- User profile name and link to profile -->
     <a href="/profile"><div class="list-group withripple">
       <div class="list-group-item">
         <div class="row-action-primary">
@@ -15,8 +23,11 @@
         </div>
       </div>
     </div></a>
+    <!-- Petition actions -->
     <div class="btn-group-vertical">
+      <!-- Finalize button -->
       {% if is_owner %}
+        <!-- Check if petition meets finalizing criteria. If it does, display button. If not, explain. -->
         {% if petition.is_finalizable %}
           <form action="/finalize_petition" method="POST">
             {% csrf_token %}
@@ -44,6 +55,7 @@
           <br />
         {% endif %}
       {% endif %}
+      <!-- display sign/revoke button -->
       {% if sign_status %}
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-primary" value="Revoke Signature" name="revoke_btn">
@@ -61,6 +73,7 @@
         <h4><em>You do not have permission to sign this petition.</em></h4>
         <br />
       {% endif %}
+      <!-- if owner, show delete petition button -->
       {% if is_owner %}
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-danger" value="Delete This Petition" name="delete_btn">
@@ -69,13 +82,16 @@
     </div>
   </div>
   <ul>
+    <!-- navigation -->
     <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
 </nav>
 
+<!-- page content -->
 <div class="pages col-xs-9">
+  <!-- basic petition information -->
 	<div class ="well">
     <h1>{{ petition.title }}</h1>
     <p><em>Started by {{ petition.get_creator_name }}</em></p>
@@ -87,13 +103,16 @@
   </div>
   <br />
 
+  <!-- display petition clauses -->
   {% for cl in clauses %}
     <div class="well">
       <div class="row">
         <div class="col-md-10">
+          <!-- clause enumeration -->
           <h1>Clause {{ forloop.counter }}</h1>
         </div>
         <div class="col-md-2">
+          <!-- delete clause button -->
           {% if is_owner %}
             <form action="/delete_clause" method="POST" class="pull-right">
               {% csrf_token %}
@@ -104,8 +123,11 @@
           {% endif %}
         </div>
       </div>
+      <!-- clause text -->
       <span class="pet_content">{{ cl.content }}</span>
       <br /> <br />
+
+      <!-- clause comments -->
       <h3>Comments</h3>
       {% if cl.has_comments %}
         {% for c in comments %}
@@ -136,6 +158,8 @@
       {% else %}
         <p>No one has commented on this clause.</p>
       {% endif %}
+
+      <!-- add a comment -->
       {% if user_perm > 2 %}
         <form action="/add_comment" method="POST">
           {% csrf_token %}
@@ -160,6 +184,8 @@
         </form>
       {% endif %}
       <br />
+
+      <!-- Display proposed changes -->
       <h3>Proposed Changes</h3>
       {% if cl.has_changes %}
         {% for c in changes %}
@@ -248,6 +274,8 @@
       {% else %}
         <p>No one has proposed any changes to this clause.</p>
       {% endif %}
+
+      <!-- propose a change -->
       {% if user_perm > 3 %}
         <form action="/add_change" method="POST">
           {% csrf_token %}
@@ -275,6 +303,8 @@
     <br />
   {% endfor %}
 
+
+  <!-- if owner, display add a new clause form -->
   {% if is_owner %}
     <div class="well">
       <h1>Add a new clause</h1>
@@ -297,7 +327,7 @@
     <br />
   {% endif %}
   
-  <!-- Clauses go here -->
+  <!-- Signatures -->
   <div class ="well">
     <h1>Signatures</h1>
     {% for sig in petition.get_signatures %}

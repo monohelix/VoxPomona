@@ -1,9 +1,14 @@
+<!--
+  Template for home
+-->
+
 {% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block content %}
 {% csrf_token %}
 
+<!-- Side navbar -->
 <nav class="col-xs-3 menu">
   <div class="user_menu">
     <a href="/profile">
@@ -28,7 +33,9 @@
   </ul>
 </nav>
 
+<!-- main page content -->
 <div class="pages col-xs-9">
+  <!-- user-created petitions -->
 	<div class ="well">
     <h1>My Petitions</h1>
     <p><em>Petitions that you started</em></p>
@@ -56,6 +63,8 @@
     </div>
   </div>
   <br />
+
+  <!-- petitions the user is following (signed, commented, proposed changes) -->
   <div class ="well">
     <h1>Petitions I'm Following</h1>
     <p><em>Petitions you've signed, commented on, or proposed changes to</em></p>

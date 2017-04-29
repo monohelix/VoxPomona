@@ -1,9 +1,15 @@
+<!--
+  Template for viewing finalized petitions
+-->
+
 {% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block content %}
 
+<!-- main page content -->
 <div class="pages col-xs-9">
+  <!-- basic petition content -->
 	<div class ="well">
     <h1>{{ petition.title }}</h1>
     <p><em>Started by {{ petition.get_creator_name }}</em></p>
@@ -15,6 +21,7 @@
   </div>
   <br />
 
+  <!-- clauses -->
   {% for cl in clauses %}
     <div class="well">
       <h1>Clause {{ forloop.counter }}</h1>
@@ -23,6 +30,7 @@
     <br />
   {% endfor %} 
   
+  <!-- signatures -->
   <div class ="well">
     <h1>Signatures</h1>
     {% for sig in petition.get_signatures %}
