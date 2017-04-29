@@ -639,7 +639,7 @@ def email_notification(this_petition,messageType):
                   L: new clause
                   D: deleted clause
     '''
-'''
+
     # grab some petition info needed for forming the email message
     owner = this_petition.userID
     title = this_petition.title
@@ -748,4 +748,3 @@ def email_notification(this_petition,messageType):
                   )
         message.format(title=title,url=url)
         send_mail('Deleted Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
-'''
