@@ -191,7 +191,7 @@ class Change(models.Model):
     time = models.DateTimeField()
 
     def get_name(self):
-        return UserInfo.objects.get(email=self.userID).name
+        return self.userID.name
 
     def get_votes(self):
         netVotes = 0
@@ -216,7 +216,7 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def get_name(self):
-        return UserInfo.objects.get(email=self.userID).name
+        return self.userID.name
 
     def __unicode__(self):
         return ("comment"+str(self.commentID))
@@ -229,7 +229,10 @@ class Sign(models.Model):
     time = models.DateTimeField()
 
     def get_name(self):
-        return UserInfo.objects.get(email=self.userID).name
+        return self.userID.name
+
+    def get_user_type(self):
+        return self.userID.get_user_type()
 
     class Meta:
         unique_together = ("userID","petitionID")

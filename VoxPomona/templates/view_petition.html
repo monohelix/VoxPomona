@@ -335,7 +335,7 @@ Template for displaying a petition prior to being finalized.
   <div class ="well">
     <h1>Signatures</h1>
     {% for sig in petition.get_signatures %}
-      <p>{{sig.get_name}}</p>
+      <p>{{sig.get_name}} ({{sig.get_user_type}})</p>
     {% endfor %}
   </div>
 </div>
