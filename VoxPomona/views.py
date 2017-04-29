@@ -495,6 +495,8 @@ def search_results(request):
     Search Query based on different criteria, suing the SearchForm()
     from forms.py
     '''
+    user_info = request.user.UserInfo
+    user_type = user_info.get_user_type()
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -528,8 +530,27 @@ def search_results(request):
             fpetition = petition.filter(finalized = True)
             npetition = petition.filter(finalized = False)
             fpetition = sorted(fpetition, key = operator.attrgetter('last_updated'))
-            npetition = sorted(npetition, key = operator.attrgetter('last_updated'))
-            return render(request,'search_results.html',{'finalized_results' : fpetition, 'open_results' : npetition})
+            if user_type == 'STU':
+                p1 = npetition.filter(stu_permission = 1)
+                p2 = npetition.filter(stu_permission = 2)
+                p3 = npetition.filter(stu_permission = 3)
+                p4 = npetition.filter(stu_permission = 4)
+            elif user_type == 'FAC':
+                p1 = npetition.filter(faculty_permission = 1)
+                p2 = npetition.filter(faculty_permission = 2)
+                p3 = npetition.filter(faculty_permission = 3)
+                p4 = npetition.filter(faculty_permission = 4)
+            else:
+                p1 = npetition.filter(staff_permission = 1)
+                p2 = npetition.filter(staff_permission = 2)
+                p3 = npetition.filter(staff_permission = 3)
+                p4 = npetition.filter(staff_permission = 4)
+            p1 = sorted(p1, key = operator.attrgetter('last_updated'))
+            p2 = sorted(p2, key = operator.attrgetter('last_updated'))
+            p3 = sorted(p3, key = operator.attrgetter('last_updated'))
+            p4 = sorted(p4, key = operator.attrgetter('last_updated'))
+            result = {'finalized_results' : fpetition, 'p1' : p1, 'p2' : p2, 'p3' : p3, 'p4': p4}
+            return render(request,'search_results.html',result)
         else:
             return render(request, 'search.html', {'form': form})
     else:
