@@ -98,7 +98,7 @@ def new_petition_view(request):
             petition.save()
 
             # check if the user has sign permission
-            user_type = user_info.user_type
+            user_type = user_info.get_user_type()
             sign_perm = False
             if (user_type == "Student"):
                 sign_perm = int(petition.stu_permission) >= 2
@@ -182,7 +182,7 @@ def view_petition_view(request,pid):
         email_notification(this_petition,'S')
         return redirect(this_petition.get_url())
     elif (request.GET.get('revoke_btn')):
-        signature = Sign.objects.get(userID=user_info,petitionID=this_petition).delete()
+        Sign.objects.filter(userID=user_info,petitionID=this_petition).delete()
         email_notification(this_petition,'R')
         return redirect(this_petition.get_url())
 
@@ -248,8 +248,7 @@ def delete_clause(request):
         return redirect(this_petition.get_url())
 
     # delete current clause
-    this_clause = Clause.objects.get(clauseID=cid)
-    this_clause.delete()
+    Clause.objects.filter(clauseID=cid).delete()
 
     # reorder the remaining clauses so we have proper ordering
     clause_list = Clause.objects.filter(petitionID=pid).order_by('index')
@@ -311,8 +310,7 @@ def delete_comment(request):
         return redirect(this_petition.get_url())
 
     # delete current comment
-    this_comment = Comment.objects.get(commentID=commentID)
-    this_comment.delete()
+    Comment.objects.filter(commentID=commentID).delete()
 
     # return to this page
     return redirect(this_petition.get_url())
@@ -685,7 +683,7 @@ def email_notification(this_petition,messageType):
         sign_count = signs.count()
 
         message = ("Your petition: \"{title}\" has lost a signature!"
-                   "This petition now has {ccount} signatures."
+                   "This petition now has {count} signatures."
                    "View your petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"

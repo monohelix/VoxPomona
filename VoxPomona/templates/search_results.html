@@ -21,7 +21,7 @@
     <br /> <br />
   </div>
   <ul>
-    <a href="/home"><li class="withripple" data-target="#about">Go back</li></a>
+    <a href="/search"><li class="withripple" data-target="#about">Go back</li></a>
     <li></li>
     <a href="/logout/"><li class="withripple">Logout</li></a>
   </ul>
@@ -30,25 +30,56 @@
 <div class="pages col-xs-9">
 	<div class ="well">
     <h1>Search Results</h1>
-  </div> <br />
-  {% if search_results %}
-    {% for pet in search_results %}
-      <div class="well">
+    {% if finalized_results or open_results %}
+      <h4>Click to view each petition</h4>
+    {% else %}
+      <br />
+      <h3> No search results found. Please <a href="/search">try again</a> with different criteria.</h3>
+    {% endif %}
+  </div>
+  <br />
+  {% if open_results %}
+    <h1>Currently Open Petitions</h1>
+    <div class="list-group">
+      {% for pet in open_results %}
         <a href="{{ pet.get_url }}">
-          <div class="list-group">
-            <div class="list-group-item">
-              <div class="row-action-primary">
-                <i class="material-icons">{{ pet.get_icon }}</i>
-              </div>
-              <div class="row-content">
-                <h4 class="list-group-item-heading "> {{ pet.title }} </h4>
-              </div>
+          <div class="list-group-item">
+            <div class="row-action-primary">
+              <i class="material-icons">{{ pet.get_icon }}</i>
+            </div>
+            <div class="row-content">
+              <b><h4 class="list-group-item-heading"> {{ pet.title }} </h4></b>
+              <p class="list-group-item-heading "> Started by: {{ pet.get_creator_name }} (Last updated: {{ pet.last_updated }})</p>
             </div>
           </div>
         </a>
-      </div>
-      <br />
-    {% endfor %}
+        {% if not forloop.last %}
+          <div class="list-group-separator"></div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <br />
+  {% endif %}
+  {% if finalized_results %}
+    <h1>Finalized Petitions</h1>
+    <div class="list-group">
+      {% for pet in finalized_results %}
+        <a href="{{ pet.get_url }}">
+          <div class="list-group-item">
+            <div class="row-action-primary">
+              <i class="material-icons">{{ pet.get_icon }}</i>
+            </div>
+            <div class="row-content">
+              <b><h4 class="list-group-item-heading"> {{ pet.title }} </h4></b>
+              <p class="list-group-item-heading "> Started by: {{ pet.get_creator_name }} (Last updated: {{ pet.last_updated }})</p>
+            </div>
+          </div>
+        </a>
+        {% if not forloop.last %}
+          <div class="list-group-separator"></div>
+        {% endif %}
+      {% endfor %}
+    </div>
   {% endif %}
 </div>
 
