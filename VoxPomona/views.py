@@ -661,8 +661,7 @@ def email_notification(this_petition,messageType):
                    "View your petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,person=signator,count=sign_count,url=url)
+                  ).format(title=title,person=signator,count=sign_count,url=url)
         send_mail('New Signature on Your Petition',message,'voxpomona@gmail.com',[owner.email])
 
     # 'R' = a signature has been revoked
@@ -675,8 +674,7 @@ def email_notification(this_petition,messageType):
                    "View your petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,count=sign_count,url=url)
+                  ).format(title=title,count=sign_count,url=url)
         send_mail('Signature Revoked on Your Petition',message,'voxpomona@gmail.com',[owner.email])
 
     # 'C' = someone has commented on a clause
@@ -689,8 +687,7 @@ def email_notification(this_petition,messageType):
                    "View your petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,person=commentor,url=url)
+                  ).format(title=title,person=commentor,url=url)
         send_mail('New Comment on Your Petition',message,'voxpomona@gmail.com',[owner.email])
 
     # 'P' = someone has proposed a change to a clause
@@ -700,8 +697,7 @@ def email_notification(this_petition,messageType):
                    "View your petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,url=url)
+                  ).format(title=title,url=url)
         send_mail('New Proposed Change on Your Petition',message,'voxpomona@gmail.com',[owner.email])
 
     # signator-specific messages
@@ -714,8 +710,7 @@ def email_notification(this_petition,messageType):
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,url=url)
+                  ).format(title=title,url=url)
         send_mail('New Proposed Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
     # 'A' = a new change has been accepted by the owner of the petition
     elif messageType == 'A':
@@ -725,8 +720,7 @@ def email_notification(this_petition,messageType):
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,url=url)
+                  ).format(title=title,url=url)
         send_mail('New Accepted Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
 
     # 'L' = the owner has added a new clause
@@ -735,8 +729,7 @@ def email_notification(this_petition,messageType):
                    "View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,url=url)
+                  ).format(title=title,url=url)
         send_mail('New Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
 
     # 'D' = the owner has deleted a clause
@@ -745,6 +738,5 @@ def email_notification(this_petition,messageType):
                    "View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
-                  )
-        message.format(title=title,url=url)
+                  ).format(title=title,url=url)
         send_mail('Deleted Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
