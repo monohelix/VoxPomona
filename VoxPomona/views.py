@@ -657,7 +657,7 @@ def email_notification(this_petition,messageType):
     title = this_petition.title
     url = this_petition.get_url()
 
-    signs = Sign.objects.filter(petitionID=this_petition).order_by('-time')
+    signs = Sign.objects.filter(petitionID=this_petition).order_by('-time').exclude(userID=owner)
     signators = signs.values_list('userID',flat=True)
 
     # owner specific email messages
@@ -715,13 +715,14 @@ def email_notification(this_petition,messageType):
                   )
         message = message.format(title=title,url=url)
         send_mail('New Proposed Change on Your Petition',message,'voxpomona@gmail.com',[owner.email])
-
     # signator-specific messages
+
+    # if there are no signators, don't bother sending an email
+    if len(signators) <= 0:
+        pass
 
     # 'N' = a new change as been proposed to the signed petition
     elif messageType == 'N':
-        proposer = change.userID
-
         message = ("The petition you signed: \"{title}\" has received a proposed change"
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
@@ -729,10 +730,9 @@ def email_notification(this_petition,messageType):
                   )
         message = message.format(title=title,url=url)
         send_mail('New Proposed Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+        
     # 'A' = a new change has been accepted by the owner of the petition
     elif messageType == 'A':
-        proposer = change.userID
-
         message = ("The owner of the petition: \"{title}\", which you signed, has accepted a new change"
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
