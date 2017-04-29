@@ -23,6 +23,7 @@
             <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
             <input type="submit" class="btn btn-raised btn-info" value="Finalize This Petition">
           </form>
+          <h4><em>Finalize to make this petition read-only and share it with anyone.</em></h4>
         {% endif %}
         {% if not petition.is_finalizable %}
           <form>
@@ -82,35 +83,50 @@
 
   {% for cl in clauses %}
     <div class="well">
-      {% if is_owner %}
-        <form action="/delete_clause" method="POST" class="pull-right">
-          {% csrf_token %}
-          <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
-          <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-          <input type="submit" class="btn btn-danger" value="Delete This Clause">
-        </form>
-      {% endif %}
-      <h1>Clause {{ forloop.counter }}</h1>
+      <div class="row">
+        <div class="col-md-10">
+          <h1>Clause {{ forloop.counter }}</h1>
+        </div>
+        <div class="col-md-2">
+          {% if is_owner %}
+            <form action="/delete_clause" method="POST" class="pull-right">
+              {% csrf_token %}
+              <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+              <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+              <input type="submit" class="btn btn-danger" value="Delete This Clause">
+            </form>
+          {% endif %}
+        </div>
+      </div>
       <span class="pet_content">{{ cl.content }}</span>
       <br /> <br />
       <h3>Comments</h3>
       {% if cl.has_comments %}
         {% for c in comments %}
           {% if c.clauseID.clauseID == cl.clauseID %}
-            {% if c.userID.email == user.UserInfo.email %}
-                <form action="/delete_comment" method="POST" class="pull-right">
-                  {% csrf_token %}
-                  <input type="hidden" name="comment_id" value="{{ c.commentID }}">
-                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                  <input type="submit" class="btn btn-danger btn-sm" value="Delete Your Comment">
-                </form>
+            <div class="row">
+              {% if c.userID.email == user.UserInfo.email %}
+                <div class="col-md-9">
+                  <br />
+                  <p> <b>{{ c.get_name }}: </b>{{ c.content }}
+                </div>
+                <div class="col-md-3">
+                  <form action="/delete_comment" method="POST" class="pull-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="comment_id" value="{{ c.commentID }}">
+                    <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete Your Comment">
+                  </form>
+                </div>
+              {% else %}
+                <div class="col-md-12">
+                  <br />
+                  <p> <b>{{ c.get_name }}: </b>{{ c.content }}
+                </div>
               {% endif %}
-            <p>
-            <b>{{ c.get_name }}: </b>{{ c.content }}
-            </p>
+            </div>
           {% endif %}
         {% endfor %}
-        <br />
       {% else %}
         <p>No one has commented on this clause.</p>
       {% endif %}
@@ -131,52 +147,84 @@
       {% if cl.has_changes %}
         {% for c in changes %}
           {% if c.clauseID.clauseID == cl.clauseID %}
-            <form action="/upvote_change" method="POST" class="inline">
-              {% csrf_token %}
-              <input type="hidden" name="change_id" value="{{ c.changeID }}">
-              <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-              <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_less</i></button>
-            </form>
-            <p class="inline"><span class="vote_count">{{ c.get_votes }}</span></p>
-            <form action="/downvote_change" method="POST" class="inline">
-              {% csrf_token %}
-              <input type="hidden" name="change_id" value="{{ c.changeID }}">
-              <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-              <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_more</i></button>
-            </form>
-            <p class="inline"><b>{{ c.get_name }}: </b>
-              {% if c.content|length > 0 %}
-                {{ c.content }}
-              {% else %}
-                <em><span class="text-danger">Delete this clause</span></em>
-              {% endif %}
+            <div class = "row">
+              <div class="col-md-2">
+                <form action="/upvote_change" method="POST" class="inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                  <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_less</i></button>
+                </form>
+                <p class="inline"><span class="vote_count">{{ c.get_votes }}</span></p>
+                <form action="/downvote_change" method="POST" class="inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                  <button type="submit" class="btn btn-no-padding"><i class="material-icons">expand_more</i></button>
+                </form>
+              </div>
               {% if is_owner %}
-                <form action="/accept_change" method="POST" class="pull-right">
-                  {% csrf_token %}
-                  <input type="hidden" name="change_id" value="{{ c.changeID }}">
-                  <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
-                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                  <input type="submit" class="btn btn-success btn-sm" value="Accept Change">
-                </form>
-                <form action="/reject_change" method="POST" class="pull-right">
-                  {% csrf_token %}
-                  <input type="hidden" name="change_id" value="{{ c.changeID }}">
-                  <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
-                  <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                  <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
-                </form>
-              {% elif not is_owner %}
-                {% if c.userID.email == user.UserInfo.email %}
+                <div class="col-md-6">
+                  <br />
+                  <p><b>{{ c.get_name }}: </b>
+                    {% if c.content|length > 0 %}
+                      {{ c.content }}
+                    {% else %}
+                      <em><span class="text-danger">Delete this clause</span></em>
+                    {% endif %}
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <form action="/accept_change" method="POST" class="pull-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                    <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+                    <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                    <input type="submit" class="btn btn-success btn-sm" value="Accept Change">
+                  </form>
                   <form action="/reject_change" method="POST" class="pull-right">
                     {% csrf_token %}
                     <input type="hidden" name="change_id" value="{{ c.changeID }}">
                     <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
                     <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
-                    <input type="submit" class="btn btn-danger btn-sm" value="Delete This Change">
+                    <input type="submit" class="btn btn-danger btn-sm" value="Reject Change">
                   </form>
+                </div>
+              {% elif not is_owner %}
+                {% if c.userID.email == user.UserInfo.email %}
+                  <div class="col-md-8">
+                    <br />
+                    <p><b>{{ c.get_name }}: </b>
+                      {% if c.content|length > 0 %}
+                        {{ c.content }}
+                      {% else %}
+                        <em><span class="text-danger">Delete this clause</span></em>
+                      {% endif %}
+                    </p>
+                  </div>
+                  <div class="col-md-2">
+                    <form action="/reject_change" method="POST" class="pull-right">
+                      {% csrf_token %}
+                      <input type="hidden" name="change_id" value="{{ c.changeID }}">
+                      <input type="hidden" name="clause_id" value="{{ cl.clauseID }}">
+                      <input type="hidden" name="petition_id" value="{{ petition.petitionID }}">
+                      <input type="submit" class="btn btn-danger btn-sm" value="Delete This Change">
+                    </form>
+                  </div>
+                {% else %}
+                  <div class="col-md-10">
+                    <br />
+                    <p><b>{{ c.get_name }}: </b>
+                      {% if c.content|length > 0 %}
+                        {{ c.content }}
+                      {% else %}
+                        <em><span class="text-danger">Delete this clause</span></em>
+                      {% endif %}
+                    </p>
+                  </div>
                 {% endif %}
               {% endif %}
-            </p>
+            </div>
           {% endif %}
         {% endfor %}
         <br />

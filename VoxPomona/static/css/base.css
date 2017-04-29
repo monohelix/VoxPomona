@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+.comment {
+    width: 100%;
+}
+
 
 .header-panel {
     background-color: #009587;
@@ -114,7 +118,18 @@
 }
 
 .inline {
-    display: inline;
+    display: inline-block;
+}
+
+.vertical-center-parent{
+    position: relative;
+}
+
+.vertical-center-child{
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .page {
