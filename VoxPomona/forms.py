@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+import datetime
 
 from VoxPomona.models import *
 
@@ -114,6 +115,24 @@ class SearchForm(forms.ModelForm):
         keyword = self.cleaned_data.get('keyword')
         return keyword
 
+    # def clean_open_time(self):
+    #     open_time = self.cleaned_data.get('open_time')
+    #     if open_time:
+    #         try:
+    #             datetime.strptime(open_time, '%Y-%m-%d')
+    #         except ValueError:
+    #             raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+    #     return open_time
+
+    # def clean_last_updated(self):
+    #     last_updated = self.cleaned_data.get('last_updated')
+    #     if last_updated:
+    #         try:
+    #             datetime.strptime(last_updated, '%Y-%m-%d')
+    #         except ValueError:
+    #             raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+    #     return last_updated
+
     class Meta:
         model = Petition
         fields = ('title','category','open_time','last_updated')
@@ -145,8 +164,10 @@ class SearchForm(forms.ModelForm):
 
         self.fields['open_time'].widget.attrs.update({'class' : 'form-control'})
         self.fields['open_time'].label = 'Search for petition opened after'
+        self.fields['open_time'].initial = 'YYYY-MM-DD'
         self.fields['open_time'].required = False
 
         self.fields['last_updated'].widget.attrs.update({'class' : 'form-control'})
         self.fields['last_updated'].label = 'Search for petition updated after'
+        self.fields['last_updated'].initial = 'YYYY-MM-DD'
         self.fields['last_updated'].required = False

@@ -527,10 +527,13 @@ def search_results(request):
                     petition = petition.filter(open_time__gt = open_time)
                 if last_updated:
                     petition = petition.filter(last_updated__gt = last_updated)
-            byTime = sorted(petition, key = operator.attrgetter('last_updated'))
-            return render(request,'search_results.html',{'search_results': petition})
+            fpetition = petition.filter(finalized = True)
+            npetition = petition.filter(finalized = False)
+            fpetition = sorted(fpetition, key = operator.attrgetter('last_updated'))
+            npetition = sorted(npetition, key = operator.attrgetter('last_updated'))
+            return render(request,'search_results.html',{'finalized_results' : fpetition, 'open_results' : npetition})
         else:
-            return HttpResponse("form not valid.")
+            return render(request, 'search.html', {'form': form})
     else:
         form = SearchForm()
         return render(request, 'search.html', {'form': form})
