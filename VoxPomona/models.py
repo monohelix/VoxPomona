@@ -73,7 +73,7 @@ class Petition(models.Model):
     last_updated = models.DateTimeField()
     # threshold: fixed to 10
     threshold = 10
-    title = models.CharField(max_length = 50)
+    title = models.CharField(max_length = 100)
     summary = models.CharField(max_length = 1000)
     # permissions, has four different levels
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
@@ -211,7 +211,7 @@ class Comment(models.Model):
     userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
     clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
     commentID = models.AutoField(primary_key = True)
-    content = models.TextField()
+    content = models.CharField(max_length=500)
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def get_name(self):
