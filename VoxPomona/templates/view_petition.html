@@ -213,6 +213,7 @@ Template for displaying a petition prior to being finalized.
                   <br />
                   <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                     {% if c.content|length > 0 %}
+                      <em><span class="text-success">Change to:</span></em> <br />
                       {{ c.content }}
                     {% else %}
                       <em><span class="text-danger">Delete this clause</span></em>
@@ -242,6 +243,7 @@ Template for displaying a petition prior to being finalized.
                     <br />
                     <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                       {% if c.content|length > 0 %}
+                        <em><span class="text-success">Change to:</span></em> <br />
                         {{ c.content }}
                       {% else %}
                         <em><span class="text-danger">Delete this clause</span></em>
@@ -261,7 +263,7 @@ Template for displaying a petition prior to being finalized.
                 {% else %}
                   <div class="col-md-10">
                     <br />
-                    <p><b>{{ c.get_name }}: </b>
+                    <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                       {% if c.content|length > 0 %}
                         {{ c.content }}
                       {% else %}
