@@ -229,6 +229,46 @@ def view_petition_view(request,pid):
     return render(request,'view_petition.html',petDict)
 
 @login_required
+def edit_petition_view(request, pid):
+    '''
+    Code to edit a petition. In essence, it is nearly identical to
+    creating a new petition, but it passes in an existing petition
+    as info. Uses EditPetitionForm from forms.py.
+    '''
+    this_petition = Petition.objects.get(petitionID=pid)
+
+    if request.method == 'POST':
+        form = NewPetitionForm(request.POST)
+        if form.is_valid():
+            user_info = request.user.UserInfo
+
+            # update petition info
+            this_petition.title = form.cleaned_data.get('title')
+            this_petition.summary = form.cleaned_data.get('summary')
+            this_petition.category = form.cleaned_data.get('category')
+            this_petition.stu_permission = form.cleaned_data.get('stu_permission')
+            this_petition.staff_permission = form.cleaned_data.get('staff_permission')
+            this_petition.faculty_permission = form.cleaned_data.get('faculty_permission')
+            this_petition.last_updated = datetime.now()
+            this_petition.save()
+
+            #redirect to the petition page
+            return redirect(this_petition.get_url())
+        else:
+            return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
+    else:
+        defFields = {
+            'title' : this_petition.title, \
+            'summary' : this_petition.summary, \
+            'category' : this_petition.category, \
+            'stu_permission' : this_petition.stu_permission, \
+            'staff_permission' : this_petition.staff_permission, \
+            'faculty_permission' : this_petition.faculty_permission
+        }
+        form = NewPetitionForm(initial=defFields)
+        return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
+
+@login_required
 def delete_clause(request):
     '''
     Removes a clause, and its assocaited proposed changes, comments, and votes.
@@ -382,9 +422,7 @@ def accept_change(request):
         this_clause.save()
         this_change.delete()
 
-
-
-    # update petition, notify owner redirect to page
+    # update petition, notify signators, redirect to page
     this_petition.last_updated = datetime.now()
     this_petition.save()
     email_notification(this_petition,'A')

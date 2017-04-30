@@ -20,6 +20,7 @@ urlpatterns = [
     # petition/clause modification url
     url(r'^new_petition', views.new_petition_view, name='new_petition'),
     url(r'^view_petition/([0-9]+)/$', views.view_petition_view, name='view_petition'),
+    url(r'^edit_petition/([0-9]+)/$', views.edit_petition_view, name='edit_petition'),
     url(r'^finalize_petition', views.finalize_petition),
     url(r'^delete_clause', views.delete_clause),
 

@@ -148,7 +148,7 @@ class Petition(models.Model):
         if len(clauses) == 0:
             return False
 
-        if self.get_num_signatures_needed > 0:
+        if self.get_num_signatures_needed() > 0:
             return False
 
         time = timezone.now() - timedelta(days=1)
