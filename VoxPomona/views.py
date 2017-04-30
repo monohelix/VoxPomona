@@ -687,7 +687,9 @@ def email_notification(this_petition,messageType):
     sign_count = signs.count()
     if Sign.objects.filter(petitionID=this_petition,userID=owner).exists():
         sign_count = sign_count+1
-    signators = signs.values_list('name',flat=True)
+    signatorIDs = signs.values_list('userID',flat=True)
+    sigInfos = UserInfo.objects.filter(userID__in=signatorIDs)
+    signators = sigInfos.values_list('name',flat=True)
 
     # owner specific email messages
 
