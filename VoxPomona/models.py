@@ -108,6 +108,9 @@ class Petition(models.Model):
         user = UserInfo.objects.get(email=creator)
         return user.name
 
+    def get_creator_user_type(self):
+        return self.userID.get_user_type()
+
     # if petition is finalized, return url to display the petition
     # otherwise give the url
     def get_url(self):
@@ -189,9 +192,10 @@ class Change(models.Model):
     clauseID = models.ForeignKey(Clause, to_field = 'clauseID', on_delete=models.CASCADE)
     changeID = models.AutoField(primary_key = True)
     content = models.CharField(max_length=500, default='New Change')
+    time = models.DateTimeField()
 
     def get_name(self):
-        return UserInfo.objects.get(email=self.userID).name
+        return self.userID.name
 
     def get_votes(self):
         netVotes = 0
@@ -216,7 +220,7 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def get_name(self):
-        return UserInfo.objects.get(email=self.userID).name
+        return self.userID.name
 
     def __unicode__(self):
         return ("comment"+str(self.commentID))
@@ -229,7 +233,10 @@ class Sign(models.Model):
     time = models.DateTimeField()
 
     def get_name(self):
-        return UserInfo.objects.get(email=self.userID).name
+        return self.userID.name
+
+    def get_user_type(self):
+        return self.userID.get_user_type()
 
     class Meta:
         unique_together = ("userID","petitionID")

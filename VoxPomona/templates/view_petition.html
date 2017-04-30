@@ -94,7 +94,7 @@ Template for displaying a petition prior to being finalized.
   <!-- basic petition information -->
 	<div class ="well">
     <h1>{{ petition.title }}</h1>
-    <p><em>Started by {{ petition.get_creator_name }}</em></p>
+    <p><em>Started by {{ petition.get_creator_name }} ({{ petition.get_creator_user_type }})</em></p>
     
     <h2> Introduction </h2>
     <span class="pet_content">{{ petition.summary }}</span>
@@ -136,7 +136,8 @@ Template for displaying a petition prior to being finalized.
               {% if c.userID.email == user.UserInfo.email %}
                 <div class="col-md-9">
                   <br />
-                  <p> <b>{{ c.get_name }}: </b>{{ c.content }}
+                  <p> <b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}): {{ c.content }} </p>
+                  <p><em> {{ c.time }} </em></p>
                 </div>
                 <div class="col-md-3">
                   <form action="/delete_comment" method="POST" class="pull-right">
@@ -149,7 +150,8 @@ Template for displaying a petition prior to being finalized.
               {% else %}
                 <div class="col-md-12">
                   <br />
-                  <p> <b>{{ c.get_name }}: </b>{{ c.content }}
+                  <p> <b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}): {{ c.content }} </p>
+                  <p><em> {{ c.time }} </em></p>
                 </div>
               {% endif %}
             </div>
@@ -209,13 +211,15 @@ Template for displaying a petition prior to being finalized.
               {% if is_owner %}
                 <div class="col-md-6">
                   <br />
-                  <p><b>{{ c.get_name }}: </b>
+                  <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                     {% if c.content|length > 0 %}
+                      <em><span class="text-success">Change to:</span></em> <br />
                       {{ c.content }}
                     {% else %}
                       <em><span class="text-danger">Delete this clause</span></em>
                     {% endif %}
                   </p>
+                  <p><em> {{ c.time }} </em></p>
                 </div>
                 <div class="col-md-4">
                   <form action="/accept_change" method="POST" class="pull-right">
@@ -237,13 +241,15 @@ Template for displaying a petition prior to being finalized.
                 {% if c.userID.email == user.UserInfo.email %}
                   <div class="col-md-8">
                     <br />
-                    <p><b>{{ c.get_name }}: </b>
+                    <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                       {% if c.content|length > 0 %}
+                        <em><span class="text-success">Change to:</span></em> <br />
                         {{ c.content }}
                       {% else %}
                         <em><span class="text-danger">Delete this clause</span></em>
                       {% endif %}
                     </p>
+                    <p><em> {{ c.time }} </em></p>
                   </div>
                   <div class="col-md-2">
                     <form action="/reject_change" method="POST" class="pull-right">
@@ -257,7 +263,7 @@ Template for displaying a petition prior to being finalized.
                 {% else %}
                   <div class="col-md-10">
                     <br />
-                    <p><b>{{ c.get_name }}: </b>
+                    <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                       {% if c.content|length > 0 %}
                         {{ c.content }}
                       {% else %}
@@ -331,7 +337,7 @@ Template for displaying a petition prior to being finalized.
   <div class ="well">
     <h1>Signatures</h1>
     {% for sig in petition.get_signatures %}
-      <p>{{sig.get_name}}</p>
+      <p>{{sig.get_name}} ({{sig.get_user_type}})</p>
     {% endfor %}
   </div>
 </div>
