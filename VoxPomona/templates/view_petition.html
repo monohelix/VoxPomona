@@ -75,7 +75,7 @@ Template for displaying a petition prior to being finalized.
       {% endif %}
       <!-- if owner, show edit, delete petition buttons -->
       {% if is_owner %}
-        <form action="{{ pet.get_edit_url }}" method="get">
+        <form action="{{ petition.get_edit_url }}" method="get">
           <input type="submit" class="btn btn-raised btn-success" value="Edit This Petition" name="edit_btn">
         </form>
         <form action="#" method="get">
