@@ -694,7 +694,7 @@ def email_notification(this_petition,messageType):
     # 'S' = a new person has signed, make sure it's not owner
     if messageType == 'S' and len(signs) > 0:
         latest_sign = signs[0]
-        signator = UserInfo.objects.get(latest_sign.userID).name
+        signator = UserInfo.objects.get(userID=latest_sign.userID).name
 
         message = ("Your petition: \"{title}\" has received a new signature by {person}!"
                    "This petition now has {count} signatures!"
@@ -723,7 +723,7 @@ def email_notification(this_petition,messageType):
     elif messageType == 'C':
         clauses = Clause.objects.filter(petitionID=this_petition)
         comment = Comment.objects.filter(clauseID__in=clauses).order_by('-time')[0]
-        commentor = UserInfo.objects.get(comment.userID).name
+        commentor = UserInfo.objects.get(userID=comment.userID).name
 
         message = ("Your petition: \"{title}\" has received a comment by {person}."
                    "View your petition at: \n"
