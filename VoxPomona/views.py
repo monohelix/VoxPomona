@@ -685,21 +685,20 @@ def email_notification(this_petition,messageType):
     # get the names of signators (excluding owner), and sign count (including owner)
     signs = Sign.objects.filter(petitionID=this_petition).order_by('-time').exclude(userID=owner)
     sign_count = signs.count()
-    if Sign.objects.get(petitionID=this_petition,userID=owner):
+    if Sign.objects.filter(petitionID=this_petition,userID=owner).exists():
         sign_count = sign_count+1
-    signators = signs.values_list('name',flat=True)
+    signators = signs.values_list('userID',flat=True)
 
     # owner specific email messages
 
     # 'S' = a new person has signed, make sure it's not owner
     if messageType == 'S' and len(signs) > 0:
         latest_sign = signs[0]
-        signator = latest_sign.userID
+        signator = UserInfo.objects.get(email=latest_sign.userID).name
 
-        message = ("Your petition: \"{title}\" has received a new signature by {person}!"
-                   "This petition now has {count} signatures!"
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+        message = ("Your petition: \"{title}\" has received a new signature by {person}! "
+                   "This petition now has {count} signatures! "
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,person=signator,count=sign_count,url=url)
@@ -710,10 +709,9 @@ def email_notification(this_petition,messageType):
         signs = Sign.objects.filter(petitionID=this_petition).order_by('-time')
         sign_count = signs.count()
 
-        message = ("Your petition: \"{title}\" has lost a signature!"
-                   "This petition now has {count} signatures."
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+        message = ("Your petition: \"{title}\" has lost a signature! "
+                   "This petition now has {count} signatures. "
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,count=sign_count,url=url)
@@ -723,11 +721,10 @@ def email_notification(this_petition,messageType):
     elif messageType == 'C':
         clauses = Clause.objects.filter(petitionID=this_petition)
         comment = Comment.objects.filter(clauseID__in=clauses).order_by('-time')[0]
-        commentor = comment.userID
+        commentor = UserInfo.objects.get(email=comment.userID).name
 
-        message = ("Your petition: \"{title}\" has received a comment by {person}."
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+        message = ("Your petition: \"{title}\" has received a comment by {person}. "
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,person=commentor,url=url)
@@ -735,10 +732,9 @@ def email_notification(this_petition,messageType):
 
     # 'P' = someone has proposed a change to a clause
     elif messageType == 'P':
-        message = ("Your petition: \"{title}\" has received a proposed change"
+        message = ("Your petition: \"{title}\" has received a proposed change "
                    "to one of its clauses."
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,url=url)
@@ -751,7 +747,7 @@ def email_notification(this_petition,messageType):
 
     # 'N' = a new change as been proposed to the signed petition
     elif messageType == 'N':
-        message = ("The petition you signed: \"{title}\" has received a proposed change"
+        message = ("The petition you signed: \"{title}\" has received a proposed change "
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
@@ -761,7 +757,7 @@ def email_notification(this_petition,messageType):
         
     # 'A' = a new change has been accepted by the owner of the petition
     elif messageType == 'A':
-        message = ("The owner of the petition: \"{title}\", which you signed, has accepted a new change"
+        message = ("The owner of the petition: \"{title}\", which you signed, has accepted a new change "
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
