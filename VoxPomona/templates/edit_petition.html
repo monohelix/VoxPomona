@@ -1,0 +1,58 @@
+<!-- template for creating new petitions -->
+
+{% extends 'base.html' %}
+{% block title %}Edit Existing Petition{% endblock %}
+
+{% block content %}
+
+<!-- side navbar -->
+<nav class="col-xs-3 menu">
+  <div class="user_menu">
+    <a href="/profile">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row-action-primary">
+            <i class="material-icons">person</i>
+          </div>
+          <div class="row-content">
+            <h4 class="list-group-item-heading ">{{ user.UserInfo.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <ul>
+    <a href="/home"><li class="withripple">Go back</li></a>
+    <li></li>
+    <a href="/logout/"><li class="withripple">Logout</li></a>
+  </ul>
+</nav>
+
+<!-- main page content -->
+<div class="pages col-xs-9">
+  <div class="well">
+  <h1>Edit Your Petition</h1>
+  <!-- form fields -->
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <br />
+      {% if field.help_text %}
+          <p>{{ field.help_text }}</p>
+      {% endif %}
+      <div class="form-group label-floating">
+        {% if field.label %}
+          <label class="control-label" for="focusedInput1">{{ field.label }}</label>
+        {% endif %}
+        {{ field }}
+      </div>
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+    {% endfor %}
+    <button class="btn" type="submit">Save</button>
+    <em> You can add clauses to your petition on the next screen. </em>
+  </form>
+  </div>
+</div>
+{% endblock %}
