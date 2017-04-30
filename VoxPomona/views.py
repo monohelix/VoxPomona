@@ -682,15 +682,18 @@ def email_notification(this_petition,messageType):
     title = this_petition.title
     url = this_petition.get_url()
 
+    # get the names of signators (excluding owner), and sign count (including owner)
     signs = Sign.objects.filter(petitionID=this_petition).order_by('-time').exclude(userID=owner)
-    signators = signs.values_list('userID',flat=True)
+    sign_count = signs.count()
+    if Sign.objects.get(petitionID=this_petition,userID=owner):
+        sign_count = sign_count+1
+    signators = signs.values_list('name',flat=True)
 
     # owner specific email messages
 
     # 'S' = a new person has signed, make sure it's not owner
     if messageType == 'S' and len(signs) > 0:
         latest_sign = signs[0]
-        sign_count = signs.count()
         signator = latest_sign.userID
 
         message = ("Your petition: \"{title}\" has received a new signature by {person}!"
