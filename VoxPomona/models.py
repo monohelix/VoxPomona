@@ -246,10 +246,3 @@ class ChangeVote(models.Model):
     vote = models.BooleanField()
     class Meta:
         unique_together = ("userID","changeID")
-
-class CommentVote(models.Model):
-    userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    commentID = models.ForeignKey(Comment, to_field = 'commentID', on_delete=models.CASCADE)
-    vote = models.BooleanField()
-    class Meta:
-        unique_together = ("userID","commentID")
