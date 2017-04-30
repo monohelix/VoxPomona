@@ -233,7 +233,7 @@ def edit_petition_view(request, pid):
     '''
     Code to edit a petition. In essence, it is nearly identical to
     creating a new petition, but it passes in an existing petition
-    as info. Uses EditPetitionForm from forms.py.
+    as info. Uses NewPetitionForm from forms.py.
     '''
     this_petition = Petition.objects.get(petitionID=pid)
 
@@ -252,11 +252,13 @@ def edit_petition_view(request, pid):
             this_petition.last_updated = datetime.now()
             this_petition.save()
 
-            #redirect to the petition page
+            # redirect to the petition page
             return redirect(this_petition.get_url())
         else:
             return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
     else:
+
+        # 
         defFields = {
             'title' : this_petition.title, \
             'summary' : this_petition.summary, \
