@@ -117,6 +117,11 @@ class Petition(models.Model):
             return '/petition/' + str(self.petitionID)
         return '/view_petition/' + str(self.petitionID)
 
+    def get_edit_url(self):
+        if self.finalized:
+            return '/petition/' + str(self.petitionID)
+        return '/edit_petition/' + str(self.petitionID)
+
     def get_signatures(self):
         return Sign.objects.filter(petitionID=self.petitionID)
 
