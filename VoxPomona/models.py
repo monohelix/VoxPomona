@@ -79,8 +79,8 @@ class Petition(models.Model):
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
         ('4','view, sign, comment, propose changes'))
     stu_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
-    staff_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
-    faculty_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
+    sta_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
+    fac_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
     finalized = models.BooleanField()
 
     def get_icon(self):
@@ -148,7 +148,7 @@ class Petition(models.Model):
         if len(clauses) == 0:
             return False
 
-        if self.get_num_signatures_needed > 0:
+        if self.get_num_signatures_needed() > 0:
             return False
 
         time = timezone.now() - timedelta(days=1)
