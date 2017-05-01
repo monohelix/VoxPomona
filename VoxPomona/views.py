@@ -86,8 +86,8 @@ def new_petition_view(request):
             petition.summary = form.cleaned_data.get('summary')
             petition.category = form.cleaned_data.get('category')
             petition.stu_permission = form.cleaned_data.get('stu_permission')
-            petition.staff_permission = form.cleaned_data.get('staff_permission')
-            petition.faculty_permission = form.cleaned_data.get('faculty_permission')
+            petition.sta_permission = form.cleaned_data.get('sta_permission')
+            petition.fac_permission = form.cleaned_data.get('fac_permission')
             petition.finalized = False #By default, the petition is not final
 
             petition.open_time = datetime.now()
@@ -102,9 +102,9 @@ def new_petition_view(request):
             if (user_type == "Student"):
                 sign_perm = int(petition.stu_permission) >= 2
             elif (user_type == "Faculty"):
-                sign_perm = int(petition.staff_permission) >= 2
+                sign_perm = int(petition.sta_permission) >= 2
             else:
-                sign_perm = int(petition.faculty_permission) >= 2
+                sign_perm = int(petition.fac_permission) >= 2
 
             # if user has permission, sign the petition
             if (sign_perm):
@@ -143,9 +143,9 @@ def view_petition_view(request,pid):
     if user_type == 'STU':
         user_perm = this_petition.stu_permission
     elif user_type =='FAC':
-        user_perm = this_petition.faculty_permission
+        user_perm = this_petition.fac_permission
     else:
-        user_perm = this_petition.staff_permission
+        user_perm = this_petition.sta_permission
 
     # check owner status and whether user has a signature on the petition
     is_owner = this_petition.userID == user_info
@@ -242,14 +242,42 @@ def edit_petition_view(request, pid):
         if form.is_valid():
             user_info = request.user.UserInfo
 
-            # update petition info
-            this_petition.title = form.cleaned_data.get('title')
-            this_petition.summary = form.cleaned_data.get('summary')
-            this_petition.category = form.cleaned_data.get('category')
-            this_petition.stu_permission = form.cleaned_data.get('stu_permission')
-            this_petition.staff_permission = form.cleaned_data.get('staff_permission')
-            this_petition.faculty_permission = form.cleaned_data.get('faculty_permission')
-            this_petition.last_updated = datetime.now()
+            # have a bool to check whether there are new changes
+            diffChanges = False
+
+            # update petition info, checking whether different changes
+            title = form.cleaned_data.get('title')
+            if this_petition.title != title:
+                this_petition.title = title
+                diffChanges = True
+
+            summary = form.cleaned_data.get('summary')
+            if this_petition.summary != summary:
+                this_petition.summary = summary
+                diffChanges = True
+
+            category = form.cleaned_data.get('category')
+            if this_petition.category != category:
+                this_petition.category = category
+                diffChanges = True
+
+            stu_permission = form.cleaned_data.get('stu_permission')
+            if this_petition.stu_permission != stu_permission:
+                this_petition.stu_permission = stu_permission
+                diffChanges = True
+
+            sta_permission = form.cleaned_data.get('sta_permission')
+            if this_petition.sta_permission != sta_permission:
+                this_petition.sta_permission = sta_permission
+                diffChanges = True
+
+            fac_permission = form.cleaned_data.get('fac_permission')
+            if this_petition.fac_permission != fac_permission:
+                this_petition.fac_permission = fac_permission
+                diffChanges = True
+
+            if diffChanges:
+                this_petition.last_updated = datetime.now()
             this_petition.save()
 
             # redirect to the petition page
@@ -258,14 +286,14 @@ def edit_petition_view(request, pid):
             return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
     else:
 
-        # 
+        # create a dict of initial field values for the form
         defFields = {
             'title' : this_petition.title, \
             'summary' : this_petition.summary, \
             'category' : this_petition.category, \
             'stu_permission' : this_petition.stu_permission, \
-            'staff_permission' : this_petition.staff_permission, \
-            'faculty_permission' : this_petition.faculty_permission
+            'sta_permission' : this_petition.sta_permission, \
+            'fac_permission' : this_petition.fac_permission
         }
         form = NewPetitionForm(initial=defFields)
         return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
@@ -583,15 +611,15 @@ def search_results(request):
                 p3 = npetition.filter(stu_permission = 3).order_by('-last_updated')
                 p4 = npetition.filter(stu_permission = 4).order_by('-last_updated')
             elif user_type == 'FAC':
-                p1 = npetition.filter(faculty_permission = 1).order_by('-last_updated')
-                p2 = npetition.filter(faculty_permission = 2).order_by('-last_updated')
-                p3 = npetition.filter(faculty_permission = 3).order_by('-last_updated')
-                p4 = npetition.filter(faculty_permission = 4).order_by('-last_updated')
+                p1 = npetition.filter(fac_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(fac_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(fac_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(fac_permission = 4).order_by('-last_updated')
             else:
-                p1 = npetition.filter(staff_permission = 1).order_by('-last_updated')
-                p2 = npetition.filter(staff_permission = 2).order_by('-last_updated')
-                p3 = npetition.filter(staff_permission = 3).order_by('-last_updated')
-                p4 = npetition.filter(staff_permission = 4).order_by('-last_updated')
+                p1 = npetition.filter(sta_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(sta_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(sta_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(sta_permission = 4).order_by('-last_updated')
             result = {'finalized_results' : fpetition, 'p1' : p1, 'p2' : p2, 'p3' : p3, 'p4': p4}
             return render(request,'search_results.html',result)
         else:
