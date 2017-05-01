@@ -75,7 +75,7 @@
     margin-left: 50px;
 }
 
-.menu .user_menu input {
+.menu .user_menu input, a {
     width: 100%;
 }
 

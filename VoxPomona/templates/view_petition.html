@@ -73,8 +73,11 @@ Template for displaying a petition prior to being finalized.
         <h4><em>You do not have permission to sign this petition.</em></h4>
         <br />
       {% endif %}
-      <!-- if owner, show delete petition button -->
+      <!-- if owner, show edit, delete petition buttons -->
       {% if is_owner %}
+        <form>
+          <a href="{{ petition.get_edit_url }}" class="btn btn-raised btn-success"> Edit This Petition </a>
+        </form>
         <form action="#" method="get">
           <input type="submit" class="btn btn-raised btn-danger" value="Delete This Petition" name="delete_btn">
         </form>
@@ -94,7 +97,7 @@ Template for displaying a petition prior to being finalized.
   <!-- basic petition information -->
 	<div class ="well">
     <h1>{{ petition.title }}</h1>
-    <p><em>Started by {{ petition.get_creator_name }} ({{ petition.get_creator_user_type }})</em></p>
+    <p><em>Started by {{ petition.get_creator_name }} ({{ petition.get_creator_user_type }}), last updated {{ petition.last_updated }}</em></p>
     
     <h2> Introduction </h2>
     <span class="pet_content">{{ petition.summary }}</span>

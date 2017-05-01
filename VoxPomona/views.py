@@ -87,8 +87,8 @@ def new_petition_view(request):
             petition.summary = form.cleaned_data.get('summary')
             petition.category = form.cleaned_data.get('category')
             petition.stu_permission = form.cleaned_data.get('stu_permission')
-            petition.staff_permission = form.cleaned_data.get('staff_permission')
-            petition.faculty_permission = form.cleaned_data.get('faculty_permission')
+            petition.sta_permission = form.cleaned_data.get('sta_permission')
+            petition.fac_permission = form.cleaned_data.get('fac_permission')
             petition.finalized = False #By default, the petition is not final
 
             petition.open_time = datetime.now()
@@ -103,9 +103,9 @@ def new_petition_view(request):
             if (user_type == "Student"):
                 sign_perm = int(petition.stu_permission) >= 2
             elif (user_type == "Faculty"):
-                sign_perm = int(petition.staff_permission) >= 2
+                sign_perm = int(petition.sta_permission) >= 2
             else:
-                sign_perm = int(petition.faculty_permission) >= 2
+                sign_perm = int(petition.fac_permission) >= 2
 
             # if user has permission, sign the petition
             if (sign_perm):
@@ -144,9 +144,9 @@ def view_petition_view(request,pid):
     if user_type == 'STU':
         user_perm = this_petition.stu_permission
     elif user_type =='FAC':
-        user_perm = this_petition.faculty_permission
+        user_perm = this_petition.fac_permission
     else:
-        user_perm = this_petition.staff_permission
+        user_perm = this_petition.sta_permission
 
     # check owner status and whether user has a signature on the petition
     is_owner = this_petition.userID == user_info
@@ -228,6 +228,77 @@ def view_petition_view(request,pid):
 
     # render the petition page
     return render(request,'view_petition.html',petDict)
+
+@login_required
+def edit_petition_view(request, pid):
+    '''
+    Code to edit a petition. In essence, it is nearly identical to
+    creating a new petition, but it passes in an existing petition
+    as info. Uses NewPetitionForm from forms.py.
+    '''
+    this_petition = Petition.objects.get(petitionID=pid)
+
+    if request.method == 'POST':
+        form = NewPetitionForm(request.POST)
+        if form.is_valid():
+            user_info = request.user.UserInfo
+
+            # have a bool to check whether there are new changes
+            diffChanges = False
+
+            # update petition info, checking whether different changes
+            title = form.cleaned_data.get('title')
+            if this_petition.title != title:
+                this_petition.title = title
+                diffChanges = True
+
+            summary = form.cleaned_data.get('summary')
+            if this_petition.summary != summary:
+                this_petition.summary = summary
+                diffChanges = True
+
+            category = form.cleaned_data.get('category')
+            if this_petition.category != category:
+                this_petition.category = category
+                diffChanges = True
+
+            stu_permission = form.cleaned_data.get('stu_permission')
+            if this_petition.stu_permission != stu_permission:
+                this_petition.stu_permission = stu_permission
+                diffChanges = True
+
+            sta_permission = form.cleaned_data.get('sta_permission')
+            if this_petition.sta_permission != sta_permission:
+                this_petition.sta_permission = sta_permission
+                diffChanges = True
+
+            fac_permission = form.cleaned_data.get('fac_permission')
+            if this_petition.fac_permission != fac_permission:
+                this_petition.fac_permission = fac_permission
+                diffChanges = True
+
+            if diffChanges:
+                this_petition.last_updated = datetime.now()
+                email_notification(this_petition,'W')
+            this_petition.save()
+
+            # redirect to the petition page
+            return redirect(this_petition.get_url())
+        else:
+            return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
+    else:
+
+        # create a dict of initial field values for the form
+        defFields = {
+            'title' : this_petition.title, \
+            'summary' : this_petition.summary, \
+            'category' : this_petition.category, \
+            'stu_permission' : this_petition.stu_permission, \
+            'sta_permission' : this_petition.sta_permission, \
+            'fac_permission' : this_petition.fac_permission
+        }
+        form = NewPetitionForm(initial=defFields)
+        return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
 
 @login_required
 def delete_clause(request):
@@ -383,9 +454,7 @@ def accept_change(request):
         this_clause.save()
         this_change.delete()
 
-
-
-    # update petition, notify owner redirect to page
+    # update petition, notify signators, redirect to page
     this_petition.last_updated = datetime.now()
     this_petition.save()
     email_notification(this_petition,'A')
@@ -544,15 +613,15 @@ def search_results(request):
                 p3 = npetition.filter(stu_permission = 3).order_by('-last_updated')
                 p4 = npetition.filter(stu_permission = 4).order_by('-last_updated')
             elif user_type == 'FAC':
-                p1 = npetition.filter(faculty_permission = 1).order_by('-last_updated')
-                p2 = npetition.filter(faculty_permission = 2).order_by('-last_updated')
-                p3 = npetition.filter(faculty_permission = 3).order_by('-last_updated')
-                p4 = npetition.filter(faculty_permission = 4).order_by('-last_updated')
+                p1 = npetition.filter(fac_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(fac_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(fac_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(fac_permission = 4).order_by('-last_updated')
             else:
-                p1 = npetition.filter(staff_permission = 1).order_by('-last_updated')
-                p2 = npetition.filter(staff_permission = 2).order_by('-last_updated')
-                p3 = npetition.filter(staff_permission = 3).order_by('-last_updated')
-                p4 = npetition.filter(staff_permission = 4).order_by('-last_updated')
+                p1 = npetition.filter(sta_permission = 1).order_by('-last_updated')
+                p2 = npetition.filter(sta_permission = 2).order_by('-last_updated')
+                p3 = npetition.filter(sta_permission = 3).order_by('-last_updated')
+                p4 = npetition.filter(sta_permission = 4).order_by('-last_updated')
             result = {'finalized_results' : fpetition, 'p1' : p1, 'p2' : p2, 'p3' : p3, 'p4': p4}
             return render(request,'search_results.html',result)
         else:
@@ -587,6 +656,9 @@ def finalize_petition(request):
     for clause in clauses:
         Comment.objects.filter(clauseID=clause.clauseID).delete()
         Change.objects.filter(clauseID=clause.clauseID).delete()
+
+    # notify people that the petition has been finalized
+    email_notification(this_petition,'F')
 
     # refresh the page, which should now redirect to page where petition
     # cant be modified
@@ -674,8 +746,10 @@ def email_notification(this_petition,messageType):
 
                   N: new change proposed    [Signator-specific]
                   A: accepted change
+                  W: petition has changed
                   L: new clause
                   D: deleted clause
+                  F: petition has been finalized
     '''
 
     # grab some petition info needed for forming the email message
@@ -686,21 +760,20 @@ def email_notification(this_petition,messageType):
     # get the names of signators (excluding owner), and sign count (including owner)
     signs = Sign.objects.filter(petitionID=this_petition).order_by('-time').exclude(userID=owner)
     sign_count = signs.count()
-    if Sign.objects.get(petitionID=this_petition,userID=owner):
+    if Sign.objects.filter(petitionID=this_petition,userID=owner).exists():
         sign_count = sign_count+1
-    signators = signs.values_list('name',flat=True)
+    signators = signs.values_list('userID',flat=True)
 
     # owner specific email messages
 
     # 'S' = a new person has signed, make sure it's not owner
     if messageType == 'S' and len(signs) > 0:
         latest_sign = signs[0]
-        signator = latest_sign.userID
+        signator = UserInfo.objects.get(email=latest_sign.userID).name
 
-        message = ("Your petition: \"{title}\" has received a new signature by {person}!"
-                   "This petition now has {count} signatures!"
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+        message = ("Your petition: \"{title}\" has received a new signature by {person}! "
+                   "This petition now has {count} signatures! "
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,person=signator,count=sign_count,url=url)
@@ -711,10 +784,9 @@ def email_notification(this_petition,messageType):
         signs = Sign.objects.filter(petitionID=this_petition).order_by('-time')
         sign_count = signs.count()
 
-        message = ("Your petition: \"{title}\" has lost a signature!"
-                   "This petition now has {count} signatures."
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+        message = ("Your petition: \"{title}\" has lost a signature! "
+                   "This petition now has {count} signatures. "
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,count=sign_count,url=url)
@@ -724,11 +796,10 @@ def email_notification(this_petition,messageType):
     elif messageType == 'C':
         clauses = Clause.objects.filter(petitionID=this_petition)
         comment = Comment.objects.filter(clauseID__in=clauses).order_by('-time')[0]
-        commentor = comment.userID
+        commentor = UserInfo.objects.get(email=comment.userID).name
 
-        message = ("Your petition: \"{title}\" has received a comment by {person}."
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+        message = ("Your petition: \"{title}\" has received a comment by {person}. "
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,person=commentor,url=url)
@@ -736,10 +807,9 @@ def email_notification(this_petition,messageType):
 
     # 'P' = someone has proposed a change to a clause
     elif messageType == 'P':
-        message = ("Your petition: \"{title}\" has received a proposed change"
+        message = ("Your petition: \"{title}\" has received a proposed change "
                    "to one of its clauses."
-                   "View your petition at: \n"
-                   "voxpomona.herokuapp.com{url}."
+                   "View your petition at: \n voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,url=url)
@@ -752,7 +822,7 @@ def email_notification(this_petition,messageType):
 
     # 'N' = a new change as been proposed to the signed petition
     elif messageType == 'N':
-        message = ("The petition you signed: \"{title}\" has received a proposed change"
+        message = ("The petition you signed: \"{title}\" has received a proposed change "
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
@@ -762,13 +832,22 @@ def email_notification(this_petition,messageType):
         
     # 'A' = a new change has been accepted by the owner of the petition
     elif messageType == 'A':
-        message = ("The owner of the petition: \"{title}\", which you signed, has accepted a new change"
+        message = ("The owner of the petition: \"{title}\", which you signed, has accepted a new change "
                    "to one of its clauses. View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,url=url)
         send_mail('New Accepted Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+
+    # 'W' = owner has made new edits to the petition
+    elif messageType == 'W':
+        message = ("The owner of the petition: \"{title}\", which you signed, has made edits to their petition. "
+                   "View this petition at: \n voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message = message.format(title=title,url=url)
+        send_mail('New Edits on a Petition You Signed',message,'voxpomona@gmail.com',signators)
 
     # 'L' = the owner has added a new clause
     elif messageType == 'L':
@@ -789,3 +868,14 @@ def email_notification(this_petition,messageType):
                   )
         message = message.format(title=title,url=url)
         send_mail('Deleted Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+
+     # 'F' = the owner has deleted a clause
+    elif messageType == 'F':
+        message = ("The petition: \"{title}\", which you signed, has been finalized. "
+                   "No further edits can be made, and your signature cannot be revoked at this point! "
+                   "View this petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message = message.format(title=title,url=url)
+        send_mail('Petition You Signed Has Been Finalized',message,'voxpomona@gmail.com',signators)

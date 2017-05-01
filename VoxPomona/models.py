@@ -80,8 +80,8 @@ class Petition(models.Model):
     PERM_CHOICES = (('1','view'),('2','view, sign'),('3','view, sign, comment'), 
         ('4','view, sign, comment, propose changes'))
     stu_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
-    staff_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
-    faculty_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
+    sta_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
+    fac_permission = models.CharField(max_length = 1, choices = PERM_CHOICES, default = 4)
     finalized = models.BooleanField()
 
     def get_icon(self):
@@ -118,6 +118,11 @@ class Petition(models.Model):
             return '/petition/' + str(self.petitionID)
         return '/view_petition/' + str(self.petitionID)
 
+    def get_edit_url(self):
+        if self.finalized:
+            return '/petition/' + str(self.petitionID)
+        return '/edit_petition/' + str(self.petitionID)
+
     def get_signatures(self):
         return Sign.objects.filter(petitionID=self.petitionID)
 
@@ -144,7 +149,7 @@ class Petition(models.Model):
         if len(clauses) == 0:
             return False
 
-        if self.get_num_signatures_needed > 0:
+        if self.get_num_signatures_needed() > 0:
             return False
 
         time = timezone.now() - timedelta(days=1)
@@ -247,10 +252,3 @@ class ChangeVote(models.Model):
     vote = models.BooleanField()
     class Meta:
         unique_together = ("userID","changeID")
-
-class CommentVote(models.Model):
-    userID = models.ForeignKey(UserInfo, to_field = 'email', on_delete=models.CASCADE)
-    commentID = models.ForeignKey(Comment, to_field = 'commentID', on_delete=models.CASCADE)
-    vote = models.BooleanField()
-    class Meta:
-        unique_together = ("userID","commentID")

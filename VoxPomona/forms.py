@@ -56,7 +56,7 @@ class NewPetitionForm(forms.ModelForm):
 
     class Meta:
         model = Petition
-        fields = ('title','summary','category','stu_permission','staff_permission','faculty_permission')
+        fields = ('title','summary','category','stu_permission','sta_permission','fac_permission')
 
     def __init__(self, *args, **kwargs):
         super(NewPetitionForm, self).__init__(*args, **kwargs)
@@ -79,13 +79,13 @@ class NewPetitionForm(forms.ModelForm):
         self.fields['stu_permission'].label = ''
         self.fields['stu_permission'].help_text = 'Student users can...'
 
-        self.fields['staff_permission'].widget.attrs.update({'class' : 'form-control'})
-        self.fields['staff_permission'].label = ''
-        self.fields['staff_permission'].help_text = 'Staff users can...'
+        self.fields['sta_permission'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['sta_permission'].label = ''
+        self.fields['sta_permission'].help_text = 'Staff users can...'
 
-        self.fields['faculty_permission'].widget.attrs.update({'class' : 'form-control'})
-        self.fields['faculty_permission'].label = ''
-        self.fields['faculty_permission'].help_text = 'Faculty users can...'
+        self.fields['fac_permission'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['fac_permission'].label = ''
+        self.fields['fac_permission'].help_text = 'Faculty users can...'
 
 # form for creating new clause
 class NewClauseForm(forms.ModelForm):
