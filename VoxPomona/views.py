@@ -278,6 +278,7 @@ def edit_petition_view(request, pid):
 
             if diffChanges:
                 this_petition.last_updated = datetime.now()
+                email_notification(this_petition,'W')
             this_petition.save()
 
             # redirect to the petition page
@@ -655,6 +656,9 @@ def finalize_petition(request):
         Comment.objects.filter(clauseID=clause.clauseID).delete()
         Change.objects.filter(clauseID=clause.clauseID).delete()
 
+    # notify people that the petition has been finalized
+    email_notification(this_petition,'F')
+
     # refresh the page, which should now redirect to page where petition
     # cant be modified
     return redirect(this_petition.get_url())
@@ -741,8 +745,10 @@ def email_notification(this_petition,messageType):
 
                   N: new change proposed    [Signator-specific]
                   A: accepted change
+                  W: petition has changed
                   L: new clause
                   D: deleted clause
+                  F: petition has been finalized
     '''
 
     # grab some petition info needed for forming the email message
@@ -833,6 +839,15 @@ def email_notification(this_petition,messageType):
         message = message.format(title=title,url=url)
         send_mail('New Accepted Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
 
+    # 'W' = owner has made new edits to the petition
+    elif messageType == 'W':
+        message = ("The owner of the petition: \"{title}\", which you signed, has made edits to their petition. "
+                   "View this petition at: \n voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message = message.format(title=title,url=url)
+        send_mail('New Accepted Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+
     # 'L' = the owner has added a new clause
     elif messageType == 'L':
         message = ("The owner of the petition: \"{title}\", which you signed, has added a new clause. "
@@ -846,6 +861,17 @@ def email_notification(this_petition,messageType):
     # 'D' = the owner has deleted a clause
     elif messageType == 'D':
         message = ("The owner of the petition: \"{title}\", which you signed, has deleted a clause. "
+                   "View this petition at: \n"
+                   "voxpomona.herokuapp.com{url}."
+                   "\n\n-VoxPomona"
+                  )
+        message = message.format(title=title,url=url)
+        send_mail('Deleted Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+
+     # 'F' = the owner has deleted a clause
+    elif messageType == 'F':
+        message = ("The petition: \"{title}\", which you signed, has been finalized. "
+                   "No further edits can be made, and your signature cannot be revoked at this point! "
                    "View this petition at: \n"
                    "voxpomona.herokuapp.com{url}."
                    "\n\n-VoxPomona"
