@@ -846,7 +846,7 @@ def email_notification(this_petition,messageType):
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,url=url)
-        send_mail('New Accepted Change on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+        send_mail('New Edits on a Petition You Signed',message,'voxpomona@gmail.com',signators)
 
     # 'L' = the owner has added a new clause
     elif messageType == 'L':
@@ -877,4 +877,4 @@ def email_notification(this_petition,messageType):
                    "\n\n-VoxPomona"
                   )
         message = message.format(title=title,url=url)
-        send_mail('Deleted Clause on a Petition You Signed',message,'voxpomona@gmail.com',signators)
+        send_mail('Petition You Signed Has Been Finalized',message,'voxpomona@gmail.com',signators)
