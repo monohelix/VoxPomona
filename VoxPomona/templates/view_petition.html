@@ -268,11 +268,13 @@ Template for displaying a petition prior to being finalized.
                     <br />
                     <p><b>{{ c.get_name }}</b> ({{ c.userID.get_user_type }}):
                       {% if c.content|length > 0 %}
+                        <em><span class="text-success">Change to:</span></em> <br />
                         {{ c.content }}
                       {% else %}
                         <em><span class="text-danger">Delete this clause</span></em>
                       {% endif %}
                     </p>
+                    <p><em> {{ c.time }} </em></p>
                   </div>
                 {% endif %}
               {% endif %}
