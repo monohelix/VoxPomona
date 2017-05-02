@@ -279,7 +279,7 @@ def edit_petition_view(request, pid):
             if diffChanges:
                 this_petition.last_updated = datetime.now()
                 email_notification(this_petition,'W')
-            this_petition.save()
+                this_petition.save()
 
             # redirect to the petition page
             return redirect(this_petition.get_url())
@@ -573,7 +573,7 @@ def search_results(request):
     from forms.py
     '''
     user_info = request.user.UserInfo
-    user_type = user_info.get_user_type()
+    user_type = user_info.user_type
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
