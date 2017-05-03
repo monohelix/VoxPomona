@@ -668,7 +668,7 @@ def finalize_petition(request):
     this_petition = Petition.objects.get(petitionID=petitionID)
 
     # if finalizable conditions not met, reject and return to view
-    if not(this_petition.finalizable()):
+    if not(this_petition.is_finalizable()):
         redirect(this_petition.get_url())
 
     # finalize it
