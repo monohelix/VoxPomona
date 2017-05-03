@@ -46,8 +46,10 @@ Template for displaying a petition prior to being finalized.
           {% if not clauses %}
             <h4><em>Have at least 1 clause</em></h4>
           {% endif %}
-          {% if petition.get_num_signatures_needed > 0 %}
+          {% if petition.get_num_signatures_needed > 1 %}
             <h4><em>Get {{ petition.get_num_signatures_needed }} more signatures</em></h4>
+          {% elif petition.get_num_signatures_needed == 1 %}
+            <h4><em>Get 1 more signature</em></h4>
           {% endif %}
           {% if petition.get_time_remaining > 0 %}
             <h4><em>Wait {{petition.get_time_remaining}} hours</em></h4>
