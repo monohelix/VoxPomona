@@ -265,16 +265,28 @@ def edit_petition_view(request, pid):
             stu_permission = form.cleaned_data.get('stu_permission')
             if this_petition.stu_permission != stu_permission:
                 this_petition.stu_permission = stu_permission
+                if (int(this_petition.stu_permission) < 4):
+                    permission_sync('STU','H',this_petition)
+                if (int(this_petition.stu_permission) < 3):
+                    permission_sync('STU','C',this_petition)
                 diffChanges = True
 
             sta_permission = form.cleaned_data.get('sta_permission')
             if this_petition.sta_permission != sta_permission:
                 this_petition.sta_permission = sta_permission
+                if (int(this_petition.sta_permission) < 4):
+                    permission_sync('STA','H',this_petition)
+                if (int(this_petition.sta_permission) < 3):
+                    permission_sync('STA','C',this_petition)
                 diffChanges = True
 
             fac_permission = form.cleaned_data.get('fac_permission')
             if this_petition.fac_permission != fac_permission:
                 this_petition.fac_permission = fac_permission
+                if (int(this_petition.fac_permission) < 4):
+                    permission_sync('FAC','H',this_petition)
+                if (int(this_petition.fac_permission) < 3):
+                    permission_sync('FAC','C',this_petition)
                 diffChanges = True
 
             if diffChanges:
@@ -299,6 +311,20 @@ def edit_petition_view(request, pid):
         }
         form = NewPetitionForm(initial=defFields)
         return render(request, 'edit_petition.html', {'form': form, 'petition' : this_petition})
+
+def permission_sync(user_type, code, this_petition):
+    '''
+    Synchronize petition to remove comments and changes depending
+    on permissions updated.
+    '''
+    users = UserInfo.objects.filter(user_type=user_type)
+    these_clauses = Clause.objects.filter(petitionID=this_petition)
+    # 'H' = remove changes for given user_type on clauses
+    if code == 'H':
+        Change.objects.filter(clauseID__in=these_clauses,userID__in=users).delete()
+    # 'C' = remove comments for given user_type on clauses
+    elif code == 'C':
+        Comment.objects.filter(clauseID__in=these_clauses,userID__in=users).delete()
 
 @login_required
 def delete_clause(request):

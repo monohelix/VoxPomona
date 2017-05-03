@@ -16,7 +16,7 @@ class SignUpForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if len(email) > 29:
             raise forms.ValidationError("Sorry, this email is too large.")
-        if not(email.endswith('@pomona.edu')):
+        if not(email.endswith('@pomona.edu') or email.endswith('@mymail.pomona.edu')):
             raise forms.ValidationError("Sorry, at this time only people with a Pomona email may create an account.")
         if email and User.objects.filter(email=email).count():
             raise forms.ValidationError('There is already an account associated with this email.')
